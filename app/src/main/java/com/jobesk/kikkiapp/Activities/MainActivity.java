@@ -1,8 +1,10 @@
-package com.jobesk.kikkiapp;
+package com.jobesk.kikkiapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.jobesk.kikkiapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

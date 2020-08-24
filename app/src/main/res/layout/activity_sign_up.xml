@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.SignUpActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/image_5"
+        android:scaleType="centerCrop"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/red_graient"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp">
+
+        <Button
+            android:id="@+id/btn_cont_with_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_back_white"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/continue_with_phone"
+            android:textColor="@color/colorPrimaryDark">
+        </Button>
+        <LinearLayout
+            android:id="@+id/ll_cont_with_fb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:background="@drawable/btn_back_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/continue_with"
+                android:layout_marginRight="5dp"
+                android:textSize="18sp"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/fb_blue"
+                android:gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fb_logo"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_cont_with_insta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:background="@drawable/btn_back_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/continue_with"
+                android:layout_marginRight="5dp"
+                android:textSize="18sp"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/insta_color"
+                android:gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/insta_logo"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
