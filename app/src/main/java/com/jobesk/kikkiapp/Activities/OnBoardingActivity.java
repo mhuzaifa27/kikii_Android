@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jobesk.kikkiapp.Activities.SignUpModule.SignUpActivity;
 import com.jobesk.kikkiapp.Adapters.OnBoardPagerAdapter;
 import com.jobesk.kikkiapp.R;
 
@@ -85,7 +86,7 @@ public class OnBoardingActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(mContext,SignUpActivity.class));
+        startActivity(new Intent(mContext, SignUpActivity.class));
         finish();
     }
 }

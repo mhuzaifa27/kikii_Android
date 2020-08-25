@@ -20,4 +20,28 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
+    <!-- Theme.AppCompat.Light is not a dialog theme -->
+    <style name="DialogTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@drawable/bg_date_picker</item>
+        <item name="android:headerBackground">@color/white</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/light_pink</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryDark</item>
+        <item name="android:headerDayOfMonthTextAppearance">@color/colorPrimaryDark</item>
+        <item name="android:headerYearTextAppearance">@color/colorPrimaryDark</item>
+        <item name="android:headerMonthTextAppearance">@color/colorPrimaryDark</item>
+    </style>
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet</item>
+    </style>
+    <style name="mySpinnerItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

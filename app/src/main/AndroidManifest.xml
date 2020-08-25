@@ -9,10 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.LocationActivity"></activity>
-        <activity android:name=".Activities.OTPActivity"></activity>
-        <activity android:name=".Activities.EnterPhoneNumberActivity" />
-        <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.SignUpModule.AgreementActivity"></activity>
+        <activity android:name=".Activities.SignUpModule.VerifyProfileImagesActivity" />
+        <activity android:name=".Activities.SignUpModule.AddMoreProfileImagesActivity" />
+        <activity android:name=".Activities.SignUpModule.AddProfileImageActivity" />
+        <activity android:name=".Activities.SignUpModule.RegistrationActivity" />
+        <activity android:name=".Activities.SignUpModule.LocationActivity" />
+        <activity android:name=".Activities.SignUpModule.OTPActivity" />
+        <activity android:name=".Activities.SignUpModule.EnterPhoneNumberActivity" />
+        <activity android:name=".Activities.SignUpModule.SignUpActivity" />
         <activity android:name=".Activities.OnBoardingActivity" />
         <activity android:name=".Activities.SplashActivity">
             <intent-filter>
