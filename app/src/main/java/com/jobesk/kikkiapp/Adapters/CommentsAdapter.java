@@ -10,18 +10,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jobesk.kikkiapp.Activities.PostDetailActivity;
+import com.jobesk.kikkiapp.Activities.CreatePostActivity;
+import com.jobesk.kikkiapp.Activities.EventDetailActivity;
 import com.jobesk.kikkiapp.R;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAdapter.TravelBuddyViewHolder> {
+public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.TravelBuddyViewHolder> {
     private List<String> data;
     Context context;
 
-    public CommunityPostsAdapter(List<String> data, Context context) {
+    public CommentsAdapter(List<String> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -29,7 +30,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
     @Override
     public TravelBuddyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_community_posts, parent, false);
+        View view = inflater.inflate(R.layout.item_comment, parent, false);
         return new TravelBuddyViewHolder(view);
     }
 
@@ -40,7 +41,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, PostDetailActivity.class));
+                context.startActivity(new Intent(context, CreatePostActivity.class));
             }
         });
     }

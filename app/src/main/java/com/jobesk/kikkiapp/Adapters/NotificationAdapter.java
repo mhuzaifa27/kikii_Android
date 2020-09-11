@@ -1,19 +1,20 @@
 package com.jobesk.kikkiapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jobesk.kikkiapp.Activities.FiltersActivity;
+import com.jobesk.kikkiapp.Activities.Profile.GenderIdentityActivity;
+import com.jobesk.kikkiapp.Activities.Profile.RelationshipStatusActivity;
 import com.jobesk.kikkiapp.R;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.TravelBuddyViewHolder> {
     private List<String> data;
@@ -34,6 +35,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
         String s = data.get(position);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, FiltersActivity.class));
+            }
+        });
     }
 
 
@@ -44,12 +52,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class TravelBuddyViewHolder extends RecyclerView.ViewHolder {
         TextView tv_subject, tv_body, tv_date;
-        CircleImageView img_user;
-        LinearLayout ll_notify;
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
-
 
         }
     }

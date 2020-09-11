@@ -54,7 +54,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     private void initComponents(View view) {
         rv_community_posts=view.findViewById(R.id.rv_community_posts);
         rv_community_posts.setLayoutManager(new LinearLayoutManager(context));
-        rv_community_posts.setAdapter(new CommunityPostsAdapter(communityPostsList,context));
+        rv_community_posts.setAdapter(new CommunityPostsAdapter(communityPostsList,getContext()));
     }
 
     @Override

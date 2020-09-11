@@ -29,7 +29,7 @@ import java.util.List;
 public class NotificationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "NotificationFragment";
-    private Context context=getContext();
+    private Context context;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tv_no;
@@ -54,6 +54,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     }
 
     private void initComponents(View view) {
+        context=getContext();
 
         rv_notification=view.findViewById(R.id.rv_notification);
         rv_notification.setLayoutManager(new LinearLayoutManager(context));

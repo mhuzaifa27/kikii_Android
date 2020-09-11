@@ -9,7 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.PostDetailActivity"></activity>
+        <activity android:name=".Activities.FiltersActivity"></activity>
+        <activity android:name=".Activities.Profile.DoYouDrinkActivity" />
+        <activity android:name=".Activities.Profile.DoYouSmokeActivity" />
+        <activity android:name=".Activities.Profile.DoYouUseCannabisActivity" />
+        <activity android:name=".Activities.Profile.PoliticalViewsActivity" />
+        <activity android:name=".Activities.Profile.YourDietActivity" />
+        <activity android:name=".Activities.Profile.YourKidsActivity" />
+        <activity android:name=".Activities.Profile.YourPetsActivity" />
+        <activity android:name=".Activities.Profile.YourReligionActivity" />
+        <activity android:name=".Activities.Profile.YourSignActivity" />
+        <activity android:name=".Activities.Profile.RelationshipStatusActivity" />
+        <activity android:name=".Activities.Profile.AddBioActivity" />
+        <activity android:name=".Activities.Profile.SetHeightActivity" />
+        <activity android:name=".Activities.Profile.SexualIdentityActivity" />
+        <activity android:name=".Activities.Profile.PronounsActivity" />
+        <activity android:name=".Activities.Profile.GenderIdentityActivity" />
+        <activity android:name=".Activities.Profile.LookingForActivity" />
+        <activity android:name=".Activities.PostDetailActivity" />
         <activity android:name=".Activities.CreatePostActivity" />
         <activity android:name=".Activities.MatchActivity" />
         <activity android:name=".Activities.EventDetailActivity" />
@@ -27,13 +44,6 @@
         <activity android:name=".Activities.SignUpModule.SignUpActivity" />
         <activity android:name=".Activities.OnBoardingActivity" />
         <activity android:name=".Activities.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Activities.MainActivity">
 
             <!--
             <intent-filter>
@@ -42,6 +52,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             -->
+        </activity>
+        <activity android:name=".Activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

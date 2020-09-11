@@ -13,13 +13,19 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_above="@+id/ll_type">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            tools:context=".Activities.PostDetailActivity">
         <RelativeLayout
             android:id="@+id/rl_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/header"
             android:background="@drawable/bg_posts_round"
             android:orientation="vertical">
 
@@ -138,15 +144,16 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/ll_type"
             android:layout_below="@+id/rl_post"
             tools:itemCount="10"
             tools:listitem="@layout/item_comment"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
+        </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout

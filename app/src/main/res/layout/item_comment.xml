@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_online_user"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
 
     <LinearLayout
@@ -67,6 +67,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/lato_bold"
             android:text="Reply"
+            android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
             android:layout_marginLeft="10dp">
