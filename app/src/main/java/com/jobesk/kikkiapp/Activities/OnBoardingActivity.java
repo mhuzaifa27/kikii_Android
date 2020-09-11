@@ -58,7 +58,6 @@ public class OnBoardingActivity extends AppCompatActivity implements View.OnClic
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setTextColor(getResources().getColor(R.color.light_grey));
-
             ll_dots.addView(mDots[i]);
         }
 

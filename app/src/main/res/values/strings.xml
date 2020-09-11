@@ -6,6 +6,10 @@
     <string name="add_img_from_camera">Add From Camera</string>
     <string name="a_picture_paints_a_thousand_words">A picture paints a thousand words!</string>
     <string name="profile_picture_verification">Profile Picture Verification</string>
+    <string name="meet">Meet</string>
+    <string name="match">Match</string>
+    <string name="chat">Chat</string>
+    <string name="social">Social</string>
     <string-array name="list_of_countries">
         <item>United States</item>
         <item>Australia</item>

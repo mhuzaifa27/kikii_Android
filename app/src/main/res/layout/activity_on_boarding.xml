@@ -17,7 +17,8 @@
             android:id="@+id/vp_on_boarding"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1.9">
+            android:layout_weight="1.9"
+            android:overScrollMode="never">
 
         </androidx.viewpager.widget.ViewPager>
 
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:text="Skip"
             android:textSize="@dimen/text_common"
+            android:textColor="@color/black"
             android:fontFamily="@font/lato_bold"
             android:layout_marginTop="20dp"
             android:layout_gravity="right"

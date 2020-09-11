@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.CreatePostActivity"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/app_header"></include>
+
+    <RelativeLayout
+        android:id="@+id/rl_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_marginVertical="20dp"
+        android:gravity="left"
+        android:layout_marginHorizontal="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_online_user"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_online_user"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/tv_time_ago"
+                android:fontFamily="@font/lato_bold"
+                android:text="Gernald"
+                android:textColor="@color/black"
+                android:textSize="18sp">
+
+            </TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/view1"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@+id/rl_user"
+        android:layout_marginBottom="10dp"
+        android:hint="What's going on? Share...."
+        android:gravity="left|top"
+        android:padding="10dp"
+        android:fontFamily="@font/lato_italic"
+        android:textColor="@color/black"
+        android:textColorHint="@color/light_grey"
+        android:background="@drawable/border_four_corner_round_red">
+    </EditText>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_above="@+id/ll_bottom_options"
+        android:layout_marginTop="20dp"
+        android:alpha="0.3"
+        android:background="@color/light_grey"/>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="bottom"
+        android:weightSum="1"
+        android:layout_alignParentBottom="true"
+        android:layout_marginVertical="20dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="right"
+            android:src="@drawable/ic_fancy_cancel">
+        </ImageView>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="invisible">
+
+        </Button>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_fancy_camera">
+        </ImageView>
+    </LinearLayout>
+
+</RelativeLayout>

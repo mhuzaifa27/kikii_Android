@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.jobesk.kikkiapp.R;
+import com.joooonho.SelectableRoundedImageView;
 
 public class OnBoardPagerAdapter extends PagerAdapter {
 
@@ -24,10 +26,10 @@ public class OnBoardPagerAdapter extends PagerAdapter {
     }
 
     public int [] slideImages={
-            R.drawable.image_1,
-            R.drawable.image_2,
-            R.drawable.image_3,
-            R.drawable.image_4
+            R.drawable.dummy_flower,
+            R.drawable.dummy_flower,
+            R.drawable.dummy_flower,
+            R.drawable.dummy_flower
     };
 
     public String [] slideHeadings={
@@ -38,19 +40,10 @@ public class OnBoardPagerAdapter extends PagerAdapter {
     };
 
     public String [] slideDescriptions={
-            "Find your perfect romantic relationship or friendship.\n" +
-                    "\n" +
-                    "Find Real People - Every Profile is verified",
-            "Once matched you have 24 hours to start a conversation.\n" +
-                    "\n" +
-                    "Send voice notes and pictures to your match.",
-            "Virtually date anyone from anywhere around the UK & Ireland.\n" +
-                    "\n" +
-                    "Connect and chat via voice call \n" +
-                    "(No personal phone numbers given out)",
-            "Keep up with the Kikii Community via the Social and Events feed\n" +
-                    "\n" +
-                    "If you’re offered a seat on a rocket ship, don’t ask what seat! Just get on."
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero",
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero",
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero",
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero"
     };
 
     @Override
@@ -60,7 +53,7 @@ public class OnBoardPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == (ScrollView)object;
+        return view == (LinearLayout)object;
     }
 
     @NonNull
@@ -69,7 +62,7 @@ public class OnBoardPagerAdapter extends PagerAdapter {
       inflater=(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
       View view=inflater.inflate(R.layout.sliding_layout,container,false);
 
-        ImageView img_view_pager=view.findViewById(R.id.img_view_pager);
+        SelectableRoundedImageView img_view_pager=view.findViewById(R.id.img_view_pager);
         TextView tv_heading_pager=view.findViewById(R.id.tv_heading_pager);
         TextView tv_description_pager=view.findViewById(R.id.tv_description_pager);
 
@@ -83,6 +76,6 @@ public class OnBoardPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((ScrollView)object);
+        container.removeView((LinearLayout)object);
     }
 }

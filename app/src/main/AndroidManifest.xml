@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.SignUpModule.AgreementActivity"></activity>
+        <activity android:name=".Activities.PostDetailActivity"></activity>
+        <activity android:name=".Activities.CreatePostActivity" />
+        <activity android:name=".Activities.MatchActivity" />
+        <activity android:name=".Activities.EventDetailActivity" />
+        <activity android:name=".Activities.CallingActivity" />
+        <activity android:name=".Activities.ChattingActivity" />
+        <activity android:name=".Activities.SignUpModule.SubscriptionActivity" />
+        <activity android:name=".Activities.SignUpModule.AgreementActivity" />
         <activity android:name=".Activities.SignUpModule.VerifyProfileImagesActivity" />
         <activity android:name=".Activities.SignUpModule.AddMoreProfileImagesActivity" />
         <activity android:name=".Activities.SignUpModule.AddProfileImageActivity" />
@@ -26,7 +33,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.MainActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
     </application>
 
 </manifest>
