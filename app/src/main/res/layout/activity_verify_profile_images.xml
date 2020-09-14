@@ -55,19 +55,30 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1.3"
                 app:cardCornerRadius="18dp"
-                app:cardElevation="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@android:color/transparent"
                 app:cardMaxElevation="0dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <ImageView
+                    <!--<ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/dummy_person">
 
-                    </ImageView>
+                    </ImageView>-->
+                    <com.joooonho.SelectableRoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/img_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dummy_person"
+                        app:sriv_left_bottom_corner_radius="50dp"
+                        app:sriv_left_top_corner_radius="10dp"
+                        app:sriv_right_bottom_corner_radius="10dp"
+                        app:sriv_right_top_corner_radius="10dp" />
                     <ImageView
                         android:id="@+id/img_face_detection"
                         android:layout_width="wrap_content"

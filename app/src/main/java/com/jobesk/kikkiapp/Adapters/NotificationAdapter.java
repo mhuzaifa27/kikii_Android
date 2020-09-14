@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jobesk.kikkiapp.Activities.FiltersActivity;
+import com.jobesk.kikkiapp.Activities.MyProfileActivity;
 import com.jobesk.kikkiapp.Activities.Profile.GenderIdentityActivity;
 import com.jobesk.kikkiapp.Activities.Profile.RelationshipStatusActivity;
 import com.jobesk.kikkiapp.R;
@@ -39,7 +40,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, FiltersActivity.class));
+                context.startActivity(new Intent(context, MyProfileActivity.class));
             }
         });
     }

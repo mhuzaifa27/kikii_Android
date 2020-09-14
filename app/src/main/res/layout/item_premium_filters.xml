@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:orientation="vertical"
+    android:paddingVertical="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/filled_one_corner_round_red">
+
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem"
+        android:textSize="16sp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/img_curiosity">
+
+    </TextView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_right"
+        android:layout_toRightOf="@+id/tv_status"
+        android:tint="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp">
+
+    </ImageView>
+</RelativeLayout>
