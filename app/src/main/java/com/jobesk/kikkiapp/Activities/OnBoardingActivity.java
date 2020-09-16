@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.jobesk.kikkiapp.Activities.SignUpModule.SignUpActivity;
 import com.jobesk.kikkiapp.Adapters.OnBoardPagerAdapter;
 import com.jobesk.kikkiapp.R;
+import com.jobesk.kikkiapp.Utils.CustomLoader;
+import com.jobesk.kikkiapp.Utils.ShowDialogues;
 
 public class OnBoardingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +28,7 @@ public class OnBoardingActivity extends AppCompatActivity implements View.OnClic
     private TextView tv_skip;
 
     private OnBoardPagerAdapter pagerAdapter;
+    private CustomLoader customLoader;
 
 
     @Override
@@ -41,6 +44,8 @@ public class OnBoardingActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initComponents() {
+        customLoader=new CustomLoader(this,false);
+
         vp_on_boarding=findViewById(R.id.vp_on_boarding);
         ll_dots=findViewById(R.id.ll_dots);
 

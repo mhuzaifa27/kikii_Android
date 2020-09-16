@@ -63,7 +63,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/rl_select_country"
             android:layout_width="match_parent"
             android:layout_height="45dp"
@@ -93,6 +93,7 @@
                 android:background="@android:color/transparent"
                 android:entries="@array/list_of_countries"
                 android:gravity="center"
+                android:clickable="false"
                 android:spinnerMode="dropdown" />
 
             <ImageView
@@ -105,8 +106,42 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/arrow_down_red" />
-        </RelativeLayout>
+        </RelativeLayout>-->
+        <RelativeLayout
+            android:id="@+id/rl_select_country"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/red_borders_white_back"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/cpp_countries"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginHorizontal="3dp"
+                app:ccp_showFullName="true"
+                app:ccp_textGravity="LEFT"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_showArrow="false"
+                app:ccp_flagBorderColor="@color/colorPrimaryDark"
+                app:ccp_showPhoneCode="false" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/arrow_down_red" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

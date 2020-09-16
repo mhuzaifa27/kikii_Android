@@ -1,29 +1,41 @@
 package com.jobesk.kikkiapp.Activities;
 
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.jobesk.kikkiapp.Events.CheckInternetEvent;
 import com.jobesk.kikkiapp.Fragments.Main.ChatFragment;
 import com.jobesk.kikkiapp.Fragments.Main.MatchFragment;
 import com.jobesk.kikkiapp.Fragments.Main.MeetFragment;
 import com.jobesk.kikkiapp.Fragments.Main.NotificationFragment;
 import com.jobesk.kikkiapp.Fragments.Main.SocialFragment;
 import com.jobesk.kikkiapp.R;
+import com.jobesk.kikkiapp.Utils.CheckConnectivity;
 import com.jobesk.kikkiapp.Utils.SessionManager;
+import com.jobesk.kikkiapp.Utils.ShowDialogues;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT_TAG = TAG_MEET;
     public static int navItemIndex = 0;
     private Handler mHandler;
-
     private SessionManager sessionManager;
-
+    private EventBus eventBus = EventBus.getDefault();
 
     int count = 0;
     private boolean shouldLoadHomeFragOnBackPress = true;
@@ -62,16 +73,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        iniComponents();
+        loadHomeFragment();
+        setUpNavigationView();
+
+    }
+
+    private void iniComponents() {
         extras = getIntent().getStringExtra("CURRENT_TAG");;
         //checkIntentData();
 
         main_frame = findViewById(R.id.main_frame);
-//        mNetworkReceiver = new CheckConnectivity();
+        mNetworkReceiver = new CheckConnectivity();
         fm = getSupportFragmentManager();
        /* mNoNet = new NoNet();
         mNoNet.initNoNet(this, fm);*/
         mHandler = new Handler();
-//        eventBus.register(this);
+        eventBus.register(this);
         registerNetworkBroadcastForNougat();
 
         meetFragment = new MeetFragment();
@@ -84,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.main_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.bottom_nav_meet);
         parentLayout = findViewById(android.R.id.content);
-
-        loadHomeFragment();
-        setUpNavigationView();
-
     }
 
     /*private void checkIntentData() {
@@ -136,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        eventBus.unregister(this);
+        eventBus.unregister(this);
         unregisterNetworkChanges();
     }
 
@@ -252,52 +267,30 @@ public class MainActivity extends AppCompatActivity {
             loadHomeFragment();
             return;
         }
-        super.onBackPressed();
-        //clickDone();
-        finish();
+        clickDone();
     }
 
-//    public void clickDone() {
-//        new AlertDialog.Builder(this,R.style.MyDialogTheme)
-//                .setIcon(R.mipmap.ic_launcher)
-//                .setTitle(getResources().getString(R.string.app_name))
-//                .setMessage(R.string.close_warning)
-//                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        /*Intent i = new Intent();
-//                        i.setAction(Intent.ACTION_MAIN);
-//                        i.addCategory(Intent.CATEGORY_HOME);*/
-//                        finish();
-//                    }
-//                })
-//                .setNegativeButton("no", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                })
-//                .show();
-//    }
+    public void clickDone() {
+        new AlertDialog.Builder(this,R.style.MyDialogTheme)
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle(getResources().getString(R.string.app_name))
+                .setMessage(R.string.close_warning)
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
 
-//    private void showServerErrorDialog() {
-//        Dialog dialog = new Dialog(MainActivity.this);
-//        dialog.setContentView(R.layout.dialog_server_error);
-//        Window window = dialog.getWindow();
-//        window.setGravity(Gravity.CENTER);
-//        window.getAttributes().windowAnimations = R.style.DialogAnimation;
-//        window.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        TextView tv_btn_cancel = dialog.findViewById(R.id.tv_btn_cancel);
-//
-//        tv_btn_cancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-//    }
 
 //    /**
 //     * EVENTS
@@ -323,50 +316,30 @@ public class MainActivity extends AppCompatActivity {
 //
 //    ;
 //
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onMessageEvent(CheckInternetEvent event) {
-//        Log.d("SsS", "checkInternetAvailability: called");
-//        if (event.isIS_INTERNET_AVAILABLE()) {
-//            Snackbar snackbar = Snackbar.make(parentLayout, "Internet connected!", Snackbar.LENGTH_LONG);
-//            View customView = getLayoutInflater().inflate(R.layout.snackbar_internet_connection, null);
-//            //snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
-//            Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-//            snackbarLayout.setPadding(0, 0, 0, 0);
-//            TextView tv_subject = customView.findViewById(R.id.tv_subject);
-//            tv_subject.setText("Internet connected!");
-//
-//            Log.e("--------id",sessionManager.getUserID());
-//
-//
-//            snackbarLayout.addView(customView);
-//            snackbar.show();
-//            Log.d("fffff", "onMessageEvent: "+CURRENT_TAG);
-//            switch (CURRENT_TAG) {
-//                case TAG_HOME:
-//                    HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME);
-//                    homeFragment.loadUserProfileData();
-//                case TAG_ALERT:
-//                    AlertFragment alertFragment = (AlertFragment) getSupportFragmentManager().findFragmentByTag(TAG_ALERT);
-//                    alertFragment.getAllNotifications();
-//                case TAG_LIVE:
-//                    StartBroadcastFragment startBroadcastFragment = (StartBroadcastFragment) getSupportFragmentManager().findFragmentByTag(TAG_LIVE);
-//                    startBroadcastFragment.loadFollowingStreams();
-//                case TAG_SETTINGS:
-//                    SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS);
-////                    settingsFragment.getSettingsData();
-//            }
-//        } else {
-//            Snackbar snackbar = Snackbar.make(parentLayout, "Please Check your internet connection!", Snackbar.LENGTH_LONG);
-//            View customView = getLayoutInflater().inflate(R.layout.snackbar_internet_connection, null);
-//            //snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
-//            Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-//            snackbarLayout.setPadding(0, 0, 0, 0);
-//            TextView tv_subject = customView.findViewById(R.id.tv_subject);
-//            tv_subject.setText("Please Check your internet connection!");
-//
-//            snackbarLayout.addView(customView);
-//            snackbar.show();
-//        }
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(CheckInternetEvent event) {
+        Log.d("SsS", "checkInternetAvailability: called");
+        if (event.isIS_INTERNET_AVAILABLE()) {
+            ShowDialogues.SHOW_SNACK_BAR(parentLayout,MainActivity.this,getString(R.string.snackbar_internet_available));
+            Log.d("fffff", "onMessageEvent: "+CURRENT_TAG);
+            switch (CURRENT_TAG) {
+                case TAG_MEET:
+                    /*HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME);
+                    homeFragment.loadUserProfileData();*/
+                case TAG_MATCH:
+                    /*AlertFragment alertFragment = (AlertFragment) getSupportFragmentManager().findFragmentByTag(TAG_ALERT);
+                    alertFragment.getAllNotifications();*/
+                case TAG_CHAT:
+                   /* StartBroadcastFragment startBroadcastFragment = (StartBroadcastFragment) getSupportFragmentManager().findFragmentByTag(TAG_LIVE);
+                    startBroadcastFragment.loadFollowingStreams();*/
+                case TAG_SOCIAL:
+                    /*SettingsFragment settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS);
+//                    settingsFragment.getSettingsData();*/
+            }
+        } else {
+            ShowDialogues.SHOW_SNACK_BAR(parentLayout,MainActivity.this,getString(R.string.snackbar_check_internet));
+        }
+    }
+
 }
 
