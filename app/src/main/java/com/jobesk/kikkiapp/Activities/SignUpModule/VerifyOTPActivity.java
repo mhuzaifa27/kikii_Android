@@ -16,11 +16,15 @@ import android.widget.Toast;
 import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
 import com.jobesk.kikkiapp.Callbacks.CallbackVerifyOTP;
 import com.jobesk.kikkiapp.Netwrok.API;
+import com.jobesk.kikkiapp.Netwrok.Constant;
 import com.jobesk.kikkiapp.Netwrok.RestAdapter;
 import com.jobesk.kikkiapp.R;
 import com.jobesk.kikkiapp.Utils.CustomLoader;
 import com.jobesk.kikkiapp.Utils.SessionManager;
 import com.jobesk.kikkiapp.Utils.ShowDialogues;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +43,8 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
     private Call<CallbackVerifyOTP> callbackVerifyOTPCall;
     private CallbackVerifyOTP responseVerifyOTP;
     private String code;
+    private Map<String, String> verifyOTPParams = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                             et_otp_4.getText().toString() +
                             et_otp_5.getText().toString() +
                             et_otp_6.getText().toString();
+                    verifyOTPParams.put(Constant.CODE,code);
                     verifyOTP();
                 }
                 break;
@@ -165,7 +172,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(mContext);
         Log.d(TAG, "sendOTP: " + code);
-        callbackVerifyOTPCall = api.verifyOTP(sessionManager.getAccessToken(), code);
+        callbackVerifyOTPCall = api.verifyOTP(sessionManager.getAccessToken(), verifyOTPParams);
         callbackVerifyOTPCall.enqueue(new Callback<CallbackVerifyOTP>() {
             @Override
             public void onResponse(Call<CallbackVerifyOTP> call, Response<CallbackVerifyOTP> response) {

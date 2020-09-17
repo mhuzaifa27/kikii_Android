@@ -82,5 +82,13 @@ public class Constant {
     public static final String PROFILE_ID="profile_id";
     public static final String LATITUDE="latitude";
     public static final String LONGITUDE="longitude";
+    public static final String PHONE="phone";
+    public static final String CODE="code";
+    public static final String NAME="name";
+    public static final String EMAIL="email";
+    public static final String BIRTHDAY="birthday";
+    public static final String PROFILE_PIC="profile_pic";
+    public static final String SINGLE="single";
+    public static final String MULTIPLE="multiple";
 
 }

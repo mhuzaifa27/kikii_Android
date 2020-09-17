@@ -27,8 +27,10 @@ public class SessionManager {
     public static final String KEY_COMP = "comp";
     // Name (make variable public to access from outside)
     public static final String KEY_NAME = "name";
+    public static final String KEY_BIRTHDAY = "birthday";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_USERID = "userid";
+    public static final String KEY_FIRST_ATTEMPT = "first_attempt";
     // User password (make variable public to access from outside)
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_CONTACT = "contact";
@@ -163,9 +165,17 @@ public class SessionManager {
         editor.putString(KEY_USERID, id);
         editor.commit();
     }
+    public void saveFirstAttempt(Boolean value) {
+        editor.putBoolean(KEY_FIRST_ATTEMPT, value);
+        editor.commit();
+    }
 
     public void saveUserName(String name) {
         editor.putString(KEY_NAME, name);
+        editor.commit();
+    }
+    public void saveBirthday(String name) {
+        editor.putString(KEY_BIRTHDAY, name);
         editor.commit();
     }
     public void saveStreetAddress(String address) {
@@ -296,8 +306,15 @@ public class SessionManager {
         return pref.getString(Tag, "");
     }
 
+    public Boolean getFirstAttempt() {
+        return pref.getBoolean(KEY_FIRST_ATTEMPT, true);
+    }
+
     public String getUserName() {
         return pref.getString(KEY_NAME, null);
+    }
+    public String getBirthday() {
+        return pref.getString(KEY_BIRTHDAY, null);
     }
 
     public String getBoxNo() {

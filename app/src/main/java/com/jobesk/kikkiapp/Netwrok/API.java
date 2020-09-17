@@ -1,6 +1,7 @@
 package com.jobesk.kikkiapp.Netwrok;
 
 import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
+import com.jobesk.kikkiapp.Callbacks.CallbackStatus;
 import com.jobesk.kikkiapp.Callbacks.CallbackVerifyOTP;
 
 import java.util.Map;
@@ -9,6 +10,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -26,12 +28,23 @@ public interface API {
 
     @POST("continue/with-phone")
     @FormUrlEncoded
-    Call<CallbackSentOTP> sendOTP(@Field("phone") String phone);
+    Call<CallbackSentOTP> sendOTP(@FieldMap Map<String, String> params);
 
-    @POST("continue/with-phone")
+    @POST("update/profile")
     @FormUrlEncoded
-    Call<CallbackVerifyOTP> verifyOTP(@Header("authorization") String auth,
-                                      @Field("code") String code);
+    Call<CallbackStatus> register(@Header("Authorization") String auth,
+                                  @FieldMap Map<String, String> params);
+
+    @POST("verify/phone")
+    @FormUrlEncoded
+    Call<CallbackVerifyOTP> verifyOTP(@Header("Authorization") String auth,
+                                      @FieldMap Map<String, String> params);
+
+    @Multipart
+    @POST("update/profile")
+    Call<CallbackStatus> updateProfilePhoto(
+            @Header("Authorization") String auth,
+            @Part MultipartBody.Part file);
 
    /* @POST("login")
     @FormUrlEncoded

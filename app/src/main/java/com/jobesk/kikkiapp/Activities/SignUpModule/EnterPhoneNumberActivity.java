@@ -18,11 +18,15 @@ import android.widget.Toast;
 import com.hbb20.CountryCodePicker;
 import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
 import com.jobesk.kikkiapp.Netwrok.API;
+import com.jobesk.kikkiapp.Netwrok.Constant;
 import com.jobesk.kikkiapp.Netwrok.RestAdapter;
 import com.jobesk.kikkiapp.R;
 import com.jobesk.kikkiapp.Utils.CustomLoader;
 import com.jobesk.kikkiapp.Utils.SessionManager;
 import com.jobesk.kikkiapp.Utils.ShowDialogues;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +47,7 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
     private String countryCode,phone;
     private EditText et_phone_number;
     private SessionManager sessionManager;
+    private Map<String, String> sendOTPParams = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +99,7 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
                 }
                 else{
                     phone=countryCode+et_phone_number.getText().toString();
+                    sendOTPParams.put(Constant.PHONE,phone);
                     sendOTP();
                 }
                 break;
@@ -104,7 +110,7 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(mContext);
         Log.d(TAG, "sendOTP: "+phone);
-        callbackSentOTPCall = api.sendOTP(phone);
+        callbackSentOTPCall = api.sendOTP(sendOTPParams);
         callbackSentOTPCall.enqueue(new Callback<CallbackSentOTP>() {
             @Override
             public void onResponse(Call<CallbackSentOTP> call, Response<CallbackSentOTP> response) {
@@ -115,8 +121,9 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
                         Log.d(TAG, "onResponse: "+responseSentOTP.getMessage());
                         customLoader.hideIndicator();
                         Toast.makeText(mContext, responseSentOTP.getMessage(), Toast.LENGTH_SHORT).show();
-                        sessionManager.saveAccessToken(responseSentOTP.getUser().getAuthToken());
+                        sessionManager.saveAccessToken("Bearer "+responseSentOTP.getUser().getAuthToken());
                         startActivity(new Intent(mContext, VerifyOTPActivity.class));
+                        sendOTPParams.clear();
                     } else {
                         Log.d(TAG, "onResponse: "+responseSentOTP.getMessage());
                         customLoader.hideIndicator();

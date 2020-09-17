@@ -62,15 +62,31 @@
         <activity android:name=".Activities.SignUpModule.AgreementActivity" />
         <activity android:name=".Activities.SignUpModule.VerifyProfileImagesActivity" />
         <activity android:name=".Activities.SignUpModule.AddMoreProfileImagesActivity" />
-        <activity android:name=".Activities.SignUpModule.AddProfileImageActivity" />
-        <activity android:name=".Activities.SignUpModule.RegistrationActivity" />
-        <activity android:name=".Activities.SignUpModule.LocationActivity" />
+        <activity android:name=".Activities.SignUpModule.AddProfileImageActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activities.SignUpModule.RegistrationActivity" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".Activities.SignUpModule.LocationActivity" >
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
         <activity android:name=".Activities.SignUpModule.VerifyOTPActivity" />
         <activity android:name=".Activities.SignUpModule.EnterPhoneNumberActivity" />
         <activity android:name=".Activities.SignUpModule.SignUpActivity" />
         <activity android:name=".Activities.OnBoardingActivity" />
         <activity android:name=".Activities.SplashActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
