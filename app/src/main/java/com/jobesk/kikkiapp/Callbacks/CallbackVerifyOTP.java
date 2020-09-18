@@ -3,7 +3,7 @@ package com.jobesk.kikkiapp.Callbacks;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.jobesk.kikkiapp.Model.DataVerifyOTP;
+import com.jobesk.kikkiapp.Model.Data;
 
 public class CallbackVerifyOTP {
 
@@ -15,7 +15,7 @@ public class CallbackVerifyOTP {
     private String message;
     @SerializedName("data")
     @Expose
-    private DataVerifyOTP data;
+    private Data data;
 
     public Boolean getSuccess() {
         return success;
@@ -33,11 +33,11 @@ public class CallbackVerifyOTP {
         this.message = message;
     }
 
-    public DataVerifyOTP getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(DataVerifyOTP data) {
+    public void setData(Data data) {
         this.data = data;
     }
 

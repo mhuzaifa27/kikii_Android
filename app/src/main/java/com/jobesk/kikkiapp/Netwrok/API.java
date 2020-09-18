@@ -1,26 +1,20 @@
 package com.jobesk.kikkiapp.Netwrok;
 
+import com.google.gson.JsonElement;
 import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
-import com.jobesk.kikkiapp.Callbacks.CallbackStatus;
+import com.jobesk.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.jobesk.kikkiapp.Callbacks.CallbackVerifyOTP;
 
 import java.util.Map;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface API {
 
@@ -32,8 +26,8 @@ public interface API {
 
     @POST("update/profile")
     @FormUrlEncoded
-    Call<CallbackStatus> register(@Header("Authorization") String auth,
-                                  @FieldMap Map<String, String> params);
+    Call<CallbackUpdateProfile> register(@Header("Authorization") String auth,
+                                         @FieldMap Map<String, String> params);
 
     @POST("verify/phone")
     @FormUrlEncoded
@@ -42,9 +36,17 @@ public interface API {
 
     @Multipart
     @POST("update/profile")
-    Call<CallbackStatus> updateProfilePhoto(
+    Call<CallbackUpdateProfile> updateProfilePhoto(
             @Header("Authorization") String auth,
             @Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("update/profile")
+    Call<JsonElement> uploadFile(@Part MultipartBody.Part file, @Header("Authorization") String authorization);
+
+    @Multipart
+    @POST("update/profile")
+    Call<JsonElement> uploadFile(@Part MultipartBody.Part file);
 
    /* @POST("login")
     @FormUrlEncoded

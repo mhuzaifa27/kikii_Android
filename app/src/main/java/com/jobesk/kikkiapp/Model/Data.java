@@ -4,7 +4,7 @@ package com.jobesk.kikkiapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DataVerifyOTP {
+public class Data {
 
     @SerializedName("user")
     @Expose

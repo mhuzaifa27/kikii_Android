@@ -11,10 +11,10 @@ public class UserVerifyOTP {
     private Integer id;
     @SerializedName("name")
     @Expose
-    private Object name;
+    private String name;
     @SerializedName("email")
     @Expose
-    private Object email;
+    private String email;
     @SerializedName("email_verified_at")
     @Expose
     private Object emailVerifiedAt;
@@ -29,10 +29,10 @@ public class UserVerifyOTP {
     private String role;
     @SerializedName("profile_pic")
     @Expose
-    private Object profilePic;
+    private String profilePic;
     @SerializedName("birthday")
     @Expose
-    private Object birthday;
+    private String birthday;
     @SerializedName("profile_verified")
     @Expose
     private Integer profileVerified;
@@ -120,19 +120,19 @@ public class UserVerifyOTP {
         this.id = id;
     }
 
-    public Object getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Object name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Object getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Object email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -168,19 +168,19 @@ public class UserVerifyOTP {
         this.role = role;
     }
 
-    public Object getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(Object profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 
-    public Object getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Object birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

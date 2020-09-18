@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.jobesk.kikkiapp.R;
@@ -19,6 +20,7 @@ public class CustomLoader extends LinearLayout {
     private Activity mContext;
     private AlertDialog dialog;
     private LottieAnimationView loading;
+    private TextView tv_progress;
 
     public CustomLoader(Activity context, boolean val) {
         super(context);
@@ -35,6 +37,7 @@ public class CustomLoader extends LinearLayout {
         View a = layoutInflater.inflate(R.layout.custom_loader, CustomLoader.this);
 
         loading = a.findViewById(R.id.animationView);
+        tv_progress=a.findViewById(R.id.tv_progress);
         loading.setAnimation(R.raw.loading_wave);
         loading.setRepeatCount(Animation.INFINITE);
 
@@ -56,5 +59,13 @@ public class CustomLoader extends LinearLayout {
     public boolean isShowing() {
         if (dialog.isShowing()) return true;
         else return false;
+    }
+
+    public void setProgress(String text) {
+        tv_progress.setText(text);
+    }
+    public void setProgressVisibility(Boolean status) {
+        if(status)tv_progress.setVisibility(VISIBLE);
+        else tv_progress.setVisibility(GONE);
     }
 }

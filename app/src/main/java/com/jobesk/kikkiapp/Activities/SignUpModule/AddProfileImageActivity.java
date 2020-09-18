@@ -1,11 +1,9 @@
 package com.jobesk.kikkiapp.Activities.SignUpModule;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,25 +12,19 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jobesk.kikkiapp.Callbacks.CallbackStatus;
+import com.jobesk.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.jobesk.kikkiapp.Netwrok.API;
 import com.jobesk.kikkiapp.Netwrok.Constant;
 import com.jobesk.kikkiapp.Netwrok.RestAdapter;
 import com.jobesk.kikkiapp.R;
 import com.jobesk.kikkiapp.Utils.CustomLoader;
-import com.jobesk.kikkiapp.Utils.FilePath;
-import com.jobesk.kikkiapp.Utils.ImageCompression;
 import com.jobesk.kikkiapp.Utils.SelectImage;
 import com.jobesk.kikkiapp.Utils.SessionManager;
 import com.jobesk.kikkiapp.Utils.ShowDialogues;
 import com.jobesk.kikkiapp.Utils.ShowSelectImageBottomSheet;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,8 +51,8 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
     private String currentPhotoPath;
     private CustomLoader customLoader;
 
-    private Call<CallbackStatus> callbackStatusCall;
-    private CallbackStatus responseUpdatePhoto;
+    private Call<CallbackUpdateProfile> callbackStatusCall;
+    private CallbackUpdateProfile responseUpdatePhoto;
 
 
     @Override
@@ -144,10 +136,11 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
     private void updateProfilePhoto(MultipartBody.Part body) {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(activity);
+        Log.d(TAG, "updateProfilePhoto: "+sessionManager.getAccessToken());
         callbackStatusCall = api.updateProfilePhoto(sessionManager.getAccessToken(), body);
-        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+        callbackStatusCall.enqueue(new Callback<CallbackUpdateProfile>() {
             @Override
-            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+            public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
                 Log.d("ressss", "onResponse: " + response);
                 responseUpdatePhoto = response.body();
                 if (responseUpdatePhoto != null) {
@@ -166,7 +159,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
             }
 
             @Override
-            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+            public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
                 if (!call.isCanceled()) {
                     Log.d("ressss", "onResponse: " + t.getMessage());
                     customLoader.hideIndicator();
@@ -177,7 +170,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
 
     private void goToNextActivity(Bitmap bitmap){
         byte[] byteArray = SelectImage.getByteArray(bitmap);
-        Intent intent=new Intent(activity,AddMoreProfileImagesActivity.class);
+        Intent intent=new Intent(activity,VerifyProfileImagesActivity.class);
         intent.putExtra("bitmap",byteArray);
         Log.d(TAG, "onActivityResult: "+byteArray);
         startActivity(intent);

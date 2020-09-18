@@ -2,6 +2,7 @@ package com.jobesk.kikkiapp.Activities.SignUpModule;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,12 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
-import com.jobesk.kikkiapp.Callbacks.CallbackStatus;
+import com.jobesk.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.jobesk.kikkiapp.Netwrok.API;
 import com.jobesk.kikkiapp.Netwrok.Constant;
 import com.jobesk.kikkiapp.Netwrok.RestAdapter;
@@ -48,8 +47,8 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
     private Map<String ,String> registerParams=new HashMap<>();
     private CustomLoader customLoader;
     private SessionManager sessionManager;
-    private Call<CallbackStatus> callbackStatusCall;
-    private CallbackStatus responseRegister;
+    private Call<CallbackUpdateProfile> callbackStatusCall;
+    private CallbackUpdateProfile responseRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,22 +124,24 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
         Log.d(TAG, "sendOTP: "+registerParams.size());
         Log.d(TAG, "token: "+sessionManager.getAccessToken());
         callbackStatusCall = api.register(sessionManager.getAccessToken(),registerParams);
-        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+        callbackStatusCall.enqueue(new Callback<CallbackUpdateProfile>() {
             @Override
-            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+            public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
                 Log.d(TAG, "onResponse: " + response);
                 responseRegister = response.body();
                 if(responseRegister != null){
                     if (responseRegister.getSuccess()) {
                         Log.d(TAG, "onResponse: "+responseRegister.getMessage());
                         customLoader.hideIndicator();
-
                         sessionManager.saveUserEmail(et_email.getText().toString());
                         sessionManager.saveUserName(et_name.getText().toString());
                         sessionManager.saveBirthday(tv_birthday.getText().toString());
-
+                        sessionManager.saveUserID(responseRegister.getUser().getId().toString());
+                        sessionManager.createLoginSession("Bearer "+responseRegister.getUser().getAuthToken(),responseRegister.getUser().getId().toString());
                         Toast.makeText(mContext, responseRegister.getMessage(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(mContext, AddProfileImageActivity.class));
+                        Intent loginIntent = new Intent(mContext, AddProfileImageActivity.class);
+                        TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
+                        startActivity(loginIntent);
                         registerParams.clear();
                     } else {
                         Log.d(TAG, "onResponse: "+responseRegister.getMessage());
@@ -153,7 +154,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                 }
             }
             @Override
-            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+            public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
                 if (!call.isCanceled()) {
                     Log.d(TAG, "onResponse: " + t.getMessage());
                     customLoader.hideIndicator();

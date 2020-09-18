@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jobesk.kikkiapp.Activities.MainActivity;
 import com.jobesk.kikkiapp.Callbacks.CallbackSentOTP;
 import com.jobesk.kikkiapp.Callbacks.CallbackVerifyOTP;
 import com.jobesk.kikkiapp.Netwrok.API;
@@ -181,10 +182,17 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                 if (responseVerifyOTP != null) {
                     if (responseVerifyOTP.getSuccess()) {
                         Log.d(TAG, "onResponse: " + responseVerifyOTP.getMessage());
+                        String email=responseVerifyOTP.getData().getUser().getEmail();
                         customLoader.hideIndicator();
                         Toast.makeText(mContext, responseVerifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(mContext, LocationActivity.class));
-                        finish();
+                        if(email!=null){
+                            startActivity(new Intent(mContext, MainActivity.class));
+                            finish();
+                        }
+                        else{
+                            startActivity(new Intent(mContext, LocationActivity.class));
+                            finish();
+                        }
                     } else {
                         Log.d(TAG, "onResponse: " + responseVerifyOTP.getMessage());
                         customLoader.hideIndicator();
