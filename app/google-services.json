@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:371180580521:android:3cdd77248be7158f2683b8",
+        "android_client_info": {
+          "package_name": "com.example.kikkiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371180580521-bup3p3g0vsnna3ju63qkiqpdtiljm6q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kikkiapp",
+            "certificate_hash": "ab18ab70ca4c9549027f834afa1a4783a3c2d176"
+          }
+        },
+        {
+          "client_id": "371180580521-cqnm1jpidpfdd883rv6aimcoej8ti9o6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJV1-x9egH02nYEu_myziUTI6jPyN_0mI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371180580521-cqnm1jpidpfdd883rv6aimcoej8ti9o6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:371180580521:android:786a1c43d67987b82683b8",
         "android_client_info": {
           "package_name": "com.jobesk.kikkiapp"

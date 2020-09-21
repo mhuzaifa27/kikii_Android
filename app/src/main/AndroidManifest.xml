@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.jobesk.kikkiapp">
+    package="com.example.kikkiapp">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -30,81 +30,100 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.EditProfileActivity"></activity>
-        <activity android:name=".Activities.MyProfileActivity" />
-        <activity android:name=".Activities.PrivacyPolicyActivity" />
-        <activity android:name=".Activities.SupportActivity" />
-        <activity android:name=".Activities.FiltersActivity" />
-        <activity android:name=".Activities.FriendsActivity" />
-        <activity android:name=".Activities.Profile.DoYouDrinkActivity" />
-        <activity android:name=".Activities.Profile.DoYouSmokeActivity" />
-        <activity android:name=".Activities.Profile.DoYouUseCannabisActivity" />
-        <activity android:name=".Activities.Profile.PoliticalViewsActivity" />
-        <activity android:name=".Activities.Profile.YourDietActivity" />
-        <activity android:name=".Activities.Profile.YourKidsActivity" />
-        <activity android:name=".Activities.Profile.YourPetsActivity" />
-        <activity android:name=".Activities.Profile.YourReligionActivity" />
-        <activity android:name=".Activities.Profile.YourSignActivity" />
-        <activity android:name=".Activities.Profile.RelationshipStatusActivity" />
-        <activity android:name=".Activities.Profile.AddBioActivity" />
-        <activity android:name=".Activities.Profile.SetHeightActivity" />
-        <activity android:name=".Activities.Profile.SexualIdentityActivity" />
-        <activity android:name=".Activities.Profile.PronounsActivity" />
-        <activity android:name=".Activities.Profile.GenderIdentityActivity" />
-        <activity android:name=".Activities.Profile.LookingForActivity" />
-        <activity android:name=".Activities.PostDetailActivity" />
-        <activity android:name=".Activities.CreatePostActivity" />
-        <activity android:name=".Activities.MatchActivity" />
-        <activity android:name=".Activities.EventDetailActivity" />
-        <activity android:name=".Activities.CallingActivity" />
-        <activity android:name=".Activities.ChattingActivity" />
-        <activity android:name=".Activities.SignUpModule.SubscriptionActivity" />
-        <activity android:name=".Activities.SignUpModule.AgreementActivity" />
-        <activity android:name=".Activities.SignUpModule.VerifyProfileImagesActivity" />
-        <activity android:name=".Activities.SignUpModule.AddMoreProfileImagesActivity" >
+        <activity android:name="com.example.kikkiapp.Activities.EditProfileActivity"></activity>
+        <activity android:name="com.example.kikkiapp.Activities.MyProfileActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.PrivacyPolicyActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SupportActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.FiltersActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.FriendsActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.DoYouDrinkActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.DoYouSmokeActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.DoYouUseCannabisActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.PoliticalViewsActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.YourDietActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.YourKidsActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.YourPetsActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.YourReligionActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.YourSignActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.RelationshipStatusActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.AddBioActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.SetHeightActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.SexualIdentityActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.PronounsActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.GenderIdentityActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.Profile.LookingForActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.PostDetailActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.CreatePostActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.MatchActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.EventDetailActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.CallingActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.ChattingActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.SubscriptionActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.AgreementActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.VerifyProfileImagesActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.AddMoreProfileImagesActivity" >
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".Activities.SignUpModule.AddProfileImageActivity" >
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.AddProfileImageActivity" >
            <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".Activities.SignUpModule.RegistrationActivity" >
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.RegistrationActivity" >
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".Activities.SignUpModule.LocationActivity" >
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.LocationActivity" >
            <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".Activities.SignUpModule.VerifyOTPActivity" />
-        <activity android:name=".Activities.SignUpModule.EnterPhoneNumberActivity" />
-        <activity android:name=".Activities.SignUpModule.SignUpActivity" />
-        <activity android:name=".Activities.OnBoardingActivity" />
-        <activity android:name=".Activities.SplashActivity">
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.VerifyOTPActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.EnterPhoneNumberActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.SignUpActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.OnBoardingActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.SignUpModule.InstagramLoginWebView" />
+        <activity android:name="com.example.kikkiapp.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name="com.example.kikkiapp.Activities.MainActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
+        </activity>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>
