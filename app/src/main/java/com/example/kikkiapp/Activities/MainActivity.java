@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         main_frame = findViewById(R.id.main_frame);
         mNetworkReceiver = new CheckConnectivity();
         fm = getSupportFragmentManager();
-       /* mNoNet = new NoNet();
-        mNoNet.initNoNet(this, fm);*/
         mHandler = new Handler();
         eventBus.register(this);
         registerNetworkBroadcastForNougat();

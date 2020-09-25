@@ -137,11 +137,50 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_next"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_marginBottom="50dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_heading_pager"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="You can resend code in"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_description"
+            android:textStyle="normal"></TextView>
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_heading_pager"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="02:00"
+            android:textAllCaps="true"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_description"
+            android:textStyle="normal"></TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_next"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:visibility="gone"
         android:layout_marginBottom="50dp"
         android:layout_centerInParent="true"
         android:orientation="vertical">

@@ -21,10 +21,23 @@
 
             </ImageView>
             <ImageView
+                android:id="@+id/img_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_back"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp">
+
+            </ImageView>
+            <ImageView
+                android:id="@+id/img_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_tick_red"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:layout_marginLeft="20dp">
 
             </ImageView>

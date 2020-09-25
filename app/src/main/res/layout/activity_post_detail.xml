@@ -30,7 +30,7 @@
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_online_user"
+                android:id="@+id/img_user"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="30dp"
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:layout_toRightOf="@+id/img_online_user"
+                android:layout_toRightOf="@+id/img_user"
                 android:orientation="vertical">
 
                 <TextView
@@ -74,7 +74,7 @@
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/img_online_user"
+                android:layout_below="@+id/img_user"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/lato_regular"

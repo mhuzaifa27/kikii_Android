@@ -4,6 +4,7 @@ import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
+import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.google.gson.JsonElement;
 import com.example.kikkiapp.Callbacks.CallbackSentOTP;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
@@ -57,6 +58,11 @@ public interface API {
     Call<CallbackVerifyOTP> verifyOTP(@Header("Authorization") String auth,
                                       @FieldMap Map<String, String> params);
 
+    @POST("create/post")
+    @FormUrlEncoded
+    Call<CallbackStatus> createPost(@Header("Authorization") String auth,
+                                      @FieldMap Map<String, String> params);
+
     @Multipart
     @POST("update/profile")
     Call<CallbackUpdateProfile> updateProfilePhoto(
@@ -75,6 +81,9 @@ public interface API {
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
                                               @Query("access_token") String access_token);
+
+    @GET("resend/phone-verification-code")
+    Call<CallbackStatus> resendOTP(@Header("Authorization") String auth);
 
    /* @POST("login")
     @FormUrlEncoded

@@ -6,15 +6,19 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Activities.MainActivity;
+import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
@@ -25,7 +29,9 @@ import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,8 +49,14 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
 
     private Call<CallbackVerifyOTP> callbackVerifyOTPCall;
     private CallbackVerifyOTP responseVerifyOTP;
+
+    private Call<CallbackStatus> callbackStatusCall;
+    private CallbackStatus responseResendCode;
+
     private String code;
     private Map<String, String> verifyOTPParams = new HashMap<>();
+    private LinearLayout ll_timer,ll_resend;
+    private TextView tv_time,tv_resend_code;
 
 
     @Override
@@ -53,6 +65,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_otp);
 
         initComponents();
+        startCountDown();
 
         et_otp_1.addTextChangedListener(new GenericTextWatcher(et_otp_1));
         et_otp_2.addTextChangedListener(new GenericTextWatcher(et_otp_2));
@@ -62,6 +75,26 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
         et_otp_6.addTextChangedListener(new GenericTextWatcher(et_otp_6));
 
         btn_next.setOnClickListener(this);
+        tv_resend_code.setOnClickListener(this);
+    }
+
+    private void startCountDown() {
+        ll_resend.setVisibility(View.GONE);
+        ll_timer.setVisibility(View.VISIBLE);
+        new CountDownTimer(120000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String text = String.format(Locale.getDefault(), "%02d:%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
+                tv_time.setText(text);
+            }
+            @Override
+            public void onFinish() {
+                ll_resend.setVisibility(View.VISIBLE);
+                ll_timer.setVisibility(View.GONE);
+            }
+        }.start();
     }
 
     private void initComponents() {
@@ -78,6 +111,11 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
 
         btn_next = findViewById(R.id.btn_next);
 
+        ll_resend=findViewById(R.id.ll_resend);
+        ll_timer=findViewById(R.id.ll_timer);
+
+        tv_resend_code=findViewById(R.id.tv_resend_code);
+        tv_time=findViewById(R.id.tv_time);
     }
 
     @Override
@@ -107,7 +145,45 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                     verifyOTP();
                 }
                 break;
+            case R.id.tv_resend_code:
+                resendCode();
+                break;
         }
+    }
+
+    private void resendCode() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(mContext);
+        Log.d(TAG, "sendOTP: " + sessionManager.getAccessToken());
+        callbackStatusCall = api.resendOTP(sessionManager.getAccessToken());
+        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseResendCode = response.body();
+                if (responseResendCode != null) {
+                    customLoader.hideIndicator();
+                    if (responseResendCode.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseResendCode.getMessage());
+                        Toast.makeText(mContext, responseResendCode.getMessage(), Toast.LENGTH_SHORT).show();
+                        startCountDown();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseResendCode.getMessage());
+                        Toast.makeText(mContext, responseResendCode.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(mContext);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
     }
 
     public class GenericTextWatcher implements TextWatcher {
@@ -194,10 +270,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                             Toast.makeText(mContext, responseVerifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(mContext, MainActivity.class);
                             TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
-                            startActivity(loginIntent);
                             verifyOTPParams.clear();
-                           /* startActivity(new Intent(mContext, MainActivity.class));
-                            finish();*/
                         }
                         else{
                             startActivity(new Intent(mContext, LocationActivity.class));

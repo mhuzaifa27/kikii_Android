@@ -1,34 +1,54 @@
 package com.example.kikkiapp.Fragments.Main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.kikkiapp.Adapters.SwipeFlingMeetAdapter;
+import com.example.kikkiapp.Activities.FiltersActivity;
+import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Activities.SupportActivity;
+import com.example.kikkiapp.Adapters.MeetCardSwipeStackAdapter;
 import com.example.kikkiapp.R;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
+import com.yuyakaido.android.cardstackview.CardStackView;
+import com.yuyakaido.android.cardstackview.Direction;
+import com.yuyakaido.android.cardstackview.Duration;
+import com.yuyakaido.android.cardstackview.StackFrom;
+import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import java.util.ArrayList;
 
-public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private static final String TAG = "MeetFragment";
-    private Context context=getContext();
+    private Context context;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<String> list=new ArrayList<>();
-    private SwipeFlingMeetAdapter adapter;
-    private ImageView img_open_details,img_close_details;
-    private LinearLayout ll_normal_view;
+    private ArrayList<String> list = new ArrayList<>();
+    private MeetCardSwipeStackAdapter meetCardSwipeStackAdapter;
+    private ImageView img_open_details, img_close_details, img_menu, img_filters, img_search;
+    private LinearLayout ll_normal_view, ll_menu;
     private RelativeLayout rl_detail_view;
+
+    private CardStackView cardStackView;
+    private CardStackLayoutManager cardStackLayoutManager;
+    private SwipeAnimationSetting swipeAnimationSetting;
+    private boolean isMenuVisible = false;
+    private TextView tv_profile, tv_support, tv_logout;
 
 
     @Override
@@ -37,106 +57,95 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         View view = inflater.inflate(R.layout.fragment_meet, container, false);
         initComponents(view);
 
-        //rl_detail_view.setVisibility(View.GONE);
+        img_menu.setOnClickListener(this);
+        img_filters.setOnClickListener(this);
+        img_search.setOnClickListener(this);
+        tv_profile.setOnClickListener(this);
+        tv_support.setOnClickListener(this);
+        tv_logout.setOnClickListener(this);
 
-            /*// Lookup view for data population
-            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-            TextView tvHome = (TextView) convertView.findViewById(R.id.tvHome);
-            // Populate the data into the template view using the data object
-            tvName.setText(user.name);
-            tvHome.setText(user.hometown);*/
+        return view;
+    }
 
-        img_close_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(context, "1", Toast.LENGTH_SHORT).show();
-                rl_detail_view.setVisibility(View.GONE);
-                ll_normal_view.setVisibility(View.VISIBLE);
-            }
-        });
+    private void initComponents(View view) {
+        context = getContext();
 
-        img_open_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(context, "2", Toast.LENGTH_SHORT).show();
-                rl_detail_view.setVisibility(View.VISIBLE);
-                ll_normal_view.setVisibility(View.GONE);
-            }
-        });
+        img_open_details = view.findViewById(R.id.img_open_details);
+        img_close_details = view.findViewById(R.id.img_close_details);
+        img_menu = view.findViewById(R.id.img_menu);
+        img_filters = view.findViewById(R.id.img_filters);
+        img_search = view.findViewById(R.id.img_search);
 
+        ll_normal_view = view.findViewById(R.id.ll_normal_view);
+        ll_menu = view.findViewById(R.id.ll_menu);
+        rl_detail_view = view.findViewById(R.id.rl_detail_view);
 
-        //add the view via xml or programmatically
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) view.findViewById(R.id.swipe_frame);
+        cardStackView = view.findViewById(R.id.card_stack_view_frame);
+
+        tv_profile = view.findViewById(R.id.tv_profile);
+        tv_support = view.findViewById(R.id.tv_support);
+        tv_logout = view.findViewById(R.id.tv_logout);
 
         list.add("php");
         list.add("c");
         list.add("python");
         list.add("java");
-        adapter=new SwipeFlingMeetAdapter(getContext(),list);
-        flingContainer.setAdapter(adapter);
 
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
-            public void removeFirstObjectInAdapter() {
-                // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Log.d("LIST", "removed object!");
-                list.remove(0);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
-                //Toast.makeText(getContext(), "Left!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRightCardExit(Object dataObject) {
-                //Toast.makeText(getContext(), "Right!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdapterAboutToEmpty(int itemsInAdapter) {
-//                // Ask for more data here
-//                list.add("XML ".concat(String.valueOf(i)));
-//                adapter.notifyDataSetChanged();
-//                Log.d("LIST", "notified");
-//                i++;
-            }
-
-            @Override
-            public void onScroll(float v) {
-
-            }
-        });
-
-        flingContainer.setVerticalScrollBarEnabled(true);
-        flingContainer.computeScroll();
-        flingContainer.setNestedScrollingEnabled(true);
-
-
-        /*// Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
-                //makeToast(MyActivity.this, "Clicked!");
-            }
-        });*/
-        return view;
-    }
-
-    private void initComponents(View view) {
-        img_open_details=view.findViewById(R.id.img_open_details);
-        img_close_details=view.findViewById(R.id.img_close_details);
-
-        ll_normal_view=view.findViewById(R.id.ll_normal_view);
-        rl_detail_view=view.findViewById(R.id.rl_detail_view);
+        setCardSwipe();
     }
 
     @Override
     public void onRefresh() {
 
+    }
+
+    private void setCardSwipe() {
+        cardStackLayoutManager = new CardStackLayoutManager(context);
+        cardStackLayoutManager.setStackFrom(StackFrom.Top);
+        cardStackLayoutManager.setMaxDegree(20.0f);
+        cardStackLayoutManager.setDirections(Direction.HORIZONTAL);
+        cardStackLayoutManager.setSwipeThreshold(0.5f);
+        cardStackLayoutManager.setCanScrollHorizontal(true);
+        cardStackLayoutManager.setCanScrollVertical(false);
+        cardStackView.setLayoutManager(cardStackLayoutManager);
+        meetCardSwipeStackAdapter = new MeetCardSwipeStackAdapter(list, context);
+        cardStackView.setAdapter(meetCardSwipeStackAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_menu:
+                Log.d(TAG, "onClick: img_menu");
+                if (isMenuVisible)
+                    closeMenu();
+                else
+                    openMenu();
+                break;
+            case R.id.img_filters:
+                startActivity(new Intent(context, FiltersActivity.class));
+                break;
+            case R.id.img_search:
+                break;
+            case R.id.tv_profile:
+                closeMenu();
+                startActivity(new Intent(context, MyProfileActivity.class));
+                break;
+            case R.id.tv_support:
+                closeMenu();
+                startActivity(new Intent(context, SupportActivity.class));
+                break;
+            case R.id.tv_logout:
+                closeMenu();
+                break;
+        }
+    }
+
+    private void openMenu() {
+        ll_menu.setVisibility(View.VISIBLE);
+    }
+
+    private void closeMenu() {
+        ll_menu.setVisibility(View.GONE);
     }
 }

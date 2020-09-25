@@ -52,9 +52,28 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     private void initComponents(View view) {
+        communityPostsAdapter=new CommunityPostsAdapter(communityPostsList,getContext());
         rv_community_posts=view.findViewById(R.id.rv_community_posts);
         rv_community_posts.setLayoutManager(new LinearLayoutManager(context));
-        rv_community_posts.setAdapter(new CommunityPostsAdapter(communityPostsList,getContext()));
+        rv_community_posts.setAdapter(communityPostsAdapter);
+
+        communityPostsAdapter.setOnClickListeners(new CommunityPostsAdapter.IClicks() {
+            @Override
+            public void onLikeDislikeClick(View view, String data) {
+
+            }
+
+            @Override
+            public void onCommentClick(View view, String data) {
+
+            }
+
+            @Override
+            public void onShareClick(View view, String data) {
+
+            }
+        });
+
     }
 
     @Override

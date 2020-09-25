@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="SwipeFlingStyle">@style/SwipeFling</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
     <!-- Theme.AppCompat.Light is not a dialog theme -->
     <style name="DialogTheme" parent="Theme.AppCompat.Light">
@@ -59,5 +60,8 @@
 
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_menu</item>
     </style>
 </resources>
