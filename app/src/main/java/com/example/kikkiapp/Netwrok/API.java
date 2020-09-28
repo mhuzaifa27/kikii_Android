@@ -1,6 +1,9 @@
 package com.example.kikkiapp.Netwrok;
 
+import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
+import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
+import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
@@ -44,10 +47,11 @@ public interface API {
     @FormUrlEncoded
     Call<CallbackUpdateProfile> register(@Header("Authorization") String auth,
                                          @FieldMap Map<String, String> params);
+
     @POST("update/profile")
     @FormUrlEncoded
     Call<CallbackUpdateProfile> updateProfile(@Header("Authorization") String auth,
-                                         @FieldMap Map<String, String> params);
+                                              @FieldMap Map<String, String> params);
 
     @POST("access_token")
     @FormUrlEncoded
@@ -61,13 +65,19 @@ public interface API {
     @POST("create/post")
     @FormUrlEncoded
     Call<CallbackStatus> createPost(@Header("Authorization") String auth,
-                                      @FieldMap Map<String, String> params);
+                                    @FieldMap Map<String, String> params);
 
     @Multipart
     @POST("update/profile")
     Call<CallbackUpdateProfile> updateProfilePhoto(
             @Header("Authorization") String auth,
             @Part MultipartBody.Part file);
+
+    @POST("add/comment")
+    @FormUrlEncoded
+    Call<CallbackAddComment> addComment(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
 
     @Multipart
     @POST("update/profile")
@@ -80,10 +90,26 @@ public interface API {
 
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
-                                              @Query("access_token") String access_token);
+                                                     @Query("access_token") String access_token);
 
     @GET("resend/phone-verification-code")
     Call<CallbackStatus> resendOTP(@Header("Authorization") String auth);
+
+
+    @GET("like/post")
+    Call<CallbackStatus> likePost(@Header("Authorization") String auth,
+                                  @Query("id") String id);
+
+    @GET("dislike/post")
+    Call<CallbackStatus> dislikePost(@Header("Authorization") String auth,
+                                     @Query("id") String id);
+
+    @GET("post/comments")
+    Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
+                                     @Query("post_id") String id);
+    @GET("community")
+    Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
+                                               @Query("offset") String next_offset);
 
    /* @POST("login")
     @FormUrlEncoded

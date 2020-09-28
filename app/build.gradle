@@ -102,5 +102,7 @@ dependencies {
 
     //CardStackView
     implementation "com.yuyakaido.android:card-stack-view:2.3.4"
+
+    implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
 }
 apply plugin: 'com.google.gms.google-services'
