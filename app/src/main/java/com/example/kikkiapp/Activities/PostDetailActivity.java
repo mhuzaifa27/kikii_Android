@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import com.example.kikkiapp.Adapters.CommunityPostsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
+import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.Netwrok.API;
@@ -50,6 +54,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private static final String TAG = "ChattingActivity";
     private Context context = PostDetailActivity.this;
+    private Activity activity = PostDetailActivity.this;
 
     private RecyclerView rv_comments;
     private CommentsAdapter commentsAdapter;
@@ -58,13 +63,17 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private Post post;
     private TextView tv_name, tv_description;
     private CircleImageView img_user;
-    private ImageView img_back,img_send;
+    private ImageView img_back, img_send;
+
     private CustomLoader customLoader;
     private SessionManager sessionManager;
-    private Map<String,String> addCommentParams=new HashMap<>();
+    private Map<String, String> addCommentParams = new HashMap<>();
 
     private Call<CallbackGetPostComments> callbackGetPostCommentsCall;
     private CallbackGetPostComments responsePostComments;
+
+    private Call<CallbackStatus> callbackDeleteComment;
+    private CallbackStatus responseDeleteComment;
 
     private Call<CallbackAddComment> callbackAddCommentCall;
     private CallbackAddComment responseAddComment;
@@ -140,7 +149,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void getIntentData() {
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         post = (Post) bundle.getSerializable("post");
     }
@@ -185,17 +194,84 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void setData() {
         currentPage = responsePostComments.getNextOffset();
-        commentsAdapter = new CommentsAdapter(context);
+        commentsAdapter = new CommentsAdapter(activity);
         commentsAdapter.addAll(responsePostComments.getComments());
         rv_comments.setAdapter(commentsAdapter);
+        commentsAdapter.setOnClickListeners(new CommentsAdapter.IClicks() {
+            @Override
+            public void onMenuClick(View view, PostComment postComment, final int position) {
+                PopupMenu popup = new PopupMenu(activity, view);
+                //Inflating the Popup using xml file
+                if(postComment.getUserId().toString().equalsIgnoreCase(sessionManager.getUserID())){
+                    popup.getMenuInflater()
+                            .inflate(R.menu.comment_menu_1, popup.getMenu());
+                }
+                else{
+                    popup.getMenuInflater()
+                            .inflate(R.menu.comment_menu_2, popup.getMenu());
+                }
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_delete:
+                                deleteComment(post.getId(), position);
+                                break;
+                            case R.id.menu_report:
+
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popup.show(); //showing popup menu
+            }
+        });
+    }
+
+    private void deleteComment(Integer id, final int position) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "deleteComment: " + sessionManager.getAccessToken());
+        callbackDeleteComment = api.deleteComment(String.valueOf(id), sessionManager.getAccessToken());
+        callbackDeleteComment.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                customLoader.hideIndicator();
+                responseDeleteComment = response.body();
+                if (responseDeleteComment != null) {
+                    if (responseDeleteComment.getSuccess()) {
+                        customLoader.hideIndicator();
+                        commentsList.remove(position);
+                        commentsAdapter.notifyItemRemoved(position);
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseDeleteComment.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseDeleteComment.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
     }
 
     private void initComponents() {
-        customLoader=new CustomLoader(this,false);
-        sessionManager=new SessionManager(this);
+        customLoader = new CustomLoader(this, false);
+        sessionManager = new SessionManager(this);
 
         rv_comments = findViewById(R.id.rv_comments);
-        layoutManager=new LinearLayoutManager(context);
+        layoutManager = new LinearLayoutManager(context);
         layoutManager.setReverseLayout(true);
         rv_comments.setLayoutManager(layoutManager);
 
@@ -204,23 +280,22 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         img_user = findViewById(R.id.img_user);
         img_back = findViewById(R.id.img_back);
-        img_send=findViewById(R.id.img_send);
+        img_send = findViewById(R.id.img_send);
 
-        et_comment=findViewById(R.id.et_comment);
+        et_comment = findViewById(R.id.et_comment);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.img_send:
-                if(et_comment.getText().toString().isEmpty()){
+                if (et_comment.getText().toString().isEmpty()) {
                     et_comment.setError(getResources().getString(R.string.et_error));
-                }
-                else{
-                    comment=et_comment.getText().toString();
+                } else {
+                    comment = et_comment.getText().toString();
 
-                    addCommentParams.put(Constant.BODY,comment);
-                    addCommentParams.put(Constant.POST_ID,String.valueOf(post.getId()));
+                    addCommentParams.put(Constant.BODY, comment);
+                    addCommentParams.put(Constant.POST_ID, String.valueOf(post.getId()));
 
                     addComment();
                 }
@@ -245,7 +320,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         et_comment.setText("");
                         View view = PostDetailActivity.this.getCurrentFocus();
                         if (view != null) {
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }
                     } else {

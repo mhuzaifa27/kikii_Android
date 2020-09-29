@@ -28,8 +28,12 @@
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/lato_bold</item>
     </style>
+
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:background">@drawable/bg_bottom_sheet</item>
     </style>
     <style name="mySpinnerItemStyle" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
@@ -63,5 +67,7 @@
     </style>
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@drawable/bg_menu</item>
+        <item name="android:popupElevation">20dp</item>
+
     </style>
 </resources>

@@ -1,13 +1,9 @@
-
 package com.example.kikkiapp.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class PostComment {
-
+public class CommentReply {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -16,7 +12,7 @@ public class PostComment {
     private String body;
     @SerializedName("post_id")
     @Expose
-    private Integer postId;
+    private Object postId;
     @SerializedName("user_id")
     @Expose
     private Integer userId;
@@ -28,13 +24,7 @@ public class PostComment {
     private String updatedAt;
     @SerializedName("comment_id")
     @Expose
-    private Integer comment_id;
-    @SerializedName("replies")
-    @Expose
-    private List<CommentReply> replies = null;
-    @SerializedName("user")
-    @Expose
-    private PostCommenter user;
+    private Integer commentId;
 
     public Integer getId() {
         return id;
@@ -52,11 +42,11 @@ public class PostComment {
         this.body = body;
     }
 
-    public Integer getPostId() {
+    public Object getPostId() {
         return postId;
     }
 
-    public void setPostId(Integer postId) {
+    public void setPostId(Object postId) {
         this.postId = postId;
     }
 
@@ -84,27 +74,11 @@ public class PostComment {
         this.updatedAt = updatedAt;
     }
 
-    public Integer getComment_id() {
-        return comment_id;
+    public Integer getCommentId() {
+        return commentId;
     }
 
-    public void setComment_id(Integer comment_id) {
-        this.comment_id = comment_id;
-    }
-
-    public PostCommenter getCommenter() {
-        return user;
-    }
-
-    public void setCommenter(PostCommenter user) {
-        this.user = user;
-    }
-
-    public List<CommentReply> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<CommentReply> replies) {
-        this.replies = replies;
+    public void setCommentId(Integer commentId) {
+        this.commentId = commentId;
     }
 }

@@ -4,24 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.CreatePostActivity;
-import com.example.kikkiapp.Model.Post;
+import com.example.kikkiapp.Model.CommentReply;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.R;
-import com.example.kikkiapp.Utils.SessionManager;
-import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.ShowReplyOfCommentsBottomSheet;
 
 import java.util.ArrayList;
@@ -29,80 +23,60 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCommentsViewHolder> {
-    private List<PostComment> data;
+public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.PostCommentsViewHolder> {
+    private List<CommentReply> data;
     private Context context;
     private Activity activity;
     private boolean isLoadingAdded;
-    private SessionManager sessionManager;
-    private IClicks iClicks;
 
-    public interface IClicks {
-        void onMenuClick(View view, PostComment data,int position);
-    }
-
-    public void setOnClickListeners(IClicks iClicks) {
-        this.iClicks = iClicks;
-    }
-
-    public CommentsAdapter(Activity activity) {
+    public RepliesAdapter(Activity activity) {
 //        this.data = data;
         data=new ArrayList<>();
         this.context = activity;
         this.activity = activity;
-        sessionManager=new SessionManager(context);
     }
-
     @Override
     public PostCommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_comment, parent, false);
+        View view = inflater.inflate(R.layout.item_reply, parent, false);
         return new PostCommentsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final PostCommentsViewHolder holder, final int position) {
-        final PostComment postComment = data.get(position);
+    public void onBindViewHolder(final PostCommentsViewHolder holder, int position) {
+        final CommentReply commentReply = data.get(position);
 
-        holder.tv_name.setText(postComment.getCommenter().getName());
-        holder.tv_comment.setText(postComment.getBody());
+        /*holder.tv_name.setText(commentReply.get().getName());
+        holder.tv_reply.setText(commentReply.getBody());
         Glide
                 .with(context)
-                .load(postComment.getCommenter().getProfilePic())
+                .load(commentReply.getCommenter().getProfilePic())
                 .centerCrop()
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(holder.img_user);
-
-        holder.tv_reply.setOnClickListener(new View.OnClickListener() {
+*/
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowReplyOfCommentsBottomSheet.showDialog(activity,v,postComment);
-            }
-        });
-        holder.img_comment_options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(iClicks!=null){
-                    iClicks.onMenuClick(v,postComment,position);
-                }
+                context.startActivity(new Intent(context, CreatePostActivity.class));
             }
         });
     }
-    public void add(PostComment mc) {
+    public void add(CommentReply mc) {
         data.add(mc);
         notifyItemInserted(data.size() - 1);
     }
 
-    public void addAll(List <PostComment > mcList) {
-        for (PostComment mc: mcList) {
+    public void addAll(List <CommentReply> mcList) {
+        for (CommentReply mc: mcList) {
             add(mc);
         }
     }
 
-    public void remove(PostComment city) {
+    public void remove(CommentReply city) {
         int position = data.indexOf(city);
         if (position > -1) {
             data.remove(position);
@@ -123,20 +97,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new PostComment());
+        add(new CommentReply());
     }
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
         int position = data.size() - 1;
-        PostComment item = getItem(position);
+        CommentReply item = getItem(position);
         if (item != null) {
             data.remove(position);
             notifyItemRemoved(position);
         }
     }
 
-    public PostComment getItem(int position) {
+    public CommentReply getItem(int position) {
         return data.get(position);
     }
 
@@ -146,19 +120,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
     }
 
     public class PostCommentsViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_comment, tv_date,tv_reply;
+        TextView tv_name, tv_date,tv_reply;
         CircleImageView img_user;
-        ImageView img_comment_options;
 
         public PostCommentsViewHolder(View itemView) {
             super(itemView);
             tv_name=itemView.findViewById(R.id.tv_name);
-            tv_comment=itemView.findViewById(R.id.tv_comment);
             tv_date=itemView.findViewById(R.id.tv_date);
             tv_reply=itemView.findViewById(R.id.tv_reply);
 
             img_user=itemView.findViewById(R.id.img_user);
-            img_comment_options=itemView.findViewById(R.id.img_comment_options);
         }
     }
 }

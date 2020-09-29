@@ -34,7 +34,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
     private boolean isLoadingAdded;
 
     public interface IClicks {
-        void onLikeDislikeClick(View view, Post data);
+        void onLikeDislikeClick(View view, Post data,int position,TextView tv_likes);
 
         void onCommentClick(View view, Post data);
 
@@ -115,6 +115,12 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
         holder.tv_description.setText(post.getBody());
         holder.tv_likes.setText(String.valueOf(post.getLikesCount()));
         holder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
+
+        if (post.getIsLiked().toString().equalsIgnoreCase("0"))
+            holder.tv_likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_empty_heart, 0, 0, 0);
+        else
+            holder.tv_likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fill_heart, 0, 0, 0);
+
         Glide
                 .with(context)
                 .load(post.getUser().getProfilePic())
@@ -126,7 +132,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
                 .into(holder.img_user);
 
         /***CLICKS****/
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (iClicks != null) {
@@ -134,12 +140,12 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
                         iClicks.onLikeDislikeClick(v, post);
                 }
             }
-        });
+        });*/
         holder.tv_likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (iClicks != null) {
-                    iClicks.onLikeDislikeClick(v, post);
+                    iClicks.onLikeDislikeClick(v, post,position,holder.tv_likes);
                 }
             }
         });

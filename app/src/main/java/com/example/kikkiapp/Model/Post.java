@@ -26,6 +26,9 @@ public class Post implements Serializable {
     @SerializedName("likes_count")
     @Expose
     private Integer likesCount;
+    @SerializedName("IsLiked")
+    @Expose
+    private Integer IsLiked;
     @SerializedName("comments_count")
     @Expose
     private Integer commentsCount;
@@ -108,4 +111,11 @@ public class Post implements Serializable {
         this.user = user;
     }
 
+    public Integer getIsLiked() {
+        return IsLiked;
+    }
+
+    public void setIsLiked(Integer isLiked) {
+        IsLiked = isLiked;
+    }
 }

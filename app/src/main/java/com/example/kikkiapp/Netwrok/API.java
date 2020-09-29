@@ -17,6 +17,7 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -96,13 +97,9 @@ public interface API {
     Call<CallbackStatus> resendOTP(@Header("Authorization") String auth);
 
 
-    @GET("like/post")
-    Call<CallbackStatus> likePost(@Header("Authorization") String auth,
-                                  @Query("id") String id);
-
-    @GET("dislike/post")
-    Call<CallbackStatus> dislikePost(@Header("Authorization") String auth,
-                                     @Query("id") String id);
+    @GET("likedislike/post/{id}")
+    Call<CallbackStatus> likeDislikePost(@Header("Authorization") String auth,
+                                  @Path("id") String id);
 
     @GET("post/comments")
     Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
@@ -110,6 +107,10 @@ public interface API {
     @GET("community")
     Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
                                                @Query("offset") String next_offset);
+
+    @DELETE("/delete/comment/{id}")
+    Call<CallbackStatus> deleteComment(@Path("id") String id,
+                                              @Query("token") String access_token);
 
    /* @POST("login")
     @FormUrlEncoded
