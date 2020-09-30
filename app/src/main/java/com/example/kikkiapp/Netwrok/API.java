@@ -13,9 +13,11 @@ import com.example.kikkiapp.Callbacks.CallbackSentOTP;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
@@ -25,6 +27,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -88,6 +91,12 @@ public interface API {
     @POST("update/profile")
     Call<JsonElement> uploadFile(@Part MultipartBody.Part file);
 
+    @Multipart
+    @POST("create/post")
+    Call<CallbackStatus> createPostWithMedia(@Header("Authorization") String auth,
+                                             @PartMap Map<String, RequestBody> text,
+                                             @Part List<MultipartBody.Part> images);
+
 
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
@@ -99,18 +108,23 @@ public interface API {
 
     @GET("likedislike/post/{id}")
     Call<CallbackStatus> likeDislikePost(@Header("Authorization") String auth,
-                                  @Path("id") String id);
+                                         @Path("id") String id);
 
     @GET("post/comments")
     Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
-                                     @Query("post_id") String id);
+                                                  @Query("post_id") String id);
+
     @GET("community")
     Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
-                                               @Query("offset") String next_offset);
+                                                @Query("offset") String next_offset);
 
-    @DELETE("/delete/comment/{id}")
+    @DELETE("delete/comment/{id}")
     Call<CallbackStatus> deleteComment(@Path("id") String id,
-                                              @Query("token") String access_token);
+                                       @Header("Authorization") String auth);
+
+    @DELETE("delete/post/{id}")
+    Call<CallbackStatus> deletePost(@Path("id") String id,
+                                    @Header("Authorization") String auth);
 
    /* @POST("login")
     @FormUrlEncoded

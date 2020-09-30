@@ -25,6 +25,17 @@ public class CommentReply {
     @SerializedName("comment_id")
     @Expose
     private Integer commentId;
+    @SerializedName("user")
+    @Expose
+    private PostCommentReplier user;
+
+    public PostCommentReplier getUser() {
+        return user;
+    }
+
+    public void setUser(PostCommentReplier user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;

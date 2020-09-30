@@ -38,7 +38,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
     private IClicks iClicks;
 
     public interface IClicks {
-        void onMenuClick(View view, PostComment data,int position);
+        void onMenuClick(View view, PostComment data, int position);
     }
 
     public void setOnClickListeners(IClicks iClicks) {
@@ -47,10 +47,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
 
     public CommentsAdapter(Activity activity) {
 //        this.data = data;
-        data=new ArrayList<>();
+        data = new ArrayList<>();
         this.context = activity;
         this.activity = activity;
-        sessionManager=new SessionManager(context);
+        sessionManager = new SessionManager(context);
     }
 
     @Override
@@ -79,27 +79,29 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
         holder.tv_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowReplyOfCommentsBottomSheet.showDialog(activity,v,postComment);
+                ShowReplyOfCommentsBottomSheet.showDialog(activity, v, postComment);
             }
         });
         holder.img_comment_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(iClicks!=null){
-                    iClicks.onMenuClick(v,postComment,position);
+                if (iClicks != null) {
+                    iClicks.onMenuClick(v, postComment, position);
                 }
             }
         });
     }
+
     public void add(PostComment mc) {
         data.add(mc);
-        notifyItemInserted(data.size() - 1);
+        if (data.size() > 1)
+            notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
     }
 
-    public void addAll(List <PostComment > mcList) {
-        for (PostComment mc: mcList) {
-            add(mc);
-        }
+    public void addAll(List<PostComment> mcList) {
+        data = mcList;
+        notifyDataSetChanged();
     }
 
     public void remove(PostComment city) {
@@ -107,6 +109,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
         if (position > -1) {
             data.remove(position);
             notifyItemRemoved(position);
+            notifyDataSetChanged();
         }
     }
 
@@ -146,19 +149,19 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
     }
 
     public class PostCommentsViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_comment, tv_date,tv_reply;
+        TextView tv_name, tv_comment, tv_date, tv_reply;
         CircleImageView img_user;
         ImageView img_comment_options;
 
         public PostCommentsViewHolder(View itemView) {
             super(itemView);
-            tv_name=itemView.findViewById(R.id.tv_name);
-            tv_comment=itemView.findViewById(R.id.tv_comment);
-            tv_date=itemView.findViewById(R.id.tv_date);
-            tv_reply=itemView.findViewById(R.id.tv_reply);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_comment = itemView.findViewById(R.id.tv_comment);
+            tv_date = itemView.findViewById(R.id.tv_date);
+            tv_reply = itemView.findViewById(R.id.tv_reply);
 
-            img_user=itemView.findViewById(R.id.img_user);
-            img_comment_options=itemView.findViewById(R.id.img_comment_options);
+            img_user = itemView.findViewById(R.id.img_user);
+            img_comment_options = itemView.findViewById(R.id.img_comment_options);
         }
     }
 }

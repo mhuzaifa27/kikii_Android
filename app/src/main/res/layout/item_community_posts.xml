@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:layout_margin="10dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="20dp"
     android:elevation="10dp"
     android:background="@drawable/bg_one_corner_round_white"
     android:orientation="vertical">
@@ -12,15 +13,17 @@
         android:id="@+id/img_user"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
 
     <LinearLayout
+        android:id="@+id/ll_user"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/img_user"
+        android:layout_toLeftOf="@+id/img_post_menu"
         android:orientation="vertical">
 
             <TextView
@@ -50,12 +53,22 @@
             </TextView>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/img_post_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_down_arrow"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingVertical="20dp"
+        android:layout_alignParentEnd="true">
+    </ImageView>
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img_user"
-        android:layout_marginHorizontal="30dp"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
         android:fontFamily="@font/lato_regular"
@@ -69,7 +82,7 @@
         android:background="@color/light_grey"
         android:layout_below="@+id/tv_description"
         android:layout_marginTop="15dp"
-        android:layout_marginHorizontal="30dp"
+        android:layout_marginHorizontal="15dp"
         android:alpha="0.8">
 
     </View>
@@ -80,7 +93,7 @@
         android:layout_below="@+id/view1"
         android:layout_marginTop="15dp"
         android:paddingBottom="15dp"
-        android:layout_marginHorizontal="30dp"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
         <TextView

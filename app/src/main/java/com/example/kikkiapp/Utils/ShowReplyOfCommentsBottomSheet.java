@@ -3,11 +3,14 @@ package com.example.kikkiapp.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.HashMap;
@@ -92,6 +96,8 @@ public class ShowReplyOfCommentsBottomSheet {
         if(postComment.getReplies().size()>0){
             repliesAdapter=new RepliesAdapter(activity);
             repliesAdapter.addAll(postComment.getReplies());
+            rv_replies.setLayoutManager(new LinearLayoutManager(activity));
+            rv_replies.setAdapter(repliesAdapter);
         }
         /********/
 
@@ -112,6 +118,7 @@ public class ShowReplyOfCommentsBottomSheet {
         /******/
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+        setupFullHeight(activity,bottomSheetDialog);
     }
 
     private static void addReply(final Activity activity) {
@@ -147,5 +154,23 @@ public class ShowReplyOfCommentsBottomSheet {
                 }
             }
         });
+    }
+    private static void setupFullHeight(Activity activity, BottomSheetDialog bottomSheetDialog) {
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+
+        int windowHeight = getWindowHeight(activity);
+        if (layoutParams != null) {
+            layoutParams.height = windowHeight;
+        }
+        bottomSheet.setLayoutParams(layoutParams);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+    private static int getWindowHeight(Activity activity) {
+        // Calculate window height for fullscreen use
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 }

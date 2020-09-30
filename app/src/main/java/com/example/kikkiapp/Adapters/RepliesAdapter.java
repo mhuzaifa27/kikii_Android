@@ -46,18 +46,17 @@ public class RepliesAdapter extends RecyclerView.Adapter<RepliesAdapter.PostComm
     public void onBindViewHolder(final PostCommentsViewHolder holder, int position) {
         final CommentReply commentReply = data.get(position);
 
-        /*holder.tv_name.setText(commentReply.get().getName());
+        holder.tv_name.setText(commentReply.getUser().getName());
         holder.tv_reply.setText(commentReply.getBody());
         Glide
                 .with(context)
-                .load(commentReply.getCommenter().getProfilePic())
+                .load(commentReply.getUser().getProfilePic())
                 .centerCrop()
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(holder.img_user);
-*/
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

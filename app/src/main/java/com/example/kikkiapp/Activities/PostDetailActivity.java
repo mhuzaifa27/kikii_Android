@@ -39,6 +39,7 @@ import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.PaginationScrollListener;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.example.kikkiapp.Utils.ShowPopupMenus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private Post post;
     private TextView tv_name, tv_description;
     private CircleImageView img_user;
-    private ImageView img_back, img_send;
+    private ImageView img_back, img_send,img_post_menu;
 
     private CustomLoader customLoader;
     private SessionManager sessionManager;
@@ -107,6 +108,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         loadComments();
 
         img_send.setOnClickListener(this);
+        img_post_menu.setOnClickListener(this);
 
         rv_comments.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
@@ -194,74 +196,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void setData() {
         currentPage = responsePostComments.getNextOffset();
-        commentsAdapter = new CommentsAdapter(activity);
-        commentsAdapter.addAll(responsePostComments.getComments());
+        commentsList=responsePostComments.getComments();
+        commentsAdapter.addAll(commentsList);
         rv_comments.setAdapter(commentsAdapter);
         commentsAdapter.setOnClickListeners(new CommentsAdapter.IClicks() {
             @Override
             public void onMenuClick(View view, PostComment postComment, final int position) {
-                PopupMenu popup = new PopupMenu(activity, view);
-                //Inflating the Popup using xml file
-                if(postComment.getUserId().toString().equalsIgnoreCase(sessionManager.getUserID())){
-                    popup.getMenuInflater()
-                            .inflate(R.menu.comment_menu_1, popup.getMenu());
-                }
-                else{
-                    popup.getMenuInflater()
-                            .inflate(R.menu.comment_menu_2, popup.getMenu());
-                }
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_delete:
-                                deleteComment(post.getId(), position);
-                                break;
-                            case R.id.menu_report:
-
-                                break;
-                        }
-                        return true;
-                    }
-                });
-                popup.show(); //showing popup menu
-            }
-        });
-    }
-
-    private void deleteComment(Integer id, final int position) {
-        customLoader.showIndicator();
-        API api = RestAdapter.createAPI(context);
-        Log.d(TAG, "deleteComment: " + sessionManager.getAccessToken());
-        callbackDeleteComment = api.deleteComment(String.valueOf(id), sessionManager.getAccessToken());
-        callbackDeleteComment.enqueue(new Callback<CallbackStatus>() {
-            @Override
-            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
-                Log.d(TAG, "onResponse: " + response);
-                customLoader.hideIndicator();
-                responseDeleteComment = response.body();
-                if (responseDeleteComment != null) {
-                    if (responseDeleteComment.getSuccess()) {
-                        customLoader.hideIndicator();
-                        commentsList.remove(position);
-                        commentsAdapter.notifyItemRemoved(position);
-                    } else {
-                        Log.d(TAG, "onResponse: " + responseDeleteComment.getMessage());
-                        customLoader.hideIndicator();
-                        Toast.makeText(context, responseDeleteComment.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    customLoader.hideIndicator();
-                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CallbackStatus> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    Log.d(TAG, "onResponse: " + t.getMessage());
-                    customLoader.hideIndicator();
-                }
+                ShowPopupMenus.showCommentMenu(activity,view,postComment,position,rv_comments,commentsList,commentsAdapter);
             }
         });
     }
@@ -269,10 +210,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private void initComponents() {
         customLoader = new CustomLoader(this, false);
         sessionManager = new SessionManager(this);
+        commentsAdapter = new CommentsAdapter(activity);
+        commentsAdapter.addAll(commentsList);
 
         rv_comments = findViewById(R.id.rv_comments);
         layoutManager = new LinearLayoutManager(context);
-        layoutManager.setReverseLayout(true);
         rv_comments.setLayoutManager(layoutManager);
 
         tv_name = findViewById(R.id.tv_name);
@@ -281,6 +223,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         img_user = findViewById(R.id.img_user);
         img_back = findViewById(R.id.img_back);
         img_send = findViewById(R.id.img_send);
+        img_post_menu=findViewById(R.id.img_post_menu);
 
         et_comment = findViewById(R.id.et_comment);
     }
@@ -300,9 +243,15 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     addComment();
                 }
                 break;
+            case R.id.img_post_menu:
+                ShowPopupMenus.showPostMenu(activity,img_post_menu, post);
+                break;
         }
     }
 
+    private void showMenu() {
+
+    }
     private void addComment() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);

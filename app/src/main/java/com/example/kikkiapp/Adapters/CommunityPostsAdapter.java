@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,8 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
         void onCommentClick(View view, Post data);
 
         void onShareClick(View view, Post data);
+
+        void onMenuClick(View view, Post data,int position);
     }
 
     public void setOnClickListeners(IClicks iClicks) {
@@ -53,13 +56,14 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
 
     public void add(Post mc) {
         data.add(mc);
-        notifyItemInserted(data.size() - 1);
+        if (data.size() > 1)
+            notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
     }
 
     public void addAll(List<Post> mcList) {
-        for (Post mc : mcList) {
-            add(mc);
-        }
+        data = mcList;
+        notifyDataSetChanged();
     }
 
     public void remove(Post city) {
@@ -67,6 +71,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
         if (position > -1) {
             data.remove(position);
             notifyItemRemoved(position);
+            notifyDataSetChanged();
         }
     }
 
@@ -141,6 +146,14 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
                 }
             }
         });*/
+        holder.img_post_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iClicks != null) {
+                    iClicks.onMenuClick(v, post,position);
+                }
+            }
+        });
         holder.tv_likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +192,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
 
         private TextView tv_likes, tv_comments, tv_share, tv_description, tv_name, tv_time_ago;
         private CircleImageView img_user;
+        private ImageView img_post_menu;
 
         public CommunityViewHolder(View itemView) {
             super(itemView);
@@ -190,6 +204,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<CommunityPostsAd
             tv_time_ago = itemView.findViewById(R.id.tv_time_ago);
 
             img_user = itemView.findViewById(R.id.img_user);
+            img_post_menu=itemView.findViewById(R.id.img_post_menu);
         }
     }
 }

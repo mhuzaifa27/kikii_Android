@@ -13,6 +13,9 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.kikkiapp.Netwrok.Constant;
 
+import net.alhazmy13.mediapicker.Image.ImagePicker;
+import net.alhazmy13.mediapicker.Video.VideoPicker;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
@@ -41,6 +44,22 @@ public class SelectImage {
             ActivityCompat.requestPermissions(activityMain, PERMISSIONS, PERMISSION_ALL);
         } else {
             selectImageDialog(i,type);
+        }
+    }
+    public static void getPermissions(Activity activity,int i) {
+        activityMain = activity;
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        };
+        if (!hasPermissions(activityMain
+                , PERMISSIONS)) {
+            ActivityCompat.requestPermissions(activityMain, PERMISSIONS, PERMISSION_ALL);
+        } else {
+            selectImageDialog(i);
         }
     }
 
@@ -77,6 +96,27 @@ public class SelectImage {
         }
     }
 
+    private static void selectImageDialog(int i) {
+        if (i == 1) {
+            new ImagePicker.Builder(activityMain)
+                    .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                    .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                    .directory(ImagePicker.Directory.DEFAULT)
+                    .extension(ImagePicker.Extension.PNG)
+                    .scale(600, 600)
+                    .allowMultipleImages(true)
+                    .enableDebuggingMode(true)
+                    .build();
+        }
+        else{
+            new VideoPicker.Builder(activityMain)
+                    .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
+                    .directory(VideoPicker.Directory.DEFAULT)
+                    .extension(VideoPicker.Extension.MP4)
+                    .enableDebuggingMode(true)
+                    .build();
+        }
+    }
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);

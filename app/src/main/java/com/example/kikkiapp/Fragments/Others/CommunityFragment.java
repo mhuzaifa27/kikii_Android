@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.PaginationScrollListener;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.example.kikkiapp.Utils.ShowPopupMenus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,8 +65,8 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     private Call<CallbackGetCommunityPosts> callbackGetCommunityPostsCall;
     private CallbackGetCommunityPosts responseAllPosts;
 
-    private Call<CallbackStatus> callbackLikeCall, callbackDisLikeCall;
-    private CallbackStatus responseLike, responseDislike;
+    private Call<CallbackStatus> callbackLikeCall, callbackDeletePost;
+    private CallbackStatus responseLike, responseDeletePost;
 
     /*****/
     ProgressBar progressBar;
@@ -87,8 +90,9 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
         View view = inflater.inflate(R.layout.fragment_community, container, false);
         initComponents(view);
-        if (NEED_TO_LOAD_DATA)
+        //if (NEED_TO_LOAD_DATA)
             loadCommunityPosts();
+        swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
 
@@ -133,8 +137,16 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 if (responseAllPosts != null) {
                     if (responseAllPosts.getSuccess()) {
                         customLoader.hideIndicator();
-                        if (responseAllPosts.getPosts().size() > 0)
+                        swipeRefreshLayout.setRefreshing(false);
+                        if (responseAllPosts.getPosts().size() > 0){
+                            tv_no.setVisibility(View.GONE);
+                            rv_community_posts.setVisibility(View.VISIBLE);
                             setData();
+                        }
+                        else{
+                            tv_no.setVisibility(View.VISIBLE);
+                            rv_community_posts.setVisibility(View.GONE);
+                        }
                         /*else
                             currentPage = -1;*/
                     } else {
@@ -159,11 +171,10 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     private void setData() {
-        NEED_TO_LOAD_DATA=false;
+        NEED_TO_LOAD_DATA = false;
         currentPage = responseAllPosts.getNextOffset();
-        communityPostsAdapter = new CommunityPostsAdapter(context);
         communityPostsList = responseAllPosts.getPosts();
-        communityPostsAdapter.addAll(responseAllPosts.getPosts());
+        communityPostsAdapter.addAll(communityPostsList);
         rv_community_posts.setAdapter(communityPostsAdapter);
         communityPostsAdapter.setOnClickListeners(new CommunityPostsAdapter.IClicks() {
             @Override
@@ -182,7 +193,11 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
             @Override
             public void onShareClick(View view, Post post) {
+            }
 
+            @Override
+            public void onMenuClick(View view, final Post post, final int position) {
+                ShowPopupMenus.showPostMenu(activity,view, post,position,rv_community_posts,communityPostsList,communityPostsAdapter);
             }
         });
     }
@@ -193,10 +208,15 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
         customLoader = new CustomLoader(activity, false);
         sessionManager = new SessionManager(context);
+        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
+        communityPostsAdapter = new CommunityPostsAdapter(context);
+        communityPostsAdapter.addAll(communityPostsList);
 
         rv_community_posts = view.findViewById(R.id.rv_community_posts);
         layoutManager = new LinearLayoutManager(context);
         rv_community_posts.setLayoutManager(layoutManager);
+
+        tv_no=view.findViewById(R.id.tv_no);
     }
 
     private void likeDislikePost(Integer id, final int position, final TextView tv_likes) {
@@ -251,6 +271,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-
+        communityPostsList.clear();
+        loadCommunityPosts();
     }
 }
