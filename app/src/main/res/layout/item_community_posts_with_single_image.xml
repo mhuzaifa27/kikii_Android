@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="20dp"
+    android:elevation="10dp"
+    android:background="@drawable/bg_one_corner_round_white"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_user"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+
+    <LinearLayout
+        android:id="@+id/ll_user"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/img_user"
+        android:layout_toLeftOf="@+id/img_post_menu"
+        android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text="Callie"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/tv_time_ago"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp">
+
+            </TextView>
+            <TextView
+                android:id="@+id/tv_time_ago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato_regular"
+                android:text="12 min. ago"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/light_grey"
+                android:textSize="12sp">
+            </TextView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_post_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_down_arrow"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingVertical="20dp"
+        android:layout_alignParentEnd="true">
+    </ImageView>
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_user"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/lato_regular"
+        android:textColor="@color/black"
+        android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.">
+    </TextView>
+    <ImageView
+        android:id="@+id/img_media"
+        android:src="@drawable/dummy_flower"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/border_four_corner_plan_white"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:layout_below="@+id/tv_description"/>
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@+id/img_media"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:alpha="0.8">
+
+    </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1"
+        android:layout_marginTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="46"
+            android:drawableLeft="@drawable/ic_empty_heart"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:drawablePadding="5dp"
+            android:layout_marginRight="20dp">
+        </TextView>
+        <TextView
+            android:id="@+id/tv_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40"
+            android:drawableLeft="@drawable/ic_comment_red"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:drawablePadding="5dp"
+            android:layout_marginRight="20dp">
+
+        </TextView>
+        <TextView
+            android:id="@+id/tv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_share_red"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:drawablePadding="5dp"
+            android:layout_marginRight="20dp">
+
+        </TextView>
+
+    </LinearLayout>
+
+</RelativeLayout>

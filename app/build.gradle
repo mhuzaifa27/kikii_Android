@@ -103,6 +103,11 @@ dependencies {
     //CardStackView
     implementation "com.yuyakaido.android:card-stack-view:2.3.4"
 
+    //Image and video picker
     implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
+
+    //ImageViewer
+    implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

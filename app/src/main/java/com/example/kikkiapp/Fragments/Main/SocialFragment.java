@@ -134,7 +134,7 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         navItemIndex = 1;
         img_kikii_info.setVisibility(View.GONE);
-        img_add.setVisibility(View.VISIBLE);
+        img_add.setVisibility(View.GONE);
         loadFragment();
     }
 

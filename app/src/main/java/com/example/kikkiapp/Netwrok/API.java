@@ -3,6 +3,7 @@ package com.example.kikkiapp.Netwrok;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
+import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
@@ -117,6 +118,10 @@ public interface API {
     @GET("community")
     Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
                                                 @Query("offset") String next_offset);
+
+    @GET("get/events")
+    Call<CallbackGetEvents> getEvents(@Header("Authorization") String auth,
+                                      @Query("offset") String next_offset);
 
     @DELETE("delete/comment/{id}")
     Call<CallbackStatus> deleteComment(@Path("id") String id,

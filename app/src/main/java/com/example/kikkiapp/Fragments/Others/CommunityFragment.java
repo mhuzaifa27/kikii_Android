@@ -136,14 +136,13 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 responseAllPosts = response.body();
                 if (responseAllPosts != null) {
                     if (responseAllPosts.getSuccess()) {
-                        customLoader.hideIndicator();
                         swipeRefreshLayout.setRefreshing(false);
                         if (responseAllPosts.getPosts().size() > 0){
                             tv_no.setVisibility(View.GONE);
                             rv_community_posts.setVisibility(View.VISIBLE);
                             setData();
-                        }
-                        else{
+                        }else{
+                            customLoader.hideIndicator();
                             tv_no.setVisibility(View.VISIBLE);
                             rv_community_posts.setVisibility(View.GONE);
                         }
@@ -176,6 +175,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         communityPostsList = responseAllPosts.getPosts();
         communityPostsAdapter.addAll(communityPostsList);
         rv_community_posts.setAdapter(communityPostsAdapter);
+        customLoader.hideIndicator();
         communityPostsAdapter.setOnClickListeners(new CommunityPostsAdapter.IClicks() {
             @Override
             public void onLikeDislikeClick(View view, Post post, int position, TextView tv_likes) {

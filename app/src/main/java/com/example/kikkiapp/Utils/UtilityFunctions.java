@@ -1,7 +1,14 @@
 package com.example.kikkiapp.Utils;
 
+import android.app.Activity;
+
+import com.example.kikkiapp.Model.PostMedia;
+import com.example.kikkiapp.R;
+import com.stfalcon.imageviewer.StfalconImageViewer;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class UtilityFunctions {
     public static int calculateAge(Date birthdate) {
@@ -25,4 +32,8 @@ public class UtilityFunctions {
 
         return yearDifference;
     }
+
+    /*public static void ShowImageViewer(Activity activity,List<PostMedia> postMedia){
+        StfalconImageViewer.Builder<>
+    }*/
 }
