@@ -210,25 +210,31 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_nav_meet:
                         navItemIndex = 0;
+                        SocialFragment.navItemIndex=0;
                         CURRENT_TAG = TAG_MEET;
                         break;
                     case R.id.bottom_nav_match:
                         navItemIndex = 1;
+                        SocialFragment.navItemIndex=0;
                         CURRENT_TAG = TAG_MATCH;
                         break;
                     case R.id.bottom_nav_chat:
                         navItemIndex = 2;
+                        SocialFragment.navItemIndex=0;
                         CURRENT_TAG = TAG_CHAT;
                         break;
                     case R.id.bottom_nav_social:
                         navItemIndex = 3;
+                        SocialFragment.navItemIndex=0;
                         CURRENT_TAG = TAG_SOCIAL;
                         break;
                     case R.id.bottom_nav_notify:
                         navItemIndex = 4;
+                        SocialFragment.navItemIndex=0;
                         CURRENT_TAG = TAG_NOTIFICATION;
                         break;
                     default:
+                        SocialFragment.navItemIndex=0;
                         navItemIndex = 0;
                 }
 

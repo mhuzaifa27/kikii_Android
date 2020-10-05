@@ -23,5 +23,15 @@
         tools:itemCount="10"
         tools:listitem="@layout/item_friends">
     </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No Pending Requests!"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

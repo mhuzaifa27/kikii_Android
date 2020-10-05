@@ -16,14 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.kikkiapp.Adapters.CommunityPostsAdapter;
 import com.example.kikkiapp.Adapters.EventsAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.Event;
-import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Netwrok.API;
+import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -53,15 +51,15 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private LinearLayoutManager layoutManager;
     private List<Event> eventsList = new ArrayList<>();
 
-    private Map<String, String> communityPostsParam = new HashMap<>();
+    private Map<String, String> eventParams = new HashMap<>();
     private CustomLoader customLoader;
     private SessionManager sessionManager;
 
     private Call<CallbackGetEvents> callbackGetEventsCall;
     private CallbackGetEvents responseGetEvents;
 
-    private Call<CallbackStatus> callbackLikeCall, callbackDeletePost;
-    private CallbackStatus responseLike, responseDeletePost;
+    private Call<CallbackStatus> callbackAttendEvent, callbackDeletePost;
+    private CallbackStatus responseAttendEvent, responseDeletePost;
 
     /*****/
     ProgressBar progressBar;
@@ -90,6 +88,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         loadEvents();
 
+        swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
 
@@ -97,7 +96,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadEvents: " + sessionManager.getAccessToken());
-        callbackGetEventsCall = api.getEvents(sessionManager.getAccessToken(), String.valueOf(currentPage));
+        callbackGetEventsCall = api.getEvents(sessionManager.getAccessToken(), String.valueOf(0));
         callbackGetEventsCall.enqueue(new Callback<CallbackGetEvents>() {
             @Override
             public void onResponse(Call<CallbackGetEvents> call, Response<CallbackGetEvents> response) {
@@ -138,13 +137,99 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
     }
+    private void attendEvent() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadEvents: " + sessionManager.getAccessToken());
+        callbackAttendEvent = api.attendEvent(sessionManager.getAccessToken(), eventParams);
+        callbackAttendEvent.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseAttendEvent = response.body();
+                if (responseAttendEvent != null) {
+                    if (responseAttendEvent.getSuccess()) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseAttendEvent.getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseAttendEvent.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseAttendEvent.getMessage(), Toast.LENGTH_SHORT).show();
+                        eventParams.clear();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
 
     private void setData() {
         currentPage = responseGetEvents.getNextOffset();
         eventsList = responseGetEvents.getEvents();
         eventsAdapter.addAll(eventsList);
         rv_events.setAdapter(eventsAdapter);
+
+        eventsAdapter.setOnClickListeners(new EventsAdapter.IClicks() {
+            @Override
+            public void attendEventClick(View view, Event event, int position) {
+                eventParams.put(Constant.ID,event.getId().toString());
+                attendEvent();
+            }
+
+            @Override
+            public void cancelEventClick(View view, Event event, int position) {
+                eventParams.put(Constant.ID,event.getId().toString());
+                cancelAttendEvent();
+            }
+        });
     }
+
+    private void cancelAttendEvent() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadEvents: " + sessionManager.getAccessToken());
+        callbackAttendEvent = api.attendEvent(sessionManager.getAccessToken(), eventParams);
+        callbackAttendEvent.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseAttendEvent = response.body();
+                if (responseAttendEvent != null) {
+                    if (responseAttendEvent.getSuccess()) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseAttendEvent.getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseAttendEvent.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseAttendEvent.getMessage(), Toast.LENGTH_SHORT).show();
+                        eventParams.clear();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
     private void initComponents(View view) {
         context = getContext();
         activity = getActivity();
@@ -164,6 +249,6 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-
+        loadEvents();
     }
 }

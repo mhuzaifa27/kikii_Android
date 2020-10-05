@@ -101,6 +101,8 @@ public class Constant {
     public static final String BODY="body";
     public static final String OFFSET="offset";
     public static final String POST_ID="post_id";
+    public static final String ID="id";
+    public static final String NOT_SET="N/A";
 
     public static final String INSTAGRAM_LOGIN_LINK="https://api.instagram.com/oauth/authorize?client_id=940190363169482&redirect_uri=https://www.instagram.com/&scope=user_profile&response_type=code";
 

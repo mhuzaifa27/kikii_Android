@@ -88,11 +88,21 @@
                 </ImageView>
 
                 <ImageView
+                    android:id="@+id/img_attend_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/red_add"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true">
+                </ImageView>
+                <ImageView
+                    android:id="@+id/img_cancel_attend_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_cancel_event_attend"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone">
                 </ImageView>
             </RelativeLayout>
         </LinearLayout>

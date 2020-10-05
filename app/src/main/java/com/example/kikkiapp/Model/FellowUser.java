@@ -1,29 +1,35 @@
+
 package com.example.kikkiapp.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+public class FellowUser {
 
-public class Attendant implements Serializable {
-
-    @SerializedName("user_id")
+    @SerializedName("id")
     @Expose
-    private Integer userId;
+    private Integer id;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("profile_pic")
     @Expose
     private String profilePic;
 
-    public Attendant(Integer userId) {
-        this.userId = userId;
+    public Integer getId() {
+        return id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getProfilePic() {

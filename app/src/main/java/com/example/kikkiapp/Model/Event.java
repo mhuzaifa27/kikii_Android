@@ -4,9 +4,10 @@ package com.example.kikkiapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Event {
+public class Event implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -38,6 +39,17 @@ public class Event {
     @SerializedName("attendants")
     @Expose
     private List<Attendant> attendants = null;
+    @SerializedName("user")
+    @Expose
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;

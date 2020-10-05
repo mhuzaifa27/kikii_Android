@@ -58,6 +58,7 @@
         <activity android:name="com.example.kikkiapp.Activities.EventDetailActivity" />
         <activity android:name="com.example.kikkiapp.Activities.CallingActivity" />
         <activity android:name="com.example.kikkiapp.Activities.ChattingActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.KikiiPostDetailActivity" />
         <activity android:name="com.example.kikkiapp.Activities.SignUpModule.SubscriptionActivity" />
         <activity android:name="com.example.kikkiapp.Activities.SignUpModule.AgreementActivity" />
         <activity android:name="com.example.kikkiapp.Activities.SignUpModule.VerifyProfileImagesActivity" />

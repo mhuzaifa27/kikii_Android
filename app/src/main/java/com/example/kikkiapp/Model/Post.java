@@ -37,7 +37,7 @@ public class Post implements Serializable {
     private List<PostMedia> media = null;
     @SerializedName("user")
     @Expose
-    private PostUser user;
+    private User user;
 
     public Integer getId() {
         return id;
@@ -103,11 +103,11 @@ public class Post implements Serializable {
         this.media = media;
     }
 
-    public PostUser getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(PostUser user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

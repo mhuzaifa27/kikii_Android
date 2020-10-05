@@ -38,7 +38,7 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public static final String TAG_COMMUNITY = "tag_community";
     public static final String TAG_EVENTS = "tag_events";
     public static final String TAG_KIKII = "tag_kikii";
-    public static final String CURRENT_TAG = TAG_COMMUNITY;
+    public static String CURRENT_TAG = TAG_COMMUNITY;
     public static int navItemIndex = 0;
 
     private Handler mHandler;
@@ -174,12 +174,16 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private Fragment getFragment() {
         switch (navItemIndex) {
             case 0:
+                CURRENT_TAG=TAG_COMMUNITY;
                 return communityFragment;
             case 1:
+                CURRENT_TAG=TAG_EVENTS;
                 return eventsFragment;
             case 2:
+                CURRENT_TAG=TAG_KIKII;
                 return kikiiFragment;
             default:
+                CURRENT_TAG=TAG_COMMUNITY;
                 return new CommunityFragment();
         }
     }

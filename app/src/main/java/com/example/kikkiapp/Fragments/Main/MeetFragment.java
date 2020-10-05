@@ -142,10 +142,12 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void openMenu() {
+        isMenuVisible=true;
         ll_menu.setVisibility(View.VISIBLE);
     }
 
     private void closeMenu() {
+        isMenuVisible=false;
         ll_menu.setVisibility(View.GONE);
     }
 }

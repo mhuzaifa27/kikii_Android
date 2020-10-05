@@ -184,7 +184,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_gender_s2"
+                            android:id="@+id/tv_gender"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_bold"
@@ -194,7 +194,7 @@
                             android:textStyle="normal"></TextView>
 
                         <TextView
-                            android:id="@+id/tv_gender2"
+                            android:id="@+id/tv_pronouns"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"

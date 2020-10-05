@@ -128,7 +128,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetCommunityPostsCall = api.getAllPosts(sessionManager.getAccessToken(), String.valueOf(currentPage));
+        callbackGetCommunityPostsCall = api.getAllPosts(sessionManager.getAccessToken(), String.valueOf(0));
         callbackGetCommunityPostsCall.enqueue(new Callback<CallbackGetCommunityPosts>() {
             @Override
             public void onResponse(Call<CallbackGetCommunityPosts> call, Response<CallbackGetCommunityPosts> response) {

@@ -38,13 +38,11 @@ public class EventAttendantsAdapter extends RecyclerView.Adapter<EventAttendants
     @Override
     public void onBindViewHolder(final EventAttendantsViewHolder holder, int position) {
         Attendant attendant = data.get(position);
-
-        if(attendant.getUserId()==-1){
+        if (attendant.getUserId() == -1) {
             holder.rl_other_likes.setVisibility(View.VISIBLE);
             holder.tv_total_attendants.setVisibility(View.VISIBLE);
-            holder.tv_total_attendants.setText("+"+(data.size()-1));
-        }
-        else{
+            holder.tv_total_attendants.setText("+" + ((data.size()-8)));
+        } else {
             Glide
                     .with(context)
                     .load(attendant.getProfilePic())
@@ -59,7 +57,11 @@ public class EventAttendantsAdapter extends RecyclerView.Adapter<EventAttendants
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if (data.size() > 8) {
+            return 8;
+        } else {
+            return data.size();
+        }
     }
 
     public class EventAttendantsViewHolder extends RecyclerView.ViewHolder {
@@ -69,9 +71,9 @@ public class EventAttendantsAdapter extends RecyclerView.Adapter<EventAttendants
 
         public EventAttendantsViewHolder(View itemView) {
             super(itemView);
-            img_user=itemView.findViewById(R.id.img_user);
-            tv_total_attendants=itemView.findViewById(R.id.tv_total_attendants);
-            rl_other_likes=itemView.findViewById(R.id.rl_other_likes);
+            img_user = itemView.findViewById(R.id.img_user);
+            tv_total_attendants = itemView.findViewById(R.id.tv_total_attendants);
+            rl_other_likes = itemView.findViewById(R.id.rl_other_likes);
         }
     }
 }

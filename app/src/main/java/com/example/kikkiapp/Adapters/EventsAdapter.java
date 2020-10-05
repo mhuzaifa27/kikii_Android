@@ -2,9 +2,11 @@ package com.example.kikkiapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.EventDetailActivity;
 import com.example.kikkiapp.Model.Attendant;
 import com.example.kikkiapp.Model.Event;
+import com.example.kikkiapp.Model.PostComment;
+import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.ItemDecorator;
 import com.joooonho.SelectableRoundedImageView;
@@ -26,9 +30,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
     private List<Event> data;
     private Context context;
     private boolean isLoadingAdded=false;
+    private IClicks iClicks;
 
     public EventsAdapter(Context context) {
         this.context = context;
+    }
+
+
+    public interface IClicks {
+        void attendEventClick(View view, Event event, int position);
+        void cancelEventClick(View view, Event event, int position);
+    }
+
+    public void setOnClickListeners(IClicks iClicks) {
+        this.iClicks = iClicks;
     }
 
     @Override
@@ -38,8 +53,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         return new EventViewHolder(view);
     }
     @Override
-    public void onBindViewHolder(final EventViewHolder holder, int position) {
-        Event event = data.get(position);
+    public void onBindViewHolder(final EventViewHolder holder, final int position) {
+        final Event event = data.get(position);
 
         holder.tv_event_title.setText(event.getName());
         holder.tv_time.setText(event.getDatetime());
@@ -54,13 +69,36 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
                 .into(holder.img_event);
 
         List<Attendant> attendantList =event.getAttendants();
-        attendantList.add(new Attendant(-1));
+        if(attendantList.size()>8){
+            attendantList.add(7,new Attendant(-1));
+        }
         EventAttendantsAdapter eventAttendantsAdapter=new EventAttendantsAdapter(attendantList,context);
         holder.rv_attendants.setAdapter(eventAttendantsAdapter);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, EventDetailActivity.class));
+                Intent intent=new Intent(context, EventDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("event", event);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+
+        holder.img_attend_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClicks!=null){
+                    iClicks.attendEventClick(v,event,position);
+                }
+            }
+        });
+        holder.img_cancel_attend_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClicks!=null){
+                    iClicks.cancelEventClick(v,event,position);
+                }
             }
         });
     }
@@ -125,10 +163,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         TextView tv_event_title, tv_time;
         SelectableRoundedImageView img_event;
         RecyclerView rv_attendants;
+        ImageView img_attend_event,img_cancel_attend_event;
 
         public EventViewHolder(View itemView) {
             super(itemView);
             img_event=itemView.findViewById(R.id.img_event);
+            img_attend_event=itemView.findViewById(R.id.img_attend_event);
+            img_cancel_attend_event=itemView.findViewById(R.id.img_cancel_attend_event);
 
             tv_time=itemView.findViewById(R.id.tv_time);
             tv_event_title=itemView.findViewById(R.id.tv_event_title);

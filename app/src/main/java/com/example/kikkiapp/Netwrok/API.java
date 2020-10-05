@@ -4,7 +4,10 @@ import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
+import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetKikiiPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
+import com.example.kikkiapp.Callbacks.CallbackGetProfile;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
@@ -84,6 +87,12 @@ public interface API {
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
 
+    @POST("attend/event")
+    @FormUrlEncoded
+    Call<CallbackStatus> attendEvent(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
     @Multipart
     @POST("update/profile")
     Call<JsonElement> uploadFile(@Part MultipartBody.Part file, @Header("Authorization") String authorization);
@@ -122,6 +131,26 @@ public interface API {
     @GET("get/events")
     Call<CallbackGetEvents> getEvents(@Header("Authorization") String auth,
                                       @Query("offset") String next_offset);
+
+    @GET("pending/requests")
+    Call<CallbackGetFellowUsers> getPendingRequests(@Header("Authorization") String auth,
+                                                    @Query("offset") String next_offset);
+
+    @GET("my/friends")
+    Call<CallbackGetFellowUsers> getMyFriends(@Header("Authorization") String auth,
+                                              @Query("offset") String next_offset);
+
+    @GET("sent/requests")
+    Call<CallbackGetFellowUsers> getSentRequests(@Header("Authorization") String auth,
+                                                 @Query("offset") String next_offset);
+
+    @GET("profile")
+    Call<CallbackGetProfile> getProfile(@Header("Authorization") String auth,
+                                        @Query("user_id") String user_id);
+
+    @GET("posts")
+    Call<CallbackGetKikiiPosts> getKikiiPosts(@Header("Authorization") String auth,
+                                              @Query("offset") String next_offset);
 
     @DELETE("delete/comment/{id}")
     Call<CallbackStatus> deleteComment(@Path("id") String id,

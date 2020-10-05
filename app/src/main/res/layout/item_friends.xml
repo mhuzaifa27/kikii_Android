@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:background="@drawable/bg_chat_main"
+    android:layout_margin="10dp"
+    android:elevation="10dp"
+    android:paddingVertical="10dp"
+    android:background="@drawable/bg_one_corner_round_white"
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -31,6 +34,7 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -41,6 +45,7 @@
 
             </TextView>
             <ImageView
+                android:id="@+id/img_my_friend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_my_friends"
@@ -48,6 +53,7 @@
                 android:visibility="visible">
             </ImageView>
             <ImageView
+                android:id="@+id/img_send_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_pending"
@@ -55,6 +61,7 @@
                 android:visibility="gone">
             </ImageView>
             <ImageView
+                android:id="@+id/img_cancel_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cancel_red"

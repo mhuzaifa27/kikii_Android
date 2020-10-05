@@ -1,34 +1,29 @@
 package com.example.kikkiapp.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Adapters.CommentsAdapter;
-import com.example.kikkiapp.Adapters.CommunityPostsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
-import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
+import com.example.kikkiapp.Model.KikiiPost;
 import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.Netwrok.API;
@@ -51,17 +46,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class KikiiPostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "ChattingActivity";
-    private Context context = PostDetailActivity.this;
-    private Activity activity = PostDetailActivity.this;
+    private static final String TAG = "KikiiPostDetailActivity";
+    private Context context = KikiiPostDetailActivity.this;
+    private Activity activity = KikiiPostDetailActivity.this;
 
     private RecyclerView rv_comments;
     private CommentsAdapter commentsAdapter;
     private LinearLayoutManager layoutManager;
     private List<PostComment> commentsList = new ArrayList<>();
-    private Post post;
+    private KikiiPost post;
     private TextView tv_name, tv_description,tv_no;
     private CircleImageView img_user;
     private ImageView img_back, img_send,img_post_menu;
@@ -100,7 +95,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_kikii_post_detail);
 
         initComponents();
         getIntentData();
@@ -137,9 +132,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setPostData() {
-        tv_name.setText(post.getUser().getName());
+        //tv_name.setText(post.getUser().getName());
         tv_description.setText(post.getBody());
-        Glide
+        /*Glide
                 .with(context)
                 .load(post.getUser().getProfilePic())
                 .centerCrop()
@@ -147,13 +142,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
-                .into(img_user);
+                .into(img_user);*/
     }
 
     private void getIntentData() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        post = (Post) bundle.getSerializable("post");
+        post = (KikiiPost) bundle.getSerializable("post");
     }
 
     private void loadComments() {
@@ -244,6 +239,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     et_comment.setError(getResources().getString(R.string.et_error));
                 } else {
                     comment = et_comment.getText().toString();
+
                     addCommentParams.put(Constant.BODY, comment);
                     addCommentParams.put(Constant.POST_ID, String.valueOf(post.getId()));
 
@@ -251,11 +247,14 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
             case R.id.img_post_menu:
-                ShowPopupMenus.showPostMenu(activity,img_post_menu, post);
+                //ShowPopupMenus.showPostMenu(activity,img_post_menu, post);
                 break;
         }
     }
 
+    private void showMenu() {
+
+    }
     private void addComment() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
@@ -271,7 +270,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         customLoader.hideIndicator();
                         commentsAdapter.add(responseAddComment.getComment());
                         et_comment.setText("");
-                        View view = PostDetailActivity.this.getCurrentFocus();
+                        View view = KikiiPostDetailActivity.this.getCurrentFocus();
                         if (view != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
