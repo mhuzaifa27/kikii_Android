@@ -56,6 +56,6 @@ public class LookingForActivity extends AppCompatActivity {
     private void initComponents() {
         rv_gender_identities=findViewById(R.id.rv_gender_identities);
         rv_gender_identities.setLayoutManager(new LinearLayoutManager(context));
-        rv_gender_identities.setAdapter(new IdentityAdapter(genderIdentitiesList,context));
+        rv_gender_identities.setAdapter(new IdentityAdapter(genderIdentitiesList,context,""));
     }
 }

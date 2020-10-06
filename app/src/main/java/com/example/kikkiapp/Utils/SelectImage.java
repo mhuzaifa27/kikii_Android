@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Base64;
 
 import androidx.core.app.ActivityCompat;
 
@@ -82,16 +84,34 @@ public class SelectImage {
             }
         } else if (i == 2) {
             if(type.equalsIgnoreCase(Constant.SINGLE)){
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                /*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
-                activityMain.startActivityForResult(photoPickerIntent, TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);
+                activityMain.startActivityForResult(photoPickerIntent, TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
+                new ImagePicker.Builder(activityMain)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .scale(600, 600)
+                        .allowMultipleImages(false)
+                        .enableDebuggingMode(true)
+                        .build();
             }
             else {
-                Intent intent = new Intent();
+                /*Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                activityMain.startActivityForResult(Intent.createChooser(intent,"Select Picture"), TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);
+                activityMain.startActivityForResult(Intent.createChooser(intent,"Select Picture"), TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
+                new ImagePicker.Builder(activityMain)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .scale(600, 600)
+                        .allowMultipleImages(true)
+                        .enableDebuggingMode(true)
+                        .build();
             }
         }
     }
@@ -157,4 +177,16 @@ public class SelectImage {
         RequestBody requestFile = RequestBody.create(MediaType.parse(partName), file);
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
+    public static Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
+
 }

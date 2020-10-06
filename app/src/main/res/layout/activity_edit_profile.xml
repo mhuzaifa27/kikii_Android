@@ -69,7 +69,8 @@
                             android:scaleType="centerCrop"
                             android:src="@drawable/dummy_flower">
                         </ImageView>-->
-                        <com.joooonho.SelectableRoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        <com.joooonho.SelectableRoundedImageView
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/img_user"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -103,13 +104,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
 
-                               <!-- <com.joooonho.SelectableRoundedImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerInParent="true"
-                                    android:src="@drawable/bg_one_corner_round_white"/>-->
+                                <!-- <com.joooonho.SelectableRoundedImageView
+                                     android:layout_width="match_parent"
+                                     android:layout_height="match_parent"
+                                     android:layout_centerInParent="true"
+                                     android:src="@drawable/bg_one_corner_round_white"/>-->
                                 <com.joooonho.SelectableRoundedImageView
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/img_selected_1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:src="@drawable/bg_add_img_small"
@@ -119,6 +120,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -142,6 +144,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_2"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -152,6 +155,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -193,6 +197,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_3"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -203,6 +208,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -227,6 +233,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_4"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -237,6 +244,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_4"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -261,6 +269,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_5"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -271,6 +280,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_5"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -303,6 +313,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_6"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -313,6 +324,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_6"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -337,6 +349,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_7"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -347,6 +360,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_7"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -371,6 +385,7 @@
                                 android:layout_height="match_parent">
 
                                 <com.joooonho.SelectableRoundedImageView
+                                    android:id="@+id/img_selected_8"
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -381,6 +396,7 @@
                                     android:scaleType="centerCrop"
                                     app:sriv_right_bottom_corner_radius="10dp"/>
                                 <ImageView
+                                    android:id="@+id/img_select_8"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
@@ -460,11 +476,12 @@
                                 android:textStyle="normal"></TextView>
 
                             <TextView
+                                android:id="@+id/tv_gender_identity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="Boy"
+                                android:text="N/A"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
@@ -512,11 +529,12 @@
                                 android:textStyle="normal"></TextView>
 
                             <TextView
+                                android:id="@+id/tv_sexual_identity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="Single"
+                                android:text="N/A"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
@@ -564,11 +582,12 @@
                                 android:textStyle="normal"></TextView>
 
                             <TextView
+                                android:id="@+id/tv_pronouns"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="He/Has"
+                                android:text="N/A"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
@@ -654,11 +673,12 @@
                                 android:textStyle="normal"></TextView>
 
                             <TextView
+                                android:id="@+id/tv_bio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et."
+                                android:text="N/A"
                                 android:textAllCaps="false"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"

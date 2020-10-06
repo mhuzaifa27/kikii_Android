@@ -103,6 +103,24 @@ public class Constant {
     public static final String POST_ID="post_id";
     public static final String ID="id";
     public static final String NOT_SET="N/A";
+    public static final String BIO="bio";
+
+    /**Categories keyword***/
+    public static final String GENDER_IDENTITY="gender_identity";
+    public static final String SEXUAL_IDENTITY="sexual_identity";
+    public static final String PRONOUNS="pronouns";
+    public static final String RELATIONSHIP_STATUS="relationship_status";
+    public static final String HEIGHT="height";
+    public static final String LOOKING_FOR="looking_for";
+    public static final String DRINK="drink";
+    public static final String SMOKE="smoke";
+    public static final String CANNABIS="cannabis";
+    public static final String POLITICAL_VIEWS="political_views";
+    public static final String RELIGION="religion";
+    public static final String SIGN="sign";
+    public static final String PETS="pets";
+    public static final String KIDS="kids";
+    /***********************/
 
     public static final String INSTAGRAM_LOGIN_LINK="https://api.instagram.com/oauth/authorize?client_id=940190363169482&redirect_uri=https://www.instagram.com/&scope=user_profile&response_type=code";
 

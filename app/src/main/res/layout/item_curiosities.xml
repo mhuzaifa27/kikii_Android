@@ -21,7 +21,5 @@
         android:layout_marginLeft="10dp"
         android:fontFamily="@font/lato_regular"
         android:textColor="@color/black"
-        android:layout_toRightOf="@+id/img_curiosity">
-
-    </TextView>
+        android:layout_toRightOf="@+id/img_curiosity"/>
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.kikkiapp.Netwrok;
 
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
+import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
@@ -147,6 +148,11 @@ public interface API {
     @GET("profile")
     Call<CallbackGetProfile> getProfile(@Header("Authorization") String auth,
                                         @Query("user_id") String user_id);
+
+    @GET("get/category/{name}")
+    Call<CallbackGetCategory> getCategory(@Header("Authorization") String auth,
+                                          @Path("name") String name);
+
 
     @GET("posts")
     Call<CallbackGetKikiiPosts> getKikiiPosts(@Header("Authorization") String auth,

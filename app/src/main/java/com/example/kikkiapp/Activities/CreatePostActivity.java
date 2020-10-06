@@ -140,7 +140,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
             case R.id.img_select_image:
-                ShowSelectImageBottomSheet.showDialogForSelectMedia(this,img_select_image);
+                ShowSelectImageBottomSheet.showDialogForSelectMedia(this,img_select_image,Constant.MULTIPLE);
                 break;
         }
     }

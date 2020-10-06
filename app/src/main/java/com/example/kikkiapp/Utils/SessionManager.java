@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.example.kikkiapp.Activities.SignUpModule.SignUpActivity;
+import com.example.kikkiapp.Model.ProfileUser;
+import com.google.gson.Gson;
 
 public class SessionManager {
     // Shared Preferences
@@ -62,6 +64,7 @@ public class SessionManager {
     public static final String KEY_MODLE = "model";
     public static final String KEY_PHOTO = "photo";
     public static final String KEY_STREAM_OBJ = "streamObj";
+    public static final String KEY_PROFILE_USER = "profile_user";
     public static final String KEY_IS_FB_LOGIN = "is_fb_login";
     public static final String KEY_IS_INSTA_LOGIN = "is_insta_login";
 
@@ -269,6 +272,18 @@ public class SessionManager {
     public void saveBoxNo(String boxNo) {
         editor.putString(KEY_BOX_NO, boxNo);
         editor.commit();
+    }
+    public void saveProfileUser(ProfileUser user) {
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        editor.putString(KEY_PROFILE_USER, json);
+        editor.commit();
+    }
+    public ProfileUser getProfileUser() {
+        Gson gson = new Gson();
+        String json = pref.getString(KEY_PROFILE_USER, "");
+        ProfileUser obj = gson.fromJson(json, ProfileUser.class);
+        return obj;
     }
 
     public void saveUserEmail(String email) {

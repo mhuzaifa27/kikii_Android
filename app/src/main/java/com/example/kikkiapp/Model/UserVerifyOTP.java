@@ -23,7 +23,7 @@ public class UserVerifyOTP {
     private String phone;
     @SerializedName("phone_verified")
     @Expose
-    private boolean phoneVerified;
+    private Integer phoneVerified;
     @SerializedName("role")
     @Expose
     private String role;
@@ -152,11 +152,11 @@ public class UserVerifyOTP {
         this.phone = phone;
     }
 
-    public boolean getPhoneVerified() {
+    public Integer getPhoneVerified() {
         return phoneVerified;
     }
 
-    public void setPhoneVerified(boolean phoneVerified) {
+    public void setPhoneVerified(Integer phoneVerified) {
         this.phoneVerified = phoneVerified;
     }
 

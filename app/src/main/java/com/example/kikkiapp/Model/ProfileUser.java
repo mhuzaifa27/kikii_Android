@@ -51,49 +51,49 @@ public class ProfileUser {
     private String bio;
     @SerializedName("relationship_status")
     @Expose
-    private Object relationshipStatus;
+    private String relationshipStatus;
     @SerializedName("height")
     @Expose
-    private Object height;
+    private String height;
     @SerializedName("looking_for")
     @Expose
-    private Object lookingFor;
+    private String lookingFor;
     @SerializedName("drink")
     @Expose
-    private Object drink;
+    private String drink;
     @SerializedName("smoke")
     @Expose
-    private Object smoke;
+    private String smoke;
     @SerializedName("cannabis")
     @Expose
-    private Object cannabis;
+    private String cannabis;
     @SerializedName("political_views")
     @Expose
-    private Object politicalViews;
+    private String politicalViews;
     @SerializedName("religion")
     @Expose
-    private Object religion;
+    private String religion;
     @SerializedName("diet_like")
     @Expose
-    private Object dietLike;
+    private String dietLike;
     @SerializedName("sign")
     @Expose
-    private Object sign;
+    private String sign;
     @SerializedName("pets")
     @Expose
-    private Object pets;
+    private String pets;
     @SerializedName("kids")
     @Expose
-    private Object kids;
+    private String kids;
     @SerializedName("facebook")
     @Expose
-    private Object facebook;
+    private String facebook;
     @SerializedName("instagram")
     @Expose
-    private Object instagram;
+    private String instagram;
     @SerializedName("tiktok")
     @Expose
-    private Object tiktok;
+    private String tiktok;
     @SerializedName("last_online")
     @Expose
     private String lastOnline;
@@ -239,123 +239,123 @@ public class ProfileUser {
         this.bio = bio;
     }
 
-    public Object getRelationshipStatus() {
+    public String getRelationshipStatus() {
         return relationshipStatus;
     }
 
-    public void setRelationshipStatus(Object relationshipStatus) {
+    public void setRelationshipStatus(String relationshipStatus) {
         this.relationshipStatus = relationshipStatus;
     }
 
-    public Object getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(Object height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public Object getLookingFor() {
+    public String getLookingFor() {
         return lookingFor;
     }
 
-    public void setLookingFor(Object lookingFor) {
+    public void setLookingFor(String lookingFor) {
         this.lookingFor = lookingFor;
     }
 
-    public Object getDrink() {
+    public String getDrink() {
         return drink;
     }
 
-    public void setDrink(Object drink) {
+    public void setDrink(String drink) {
         this.drink = drink;
     }
 
-    public Object getSmoke() {
+    public String getSmoke() {
         return smoke;
     }
 
-    public void setSmoke(Object smoke) {
+    public void setSmoke(String smoke) {
         this.smoke = smoke;
     }
 
-    public Object getCannabis() {
+    public String getCannabis() {
         return cannabis;
     }
 
-    public void setCannabis(Object cannabis) {
+    public void setCannabis(String cannabis) {
         this.cannabis = cannabis;
     }
 
-    public Object getPoliticalViews() {
+    public String getPoliticalViews() {
         return politicalViews;
     }
 
-    public void setPoliticalViews(Object politicalViews) {
+    public void setPoliticalViews(String politicalViews) {
         this.politicalViews = politicalViews;
     }
 
-    public Object getReligion() {
+    public String getReligion() {
         return religion;
     }
 
-    public void setReligion(Object religion) {
+    public void setReligion(String religion) {
         this.religion = religion;
     }
 
-    public Object getDietLike() {
+    public String getDietLike() {
         return dietLike;
     }
 
-    public void setDietLike(Object dietLike) {
+    public void setDietLike(String dietLike) {
         this.dietLike = dietLike;
     }
 
-    public Object getSign() {
+    public String getSign() {
         return sign;
     }
 
-    public void setSign(Object sign) {
+    public void setSign(String sign) {
         this.sign = sign;
     }
 
-    public Object getPets() {
+    public String getPets() {
         return pets;
     }
 
-    public void setPets(Object pets) {
+    public void setPets(String pets) {
         this.pets = pets;
     }
 
-    public Object getKids() {
+    public String getKids() {
         return kids;
     }
 
-    public void setKids(Object kids) {
+    public void setKids(String kids) {
         this.kids = kids;
     }
 
-    public Object getFacebook() {
+    public String getFacebook() {
         return facebook;
     }
 
-    public void setFacebook(Object facebook) {
+    public void setFacebook(String facebook) {
         this.facebook = facebook;
     }
 
-    public Object getInstagram() {
+    public String getInstagram() {
         return instagram;
     }
 
-    public void setInstagram(Object instagram) {
+    public void setInstagram(String instagram) {
         this.instagram = instagram;
     }
 
-    public Object getTiktok() {
+    public String getTiktok() {
         return tiktok;
     }
 
-    public void setTiktok(Object tiktok) {
+    public void setTiktok(String tiktok) {
         this.tiktok = tiktok;
     }
 

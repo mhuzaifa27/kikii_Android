@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,11 +18,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class IdentityAdapter extends RecyclerView.Adapter<IdentityAdapter.TravelBuddyViewHolder> {
     private List<String> data;
-    Context context;
+    private Context context;
+    private String selected;
 
-    public IdentityAdapter(List<String> data, Context context) {
+    public IdentityAdapter(List<String> data, Context context,String selected) {
         this.data = data;
         this.context = context;
+        this.selected=selected;
     }
 
     @Override
@@ -34,7 +37,9 @@ public class IdentityAdapter extends RecyclerView.Adapter<IdentityAdapter.Travel
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
         String s = data.get(position);
+        holder.tv_identity.setText(s);
 
+        if(s.equalsIgnoreCase(selected))holder.img_tick.setVisibility(View.VISIBLE);
     }
 
 
@@ -44,14 +49,15 @@ public class IdentityAdapter extends RecyclerView.Adapter<IdentityAdapter.Travel
     }
 
     public class TravelBuddyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_subject, tv_body, tv_date;
+        TextView tv_identity, tv_body, tv_date;
         CircleImageView img_user;
         LinearLayout ll_notify;
+        ImageView img_tick;
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
-
-
+            tv_identity=itemView.findViewById(R.id.tv_identity);
+            img_tick=itemView.findViewById(R.id.img_tick);
         }
     }
 }

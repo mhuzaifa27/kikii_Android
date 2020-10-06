@@ -99,5 +99,39 @@ public class ShowSelectImageBottomSheet {
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+    public static void showDialogForSelectMedia(final Activity activity, View view, final String type) {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                activity, R.style.AppBottomSheetDialogTheme
+        );
+        View bottomSheetView = LayoutInflater.from(activity)
+                .inflate(R.layout.bottom_sheet_select_media,
+                        (RelativeLayout) view.findViewById(R.id.bottomSheetLayout), false);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            bottomSheetView.getBackground().setAlpha(0);
+        } else {
+            bottomSheetView.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
+        }
+        TextView tv_select_image = bottomSheetView.findViewById(R.id.tv_select_image);
+        TextView tv_select_video = bottomSheetView.findViewById(R.id.tv_select_video);
+
+        tv_select_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImage.getPermissions(activity,2,type);
+                bottomSheetDialog.dismiss();
+                //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
+            }
+        });
+        tv_select_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImage.getPermissions(activity,2,type);
+                bottomSheetDialog.dismiss();
+                //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
+            }
+        });
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
 
 }

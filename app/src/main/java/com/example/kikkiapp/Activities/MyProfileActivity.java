@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
+import com.example.kikkiapp.Model.ProfileUser;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
@@ -43,6 +44,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
     private SelectableRoundedImageView img_user;
     private TextView tv_user_name, tv_user_age, tv_gender, tv_pronouns, tv_distance, tv_bio, tv_friends_count;
+    private TextView tv_relationship_status,tv_height,tv_looking_for,tv_cigerate,tv_drink,tv_canabiese,tv_political_views,tv_religion,tv_diet,tv_sign,tv_pet,tv_children;
     private RecyclerView rv_curiosities;
     private Button btn_view_friends;
     private ImageView img_edit;
@@ -101,42 +103,55 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setData() {
-        tv_user_name.setText(responseGetProfile.getUser().getName());
-        tv_friends_count.setText(String.valueOf(responseGetProfile.getUser().getFriends_count()));
-        if (responseGetProfile.getUser().getPronouns() != null)
-            tv_pronouns.setText(responseGetProfile.getUser().getPronouns());
-        else
-            tv_pronouns.setText(Constant.NOT_SET);
-        if (responseGetProfile.getUser().getGenderIdentity() != null)
-            tv_gender.setText(responseGetProfile.getUser().getGenderIdentity());
-        else
-            tv_gender.setText(Constant.NOT_SET);
-        /*if (responseGetProfile.getUser().getPronouns() != null)
-            tv_distance.setText(responseGetProfile.getUser().getPronouns());
-        else
-            tv_distance.setText(Constant.NOT_SET);*/
-        if (responseGetProfile.getUser().getPronouns() != null)
-            tv_bio.setText(responseGetProfile.getUser().getBio());
-        else
-            tv_bio.setText(Constant.NOT_SET);
+        sessionManager.saveProfileUser(responseGetProfile.getUser());
+        ProfileUser user=responseGetProfile.getUser();
+        tv_user_name.setText(user.getName());
+        tv_friends_count.setText("("+user.getFriends_count()+")");
+        if (user.getPronouns() != null)
+            tv_pronouns.setText(user.getPronouns());
+        if (user.getGenderIdentity() != null)
+            tv_gender.setText(user.getGenderIdentity());
+       /* if (user.getPronouns() != null)
+            tv_distance.setText(user.getPronouns());
+        if (user.getPronouns() != null)
+            tv_bio.setText(user.getBio());*/
+        if (user.getBio() != null)
+            tv_bio.setText(user.getBio());
+        /***CURIOSITIES**/
+        if (user.getRelationshipStatus() != null)
+            tv_relationship_status.setText(user.getRelationshipStatus());
+        if (user.getHeight() != null)
+            tv_height.setText(user.getHeight());
+        if (user.getLookingFor() != null)
+            tv_relationship_status.setText(user.getLookingFor());
+        if (user.getSmoke() != null)
+            tv_cigerate.setText(user.getSmoke());
+        if (user.getDrink() != null)
+            tv_drink.setText(user.getDrink());
+        if (user.getCannabis() != null)
+            tv_canabiese.setText(user.getCannabis());
+        if (user.getPoliticalViews() != null)
+            tv_political_views.setText(user.getPoliticalViews());
+        if (user.getReligion() != null)
+            tv_religion.setText(user.getReligion());
+        if (user.getDietLike() != null)
+            tv_diet.setText(user.getDietLike());
+        if (user.getSign() != null)
+            tv_sign.setText(user.getSign());
+        if (user.getPets() != null)
+            tv_pet.setText(user.getPets());
+        if (user.getKids() != null)
+            tv_children.setText(user.getKids());
         Glide
                 .with(context)
-                .load(responseGetProfile.getUser().getProfilePic())
+                .load(user.getProfilePic())
                 .centerCrop()
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(img_user);
-        String birthdateStr = responseGetProfile.getUser().getBirthday();
-        SimpleDateFormat df = new SimpleDateFormat("dd-mm-yyyy");
-        Date birthdate = null;
-        try {
-            birthdate = df.parse(birthdateStr);
-            tv_user_age.setText(String.valueOf(UtilityFunctions.calculateAge(birthdate)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        tv_user_age.setText(", "+UtilityFunctions.getAge(user.getBirthday()));
     }
 
     private void initComponents() {
@@ -153,6 +168,19 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         tv_friends_count = findViewById(R.id.tv_friends_count);
         tv_user_age = findViewById(R.id.tv_user_age);
         tv_user_name = findViewById(R.id.tv_user_name);
+
+        tv_relationship_status=findViewById(R.id.tv_relationship_status);
+        tv_height=findViewById(R.id.tv_height);
+        tv_looking_for=findViewById(R.id.tv_looking_for);
+        tv_cigerate=findViewById(R.id.tv_cigerate);
+        tv_drink=findViewById(R.id.tv_drink);
+        tv_canabiese=findViewById(R.id.tv_canabiese);
+        tv_political_views=findViewById(R.id.tv_political_views);
+        tv_religion=findViewById(R.id.tv_religion);
+        tv_diet=findViewById(R.id.tv_diet);
+        tv_sign=findViewById(R.id.tv_sign);
+        tv_pet=findViewById(R.id.tv_pet);
+        tv_children=findViewById(R.id.tv_children);
 
         btn_view_friends = findViewById(R.id.btn_view_friends);
     }
