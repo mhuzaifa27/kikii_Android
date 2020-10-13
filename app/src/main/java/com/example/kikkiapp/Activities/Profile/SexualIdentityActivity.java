@@ -53,7 +53,7 @@ public class SexualIdentityActivity extends AppCompatActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,SexualIdentityActivity.class));
+                startActivity(new Intent(context,RelationshipStatusActivity.class));
             }
         });
     }
@@ -71,7 +71,8 @@ public class SexualIdentityActivity extends AppCompatActivity {
                 if (responseGetCategory != null) {
                     if (responseGetCategory.getSuccess()) {
                         customLoader.hideIndicator();
-                        setData();
+                        if (responseGetCategory.getValue().getValueAttr().size() > 0)
+                            setData();
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetCategory.getMessage());
                         customLoader.hideIndicator();

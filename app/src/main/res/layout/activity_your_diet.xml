@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/header"
-        layout="@layout/app_header"></include>
+        layout="@layout/app_header_for_cat"></include>
 
 
     <TextView
@@ -25,6 +25,21 @@
         android:textAllCaps="true"
         android:layout_marginHorizontal="20dp">
     </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <com.plumillonforge.android.chipview.ChipView
+            android:id="@+id/chip_statuses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chip_line_spacing="10dp"
+            android:layout_gravity="clip_horizontal"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_statuses"
@@ -37,6 +52,7 @@
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
+        android:visibility="gone"
         android:layout_marginHorizontal="20dp">
 
     </androidx.recyclerview.widget.RecyclerView>

@@ -109,5 +109,8 @@ dependencies {
     //ImageViewer
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
 
+    //ChipView
+    implementation 'com.github.Plumillon:ChipView:1.2.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -3,6 +3,7 @@ package com.example.kikkiapp.Netwrok;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
+import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
@@ -153,6 +154,9 @@ public interface API {
     Call<CallbackGetCategory> getCategory(@Header("Authorization") String auth,
                                           @Path("name") String name);
 
+    @GET("get/category/{name}")
+    Call<CallbackGetCategoryChip> getCategoryChip(@Header("Authorization") String auth,
+                                              @Path("name") String name);
 
     @GET("posts")
     Call<CallbackGetKikiiPosts> getKikiiPosts(@Header("Authorization") String auth,

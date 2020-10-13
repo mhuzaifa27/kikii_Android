@@ -779,19 +779,35 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        android:text="Curiositites"
+                        android:text="Curiosities"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="16sp"
                         android:textStyle="bold">
 
                     </TextView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_title"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <com.plumillonforge.android.chipview.ChipView
+                            android:id="@+id/chip_curiosities"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chip_line_spacing="10dp"
+                            android:layout_gravity="clip_horizontal"/>
+                    </LinearLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:itemCount="10"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="3"
+                        android:visibility="gone"
                         android:layout_marginTop="10dp"
                         tools:listitem="@layout/item_premium_filters">
 

@@ -72,7 +72,8 @@ public class GenderIdentityActivity extends AppCompatActivity {
                 if (responseGetCategory != null) {
                     if (responseGetCategory.getSuccess()) {
                         customLoader.hideIndicator();
-                        setData();
+                        if (responseGetCategory.getValue().getValueAttr().size() > 0)
+                            setData();
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetCategory.getMessage());
                         customLoader.hideIndicator();

@@ -113,6 +113,7 @@ public class Constant {
     public static final String HEIGHT="height";
     public static final String LOOKING_FOR="looking_for";
     public static final String DRINK="drink";
+    public static final String DIET_LIKE="diet_like";
     public static final String SMOKE="smoke";
     public static final String CANNABIS="cannabis";
     public static final String POLITICAL_VIEWS="political_views";
