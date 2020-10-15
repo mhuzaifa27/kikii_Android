@@ -42,6 +42,9 @@ public class PronounsActivity extends AppCompatActivity {
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
 
+    private String isChecked;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,10 @@ public class PronounsActivity extends AppCompatActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,SexualIdentityActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.PRONOUNS,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -98,6 +104,12 @@ public class PronounsActivity extends AppCompatActivity {
         pronounsList =responseGetCategory.getValue().getValueAttr();
         identityAdapter=new IdentityAdapter(pronounsList,context,responseGetCategory.getIsChecked());
         rv_pronouns.setAdapter(identityAdapter);
+        identityAdapter.setOnClickListener(new IdentityAdapter.IClicks() {
+            @Override
+            public void onClickListener(View view, String s) {
+                isChecked=s;
+            }
+        });
     }
     private void initComponents() {
         customLoader=new CustomLoader(this,false);

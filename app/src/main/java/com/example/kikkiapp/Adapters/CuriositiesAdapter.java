@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.kikkiapp.Model.ChipModel;
+import com.example.kikkiapp.Model.CuriosityChipModel;
 import com.example.kikkiapp.R;
 import com.plumillonforge.android.chipview.ChipViewAdapter;
 
@@ -20,8 +21,8 @@ public class CuriositiesAdapter extends ChipViewAdapter {
 
     @Override
     public int getLayoutRes(int position) {
-        ChipModel tag = (ChipModel) getChip(position);
-        return R.layout.item_status;
+        CuriosityChipModel tag = (CuriosityChipModel) getChip(position);
+        return R.layout.item_premium_filters;
         /*switch (tag.getType()) {
             default:
             case 2:
@@ -39,7 +40,7 @@ public class CuriositiesAdapter extends ChipViewAdapter {
 
     @Override
     public int getBackgroundColor(int position) {
-        ChipModel tag = (ChipModel) getChip(position);
+        CuriosityChipModel tag = (CuriosityChipModel) getChip(position);
         return 0;
        /* switch (tag.getType()) {
             default:
@@ -60,37 +61,18 @@ public class CuriositiesAdapter extends ChipViewAdapter {
 
     @Override
     public int getBackgroundColorSelected(int position) {
-        ChipModel tag = (ChipModel) getChip(position);
-        if (isChecked.equalsIgnoreCase(tag.getText())){
-            return R.drawable.border_one_corner_round_red_fill;
-        }
-        else{
-            return R.drawable.border_one_corner_round_red;
-        }
+            return 0;
     }
 
     @Override
     public int getBackgroundRes(int position) {
-        ChipModel tag = (ChipModel) getChip(position);
-        if (isChecked.equalsIgnoreCase(tag.getText())){
-            return R.drawable.border_one_corner_round_red_fill;
-        }
-        else{
-            return R.drawable.border_one_corner_round_red;
-        }
+            return 0;
     }
 
     @Override
     public void onLayout(View view, int position) {
-        ChipModel tag = (ChipModel) getChip(position);
+        CuriosityChipModel tag = (CuriosityChipModel) getChip(position);
         TextView tv_status = view.findViewById(R.id.tv_status);
         tv_status.setText(tag.getText());
-
-        if (isChecked.equalsIgnoreCase(tag.getText())){
-            tv_status.setTextColor(getColor(R.color.white));
-        }
-        else{
-            tv_status.setTextColor(getColor(R.color.grey));
-        }
     }
 }

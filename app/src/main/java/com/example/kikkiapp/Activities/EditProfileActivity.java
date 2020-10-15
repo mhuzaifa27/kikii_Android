@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,14 +35,18 @@ import com.example.kikkiapp.Activities.Profile.YourPetsActivity;
 import com.example.kikkiapp.Activities.Profile.YourReligionActivity;
 import com.example.kikkiapp.Activities.Profile.YourSignActivity;
 import com.example.kikkiapp.Adapters.CuriositiesAdapter;
-import com.example.kikkiapp.Model.ChipModel;
+import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Model.CuriosityChipModel;
 import com.example.kikkiapp.Model.ProfilePic;
 import com.example.kikkiapp.Model.ProfileUser;
+import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
+import com.example.kikkiapp.Utils.SelectImage;
 import com.example.kikkiapp.Utils.SessionManager;
+import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.ShowSelectImageBottomSheet;
 import com.joooonho.SelectableRoundedImageView;
 import com.plumillonforge.android.chipview.Chip;
@@ -55,7 +60,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener, OnChipClickListener {
 
@@ -81,7 +91,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     public static final int REQUEST_KIDS = 550;
 
     private SelectableRoundedImageView img_user, img_selected_1, img_selected_2, img_selected_3, img_selected_4, img_selected_5, img_selected_6, img_selected_7, img_selected_8;
-    private ImageView img_select_1, img_select_2, img_select_3, img_select_4, img_select_5, img_select_6, img_select_7, img_select_8;
+    private ImageView img_select_1, img_select_2, img_select_3, img_select_4, img_select_5, img_select_6, img_select_7, img_select_8, img_ok;
     private static int setImageOn = 0;
     private LinearLayout ll_gender_identity, ll_sexual_identity, ll_pronouns, ll_bio;
 
@@ -97,7 +107,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private TextView tv_gender_identity, tv_sexual_identity, tv_pronouns, tv_bio;
 
-    private Map<String,String> updateProfileParams=new HashMap<>();
+    private Map<String, String> updateProfileParams = new HashMap<>();
+
+    private Call<CallbackUpdateProfile> callbackUpdateProfile;
+    private CallbackUpdateProfile responseUpdateProfile;
+
+    private Map<String, RequestBody> editProfileMultipartParams = new HashMap<>();
 
 
     @Override
@@ -118,6 +133,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_select_6.setOnClickListener(this);
         img_select_7.setOnClickListener(this);
         img_select_8.setOnClickListener(this);
+        img_ok.setOnClickListener(this);
 
         ll_gender_identity.setOnClickListener(this);
         ll_sexual_identity.setOnClickListener(this);
@@ -142,6 +158,16 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 setUrlToImage(profilePics.get(i).getPath(), i + 1);
             }
         }
+
+        if (user.getGenderIdentity() != null)
+            tv_gender_identity.setText(user.getGenderIdentity());
+        if (user.getSexualIdentity() != null)
+            tv_sexual_identity.setText(user.getGenderIdentity());
+        if (user.getPronouns() != null)
+            tv_pronouns.setText(user.getPronouns());
+        if (user.getBio() != null)
+            tv_bio.setText(user.getBio());
+
         setCuriosities();
     }
 
@@ -235,6 +261,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_select_7 = findViewById(R.id.img_select_7);
         img_select_8 = findViewById(R.id.img_select_8);
 
+        img_ok = findViewById(R.id.img_ok);
+
         chip_curiosities = findViewById(R.id.chip_curiosities);
     }
 
@@ -285,7 +313,58 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 setImageOn = 8;
                 ShowSelectImageBottomSheet.showDialogForSelectMedia(this, img_select_8, Constant.SINGLE);
                 break;
+            case R.id.img_ok:
+                if (updateProfileParams.size() > 0) {
+                    if (mediaPaths.size() > 0) {
+                        uploadFiles();
+                    } else {
+                        updateProfile();
+                    }
+                }
+                break;
         }
+    }
+
+    private void uploadFiles() {
+        for (int i = 0; i < mediaPaths.size(); i++) {
+            imagesList.add(SelectImage.prepareFilePart("new_pics[]", mediaPaths.get(i)));
+        }
+        updateProfileWithImages();
+    }
+
+    private void updateProfileWithImages() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "createPost: " + sessionManager.getAccessToken());
+        callbackUpdateProfile = api.updateProfileWithImages(sessionManager.getAccessToken(), updateProfileParams, imagesList);
+        callbackUpdateProfile.enqueue(new Callback<CallbackUpdateProfile>() {
+            @Override
+            public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseUpdateProfile = response.body();
+                if (responseUpdateProfile != null) {
+                    customLoader.hideIndicator();
+                    if (responseUpdateProfile.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseUpdateProfile.getMessage());
+                        Toast.makeText(context, responseUpdateProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseUpdateProfile.getMessage());
+                        Toast.makeText(context, responseUpdateProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
     }
 
     private void setUriToImage(Uri uri) {
@@ -486,124 +565,177 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             Log.d("hhhh", "onActivityResult: " + mediaPaths.size());
 
         }
-        if(requestCode == REQUEST_RELATIONSHIP_STATUS && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.RELATIONSHIP_STATUS);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
-                chip.setmName(cat);
-                curiositiesAdapter = new CuriositiesAdapter(context);
-                chip_curiosities.setAdapter(curiositiesAdapter);
-                chip_curiosities.setChipList(chipList);
+        if (requestCode == REQUEST_GENDER_IDENTITY && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.GENDER_IDENTITY);
+                tv_gender_identity.setText(cat);
+                updateProfileParams.put(Constant.GENDER_IDENTITY, cat);
             }
         }
-        if(requestCode == REQUEST_HEIGHT && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.HEIGHT);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
-                chip.setmName(cat);
-                curiositiesAdapter = new CuriositiesAdapter(context);
-                chip_curiosities.setAdapter(curiositiesAdapter);
-                chip_curiosities.setChipList(chipList);
+        if (requestCode == REQUEST_SEXUAL_IDENTITY && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.SEXUAL_IDENTITY);
+                tv_sexual_identity.setText(cat);
+                updateProfileParams.put(Constant.SEXUAL_IDENTITY, cat);
             }
         }
-        if(requestCode == REQUEST_LOOKING_FOR && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.LOOKING_FOR);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
-                chip.setmName(cat);
-                curiositiesAdapter = new CuriositiesAdapter(context);
-                chip_curiosities.setAdapter(curiositiesAdapter);
-                chip_curiosities.setChipList(chipList);
+        if (requestCode == REQUEST_PRONOUNS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.PRONOUNS);
+                tv_pronouns.setText(cat);
+                updateProfileParams.put(Constant.PRONOUNS, cat);
             }
         }
-        if(requestCode == REQUEST_DO_YOU_DRINK && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.DRINK);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
-                chip.setmName(cat);
-                curiositiesAdapter = new CuriositiesAdapter(context);
-                chip_curiosities.setAdapter(curiositiesAdapter);
-                chip_curiosities.setChipList(chipList);
+        if (requestCode == REQUEST_ADD_BIO && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.BIO);
+                tv_bio.setText(cat);
+                updateProfileParams.put(Constant.BIO, cat);
             }
         }
-        if(requestCode == REQUEST_CANNABIS && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.CANNABIS);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_RELATIONSHIP_STATUS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.RELATIONSHIP_STATUS);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(0);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.RELATIONSHIP_STATUS, cat);
             }
         }
-        if(requestCode == REQUEST_POLITICAL_VIEWS && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.POLITICAL_VIEWS);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_HEIGHT && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.HEIGHT);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(1);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.HEIGHT, cat);
             }
         }
-        if(requestCode == REQUEST_RELIGION && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.RELIGION);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_LOOKING_FOR && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.LOOKING_FOR);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(2);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.LOOKING_FOR, cat);
             }
         }
-        if(requestCode == REQUEST_DIET_LIKE && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.DIET_LIKE);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_DO_YOU_DRINK && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.DRINK);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(3);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.DRINK, cat);
             }
         }
-        if(requestCode == REQUEST_YOUR_SIGN && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.SIGN);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_CANNABIS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.CANNABIS);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(5);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.CANNABIS, cat);
             }
         }
-        if(requestCode == REQUEST_PETS && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.PETS);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_POLITICAL_VIEWS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.POLITICAL_VIEWS);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(6);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.POLITICAL_VIEWS, cat);
             }
         }
-        if(requestCode == REQUEST_DO_YOU_SMOKE && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.SMOKE);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_RELIGION && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.RELIGION);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(7);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.RELIGION, cat);
+
             }
         }
-        if(requestCode == REQUEST_KIDS && resultCode == RESULT_OK){
-            if(data!=null){
-                String cat=data.getStringExtra(Constant.KIDS);
-                CuriosityChipModel chip=(CuriosityChipModel)chipList.get(1);
+        if (requestCode == REQUEST_DIET_LIKE && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.DIET_LIKE);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(8);
                 chip.setmName(cat);
                 curiositiesAdapter = new CuriositiesAdapter(context);
                 chip_curiosities.setAdapter(curiositiesAdapter);
                 chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.DIET_LIKE, cat);
+            }
+        }
+        if (requestCode == REQUEST_YOUR_SIGN && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.SIGN);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(9);
+                chip.setmName(cat);
+                curiositiesAdapter = new CuriositiesAdapter(context);
+                chip_curiosities.setAdapter(curiositiesAdapter);
+                chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.SIGN, cat);
+            }
+        }
+        if (requestCode == REQUEST_PETS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.PETS);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(10);
+                chip.setmName(cat);
+                curiositiesAdapter = new CuriositiesAdapter(context);
+                chip_curiosities.setAdapter(curiositiesAdapter);
+                chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.PETS, cat);
+            }
+        }
+        if (requestCode == REQUEST_DO_YOU_SMOKE && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.SMOKE);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(4);
+                chip.setmName(cat);
+                curiositiesAdapter = new CuriositiesAdapter(context);
+                chip_curiosities.setAdapter(curiositiesAdapter);
+                chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.SMOKE, cat);
+            }
+        }
+        if (requestCode == REQUEST_KIDS && resultCode == RESULT_OK) {
+            if (data != null) {
+                String cat = data.getStringExtra(Constant.KIDS);
+                CuriosityChipModel chip = (CuriosityChipModel) chipList.get(11);
+                chip.setmName(cat);
+                curiositiesAdapter = new CuriositiesAdapter(context);
+                chip_curiosities.setAdapter(curiositiesAdapter);
+                chip_curiosities.setChipList(chipList);
+
+                updateProfileParams.put(Constant.KIDS, cat);
             }
         }
     }
@@ -689,5 +821,40 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
             }
         }
+    }
+
+    private void updateProfile() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        callbackUpdateProfile = api.updateProfile(sessionManager.getAccessToken(), updateProfileParams);
+        callbackUpdateProfile.enqueue(new Callback<CallbackUpdateProfile>() {
+            @Override
+            public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseUpdateProfile = response.body();
+                if (responseUpdateProfile != null) {
+                    if (responseUpdateProfile.getSuccess()) {
+                        setResult(RESULT_OK);
+                        onBackPressed();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseUpdateProfile.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseUpdateProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 package com.example.kikkiapp.Utils;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.kikkiapp.Activities.ChattingActivity;
+import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Netwrok.Constant;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.example.kikkiapp.R;
 
@@ -128,6 +132,43 @@ public class ShowSelectImageBottomSheet {
                 SelectImage.getPermissions(activity,2,type);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
+            }
+        });
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
+    public static void showDialogProfileOptions(final Activity activity, View view, final Integer userId) {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                activity, R.style.AppBottomSheetDialogTheme
+        );
+        View bottomSheetView = LayoutInflater.from(activity)
+                .inflate(R.layout.bottom_sheet_profile_options,
+                        (RelativeLayout) view.findViewById(R.id.bottomSheetLayout), false);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            bottomSheetView.getBackground().setAlpha(0);
+        } else {
+            bottomSheetView.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
+        }
+        TextView tv_send_message = bottomSheetView.findViewById(R.id.tv_send_message);
+        TextView tv_view_profile = bottomSheetView.findViewById(R.id.tv_view_profile);
+
+        tv_send_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                Intent intent=new Intent(activity, ChattingActivity.class);
+                intent.putExtra(Constant.ID,String.valueOf(userId));
+                activity.startActivity(intent);
+            }
+        });
+        tv_view_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+                Intent intent=new Intent(activity, MyProfileActivity.class);
+                intent.putExtra(Constant.ID,userId);
+                activity.startActivity(intent);
             }
         });
         bottomSheetDialog.setContentView(bottomSheetView);

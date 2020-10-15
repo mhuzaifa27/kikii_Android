@@ -104,6 +104,11 @@ public class Constant {
     public static final String ID="id";
     public static final String NOT_SET="N/A";
     public static final String BIO="bio";
+    public static final String DISTANCE="distance";
+    public static final String FROM_AGE="from_age";
+    public static final String TO_AGE="to_age";
+    public static final String RECEIVER_ID="receiver_id";
+
 
     /**Categories keyword***/
     public static final String GENDER_IDENTITY="gender_identity";

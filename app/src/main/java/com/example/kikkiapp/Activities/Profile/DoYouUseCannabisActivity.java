@@ -49,6 +49,7 @@ public class DoYouUseCannabisActivity extends AppCompatActivity implements OnChi
 
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
+    private String isChecked;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -64,7 +65,10 @@ public class DoYouUseCannabisActivity extends AppCompatActivity implements OnChi
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, PoliticalViewsActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.CANNABIS,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -72,7 +76,7 @@ public class DoYouUseCannabisActivity extends AppCompatActivity implements OnChi
 
     @Override
     public void onChipClick(Chip chip) {
-        String isChecked = chip.getText();
+        isChecked = chip.getText();
         chipViewAdapter = new ChipAdapter(context, isChecked);
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +10,7 @@
 
     <include
         android:id="@+id/header"
-        layout="@layout/app_header"></include>
+        layout="@layout/app_header_with_tick"></include>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -47,7 +48,7 @@
                 android:textSize="16sp"></TextView>
 
             <TextView
-                android:id="@+id/tv_start"
+                android:id="@+id/tv_start_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_title"
@@ -66,7 +67,7 @@
                 android:layout_below="@+id/tv_title"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_toLeftOf="@+id/tv_end"
+                android:layout_toLeftOf="@+id/tv_end_age"
                 android:fontFamily="@font/lato_regular"
                 android:text="-"
                 android:textAllCaps="false"
@@ -74,7 +75,7 @@
                 android:textSize="16sp"></TextView>
 
             <TextView
-                android:id="@+id/tv_end"
+                android:id="@+id/tv_end_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_title"
@@ -144,11 +145,25 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"></TextView>
 
+            <TextView
+                android:id="@+id/tv_distance_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_miles"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="18"
+                android:layout_marginLeft="20dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"></TextView>
+
+
             <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
                 android:id="@+id/sb_distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_distance"
+                android:layout_below="@+id/tv_distance_value"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 app:bar_color="@color/grey"
@@ -173,6 +188,19 @@
                 android:textSize="18sp"></TextView>
 
             <TextView
+                android:id="@+id/tv_height_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_height"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="Height"
+                android:textAllCaps="false"
+                android:textColor="@color/grey"
+                android:textSize="18sp"></TextView>
+
+            <TextView
                 android:id="@+id/tv_any_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,7 +218,7 @@
                 android:id="@+id/view1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_below="@+id/tv_any_age"
+                android:layout_below="@+id/tv_height_value"
                 android:layout_marginTop="20dp"
                 android:alpha="0.3"
                 android:background="@color/light_grey"></View>

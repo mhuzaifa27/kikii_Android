@@ -131,8 +131,8 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
             public void run() {
                 Fragment fragment = getFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
+                /*fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);*/
                 fragmentTransaction.replace(R.id.tab_frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }

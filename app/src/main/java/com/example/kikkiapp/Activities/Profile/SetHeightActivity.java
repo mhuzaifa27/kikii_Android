@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 import com.webianks.library.scroll_choice.ScrollChoice;
 
@@ -20,8 +21,9 @@ public class SetHeightActivity extends AppCompatActivity {
     private Context context=SetHeightActivity.this;
 
     private ScrollChoice scroll_feet,scroll_inches;
-    List<String> feetList = new ArrayList<>();
-    List<String> inchesList = new ArrayList<>();
+    private List<String> feetList = new ArrayList<>();
+    private List<String> inchesList = new ArrayList<>();
+    private String feet="5'",inches="1''";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,14 @@ public class SetHeightActivity extends AppCompatActivity {
         scroll_feet.setOnItemSelectedListener(new ScrollChoice.OnItemSelectedListener() {
             @Override
             public void onItemSelected(ScrollChoice scrollChoice, int position, String name) {
+                feet=name;
                 Log.d(TAG,name);
             }
         });
         scroll_inches.setOnItemSelectedListener(new ScrollChoice.OnItemSelectedListener() {
             @Override
             public void onItemSelected(ScrollChoice scrollChoice, int position, String name) {
+                inches=name;
                 Log.d(TAG,name);
             }
         });
@@ -46,7 +50,10 @@ public class SetHeightActivity extends AppCompatActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,LookingForActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.HEIGHT,feet+inches);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }

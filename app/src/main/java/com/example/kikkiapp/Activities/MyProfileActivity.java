@@ -1,5 +1,6 @@
 package com.example.kikkiapp.Activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG = "MyProfileActivity";
     private Context context = MyProfileActivity.this;
     private Activity activity = MyProfileActivity.this;
+    public static final int REQUEST_EDIT_PROFILE=230;
 
     private SelectableRoundedImageView img_user;
     private TextView tv_user_name, tv_user_age, tv_gender, tv_pronouns, tv_distance, tv_bio, tv_friends_count;
@@ -123,7 +125,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         if (user.getHeight() != null)
             tv_height.setText(user.getHeight());
         if (user.getLookingFor() != null)
-            tv_relationship_status.setText(user.getLookingFor());
+            tv_looking_for.setText(user.getLookingFor());
         if (user.getSmoke() != null)
             tv_cigerate.setText(user.getSmoke());
         if (user.getDrink() != null)
@@ -189,11 +191,19 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_edit:
-                startActivity(new Intent(context, EditProfileActivity.class));
+                startActivityForResult(new Intent(context, EditProfileActivity.class),REQUEST_EDIT_PROFILE);
                 break;
             case R.id.btn_view_friends:
                 startActivity(new Intent(context, FriendsActivity.class));
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_EDIT_PROFILE && resultCode==RESULT_OK){
+            getUserProfile();
         }
     }
 }

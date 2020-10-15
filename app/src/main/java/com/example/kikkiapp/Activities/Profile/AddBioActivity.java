@@ -67,8 +67,12 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
                     et_bio.setError(getResources().getString(R.string.et_error));
                 }
                 else{
-                    updateParam.put(Constant.BIO,et_bio.getText().toString());
-                    updateBio();
+                    Intent intent=new Intent();
+                    intent.putExtra(Constant.BIO,et_bio.getText().toString());
+                    setResult(RESULT_OK,intent);
+                    onBackPressed();
+                    /*updateParam.put(Constant.BIO,et_bio.getText().toString());
+                    updateBio();*/
                 }
                 break;
         }

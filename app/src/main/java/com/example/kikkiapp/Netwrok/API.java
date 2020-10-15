@@ -5,14 +5,17 @@ import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
+import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
 import com.example.kikkiapp.Callbacks.CallbackGetKikiiPosts;
+import com.example.kikkiapp.Callbacks.CallbackGetMatch;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
+import com.example.kikkiapp.Callbacks.CallbackSendMessage;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.google.gson.JsonElement;
 import com.example.kikkiapp.Callbacks.CallbackSentOTP;
@@ -95,6 +98,18 @@ public interface API {
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
 
+    @POST("update/filters")
+    @FormUrlEncoded
+    Call<CallbackStatus> updateFilters(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
+    @POST("send/message")
+    @FormUrlEncoded
+    Call<CallbackSendMessage> sendMessage(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
     @Multipart
     @POST("update/profile")
     Call<JsonElement> uploadFile(@Part MultipartBody.Part file, @Header("Authorization") String authorization);
@@ -109,6 +124,12 @@ public interface API {
                                              @PartMap Map<String, RequestBody> text,
                                              @Part List<MultipartBody.Part> images);
 
+    @Multipart
+    @POST("update/profile")
+    Call<CallbackUpdateProfile> updateProfileWithImages(@Header("Authorization") String auth,
+                                             @PartMap Map<String, String> text,
+                                             @Part List<MultipartBody.Part> images);
+
 
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
@@ -121,6 +142,10 @@ public interface API {
     @GET("likedislike/post/{id}")
     Call<CallbackStatus> likeDislikePost(@Header("Authorization") String auth,
                                          @Path("id") String id);
+
+    @GET("conversation/messages")
+    Call<CallbackGetConversationMessages> getConversationMessages(@Header("Authorization") String auth,
+                                                          @Query("conversation_id") String conversation_id);
 
     @GET("post/comments")
     Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
@@ -161,6 +186,9 @@ public interface API {
     @GET("posts")
     Call<CallbackGetKikiiPosts> getKikiiPosts(@Header("Authorization") String auth,
                                               @Query("offset") String next_offset);
+
+    @GET("match")
+    Call<CallbackGetMatch> getMatch(@Header("Authorization") String auth);
 
     @DELETE("delete/comment/{id}")
     Call<CallbackStatus> deleteComment(@Path("id") String id,

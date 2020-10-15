@@ -49,7 +49,7 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
 
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
-
+    private String isChecked;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -64,7 +64,10 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,DoYouSmokeActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.DRINK,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -72,7 +75,7 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
 
     @Override
     public void onChipClick(Chip chip) {
-        String isChecked=chip.getText();
+        isChecked=chip.getText();
         chipViewAdapter =new ChipAdapter(context,isChecked);
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);

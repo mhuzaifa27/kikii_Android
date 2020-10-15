@@ -42,6 +42,8 @@ public class SexualIdentityActivity extends AppCompatActivity {
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
 
+    private String isChecked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,10 @@ public class SexualIdentityActivity extends AppCompatActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,RelationshipStatusActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.SEXUAL_IDENTITY,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -98,6 +103,12 @@ public class SexualIdentityActivity extends AppCompatActivity {
         sexualIdentitiesList =responseGetCategory.getValue().getValueAttr();
         identityAdapter=new IdentityAdapter(sexualIdentitiesList,context,responseGetCategory.getIsChecked());
         rv_sexual_identities.setAdapter(identityAdapter);
+        identityAdapter.setOnClickListener(new IdentityAdapter.IClicks() {
+            @Override
+            public void onClickListener(View view, String s) {
+                isChecked=s;
+            }
+        });
     }
     private void initComponents() {
         customLoader=new CustomLoader(this,false);

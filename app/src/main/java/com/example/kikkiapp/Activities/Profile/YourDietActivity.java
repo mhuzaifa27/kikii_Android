@@ -50,6 +50,7 @@ public class YourDietActivity extends AppCompatActivity implements OnChipClickLi
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
 
+    private String isChecked;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -64,7 +65,10 @@ public class YourDietActivity extends AppCompatActivity implements OnChipClickLi
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,YourSignActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.DIET_LIKE,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -72,7 +76,7 @@ public class YourDietActivity extends AppCompatActivity implements OnChipClickLi
 
     @Override
     public void onChipClick(Chip chip) {
-        String isChecked=chip.getText();
+        isChecked=chip.getText();
         chipViewAdapter =new ChipAdapter(context,isChecked);
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);

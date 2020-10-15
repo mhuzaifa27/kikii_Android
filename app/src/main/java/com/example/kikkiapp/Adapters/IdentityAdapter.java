@@ -20,7 +20,15 @@ public class IdentityAdapter extends RecyclerView.Adapter<IdentityAdapter.Travel
     private List<String> data;
     private Context context;
     private String selected;
+    private int selectedPosition=-1;
+    private IClicks iClicks;
 
+    public interface IClicks{
+        void onClickListener(View view,String s);
+    }
+    public void setOnClickListener(IClicks iClicks){
+        this.iClicks=iClicks;
+    }
     public IdentityAdapter(List<String> data, Context context,String selected) {
         this.data = data;
         this.context = context;
@@ -35,11 +43,25 @@ public class IdentityAdapter extends RecyclerView.Adapter<IdentityAdapter.Travel
     }
 
     @Override
-    public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
-        String s = data.get(position);
+    public void onBindViewHolder(final TravelBuddyViewHolder holder, final int position) {
+        final String s = data.get(position);
         holder.tv_identity.setText(s);
 
-        if(s.equalsIgnoreCase(selected))holder.img_tick.setVisibility(View.VISIBLE);
+        if(s.equalsIgnoreCase(selected) || selectedPosition==position)
+            holder.img_tick.setVisibility(View.VISIBLE);
+        else
+            holder.img_tick.setVisibility(View.GONE);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClicks!=null){
+                    selectedPosition=position;
+                    notifyDataSetChanged();
+                    iClicks.onClickListener(v,s);
+                }
+            }
+        });
     }
 
 

@@ -42,6 +42,7 @@ public class GenderIdentityActivity extends AppCompatActivity {
 
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
+    private String isChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,10 @@ public class GenderIdentityActivity extends AppCompatActivity {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,SexualIdentityActivity.class));
+                Intent intent=new Intent();
+                intent.putExtra(Constant.GENDER_IDENTITY,isChecked);
+                setResult(RESULT_OK,intent);
+                onBackPressed();
             }
         });
     }
@@ -99,6 +103,12 @@ public class GenderIdentityActivity extends AppCompatActivity {
         genderIdentitiesList=responseGetCategory.getValue().getValueAttr();
         identityAdapter=new IdentityAdapter(genderIdentitiesList,context,responseGetCategory.getIsChecked());
         rv_gender_identities.setAdapter(identityAdapter);
+        identityAdapter.setOnClickListener(new IdentityAdapter.IClicks() {
+            @Override
+            public void onClickListener(View view, String s) {
+                isChecked=s;
+            }
+        });
     }
     private void initComponents() {
         customLoader=new CustomLoader(this,false);

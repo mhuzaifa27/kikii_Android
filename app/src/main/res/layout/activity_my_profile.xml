@@ -279,29 +279,39 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="20dp"
                                     android:orientation="horizontal"
-                                    android:weightSum="2">
+                                    android:weightSum="2"
+                                    android:gravity="center_vertical">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_rel_status"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_relationship_status"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_rel_status"
                                         android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_hieght"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_height"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_hieght"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -314,18 +324,29 @@
                                     android:orientation="horizontal"
                                     android:weightSum="2">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_looking_for"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_looking_for"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_looking_for"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_ciggerate"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
 
                                     <TextView
                                         android:id="@+id/tv_cigerate"
@@ -333,8 +354,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_ciggerate"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -346,6 +365,13 @@
                                     android:layout_marginTop="20dp"
                                     android:orientation="horizontal"
                                     android:weightSum="2">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_drink"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
 
                                     <TextView
                                         android:id="@+id/tv_drink"
@@ -353,12 +379,17 @@
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_drink"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_canabiese"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
 
                                     <TextView
                                         android:id="@+id/tv_canabiese"
@@ -366,8 +397,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_canabiese"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -380,27 +409,35 @@
                                     android:orientation="horizontal"
                                     android:weightSum="2">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_political_views"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_political_views"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_political_views"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_religion"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_religion"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_religion"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -413,27 +450,35 @@
                                     android:orientation="horizontal"
                                     android:weightSum="2">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_diet"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_diet"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_diet"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_sign"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_sign"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_sign"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -446,27 +491,35 @@
                                     android:orientation="horizontal"
                                     android:weightSum="2">
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_pets"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_pet"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_pets"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
                                         android:textSize="16sp" />
 
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_cur_children"
+                                        android:layout_marginRight="10dp">
+                                    </ImageView>
                                     <TextView
                                         android:id="@+id/tv_children"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_toRightOf="@+id/img_curiosity"
                                         android:layout_weight="1"
-                                        android:drawableLeft="@drawable/ic_cur_children"
-                                        android:drawablePadding="10dp"
                                         android:fontFamily="@font/lato_regular"
                                         android:text="N/A"
                                         android:textColor="@color/black"
@@ -673,7 +726,7 @@
                 android:id="@+id/img_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="20dp"
                 android:padding="20dp"
                 android:src="@drawable/ic_edit"></ImageView>
         </LinearLayout>
