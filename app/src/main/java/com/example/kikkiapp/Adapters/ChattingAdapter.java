@@ -5,6 +5,7 @@ import android.se.omapi.Session;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,16 +27,16 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<Message> data;
     private Context context;
     private SessionManager sessionManager;
-    private boolean isLoadingAdded=false;
+    private boolean isLoadingAdded = false;
 
     public ChattingAdapter(Context context) {
         this.data = data;
         this.context = context;
-        sessionManager=new SessionManager(context);
+        sessionManager = new SessionManager(context);
     }
 
     public void add(Message mc) {
-        data.add(0,mc);
+        data.add(0, mc);
         if (data.size() > 1)
             notifyItemInserted(0);
         notifyDataSetChanged();
@@ -92,7 +93,8 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if(data.get(position).getSenderId().getId().toString().equalsIgnoreCase(sessionManager.getUserID())) return 0;
+        if (data.get(position).getSenderId().getId().toString().equalsIgnoreCase(sessionManager.getUserID()))
+            return 0;
         else return 1;
     }
 
@@ -100,15 +102,15 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view;
-        RecyclerView.ViewHolder holder=null;
+        RecyclerView.ViewHolder holder = null;
         switch (viewType) {
             case 0:
                 view = inflater.inflate(R.layout.item_sent_message, parent, false);
-                holder=new SenderViewHolder(view);
+                holder = new SenderViewHolder(view);
                 break;
             case 1:
                 view = inflater.inflate(R.layout.item_received_message, parent, false);
-                holder=new ReceiverViewHolder(view);
+                holder = new ReceiverViewHolder(view);
                 break;
         }
         return holder;
@@ -117,9 +119,10 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = data.get(position);
-        switch (holder.getItemViewType()){
+        switch (holder.getItemViewType()) {
             case 0:
-                SenderViewHolder senderViewHolder = (SenderViewHolder)holder;
+                SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
+                senderViewHolder.tv_message.setText(message.getBody());
                 senderViewHolder.tv_message.setText(message.getBody());
                 senderViewHolder.tv_name.setText(message.getSenderId().getName());
                 Glide
@@ -133,7 +136,7 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .into(senderViewHolder.img_user);
                 break;
             case 1:
-                ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder)holder;
+                ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder) holder;
                 receiverViewHolder.tv_message.setText(message.getBody());
                 receiverViewHolder.tv_name.setText(message.getReceiverId().getName());
                 Glide
@@ -148,31 +151,39 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
     }
+
     @Override
     public int getItemCount() {
         return data.size();
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_message,tv_time_ago,tv_name;
+        TextView tv_message, tv_time_ago, tv_name;
         CircleImageView img_user;
+        LinearLayout ll_detail;
+
         public SenderViewHolder(View itemView) {
             super(itemView);
-            tv_message=itemView.findViewById(R.id.tv_message);
-            tv_time_ago=itemView.findViewById(R.id.tv_time_ago);
-            tv_name=itemView.findViewById(R.id.tv_name);
-            img_user=itemView.findViewById(R.id.img_user);
+            tv_message = itemView.findViewById(R.id.tv_message);
+            tv_time_ago = itemView.findViewById(R.id.tv_time_ago);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            img_user = itemView.findViewById(R.id.img_user);
+            ll_detail = itemView.findViewById(R.id.ll_detail);
         }
     }
+
     public class ReceiverViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_message,tv_time_ago,tv_name;
+        TextView tv_message, tv_time_ago, tv_name;
         CircleImageView img_user;
+        LinearLayout ll_detail;
+
         public ReceiverViewHolder(View itemView) {
             super(itemView);
-            tv_message=itemView.findViewById(R.id.tv_message);
-            tv_time_ago=itemView.findViewById(R.id.tv_time_ago);
-            tv_name=itemView.findViewById(R.id.tv_name);
-            img_user=itemView.findViewById(R.id.img_user);
+            tv_message = itemView.findViewById(R.id.tv_message);
+            tv_time_ago = itemView.findViewById(R.id.tv_time_ago);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            img_user = itemView.findViewById(R.id.img_user);
+            ll_detail = itemView.findViewById(R.id.ll_detail);
         }
     }
 }

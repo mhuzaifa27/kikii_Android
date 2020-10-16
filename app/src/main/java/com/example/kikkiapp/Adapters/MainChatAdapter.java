@@ -58,6 +58,7 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
             public void onClick(View v) {
                 Intent intent=new Intent(context, ChattingActivity.class);
                 intent.putExtra(Constant.CONVERSATION_ID,String.valueOf(conversation.getMessages().get(0).getConversationId()));
+                intent.putExtra(Constant.USER_MATCH_ID,String.valueOf(conversation.getParticipant2Id()));
                 context.startActivity(intent);
             }
         });

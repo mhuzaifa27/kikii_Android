@@ -83,10 +83,13 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         if (conversationId != null) {
             loadChat1(conversationId);
-        } else if (userMatchId != null)
+            sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+        } else if (userMatchId != null) {
             loadChat2(userMatchId);
+            sendMessageParam.put(Constant.USER_MATCH_ID, userMatchId);
+        }
         else
-            tv_no.setVisibility(View.VISIBLE);
+        tv_no.setVisibility(View.VISIBLE);
 
 
         img_video_call.setOnClickListener(this);
@@ -139,7 +142,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 if (responseGetConversationMessages != null) {
                     if (responseGetConversationMessages.getSuccess()) {
                         swipe_refresh_layout.setRefreshing(false);
-                        isSwipeRefresh=false;
+                        isSwipeRefresh = false;
                         if (responseGetConversationMessages.getMessages().size() > 0) {
                             rv_chatting.setVisibility(View.VISIBLE);
                             tv_no.setVisibility(View.GONE);
@@ -170,6 +173,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
+
     private void loadChat2(String id) {
         chatList.clear();
         if (!isSwipeRefresh)
@@ -185,7 +189,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 if (responseGetConversationMessages != null) {
                     if (responseGetConversationMessages.getSuccess()) {
                         swipe_refresh_layout.setRefreshing(false);
-                        isSwipeRefresh=false;
+                        isSwipeRefresh = false;
                         if (responseGetConversationMessages.getMessages().size() > 0) {
                             rv_chatting.setVisibility(View.VISIBLE);
                             tv_no.setVisibility(View.GONE);
@@ -220,7 +224,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     private void setData() {
         conversationId = responseGetConversationMessages.getMessages().get(0).getConversationId().toString();
         sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
-        linearLayoutManager=new LinearLayoutManager(context);
+        linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         rv_chatting.setLayoutManager(linearLayoutManager);
@@ -320,7 +324,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onRefresh() {
         chatList.clear();
-        isSwipeRefresh=true;
+        isSwipeRefresh = true;
         if (conversationId != null)
             loadChat1(conversationId);
         else if (userMatchId != null)
