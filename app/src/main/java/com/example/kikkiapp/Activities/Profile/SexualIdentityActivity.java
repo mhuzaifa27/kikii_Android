@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
@@ -28,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SexualIdentityActivity extends AppCompatActivity {
+public class SexualIdentityActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "SexualIdentityActivity";
     private Context context= SexualIdentityActivity.this;
@@ -43,6 +45,7 @@ public class SexualIdentityActivity extends AppCompatActivity {
     private CallbackGetCategory responseGetCategory;
 
     private String isChecked;
+    private ImageView img_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class SexualIdentityActivity extends AppCompatActivity {
 
         initComponents();
         getIdentity();
+
+        img_back.setOnClickListener(this);
 
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,5 +121,16 @@ public class SexualIdentityActivity extends AppCompatActivity {
 
         rv_sexual_identities =findViewById(R.id.rv_sexual_identities);
         rv_sexual_identities.setLayoutManager(new LinearLayoutManager(context));
+
+        img_back=findViewById(R.id.img_back);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.img_back:
+                CommonMethods.goBack(this);
+                break;
+        }
     }
 }

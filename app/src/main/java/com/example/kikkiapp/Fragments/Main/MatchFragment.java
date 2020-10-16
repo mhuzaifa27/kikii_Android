@@ -182,7 +182,8 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
+        yourMatchesList.clear();
+        yourLikesList.clear();
         getMatchData();
     }
 }

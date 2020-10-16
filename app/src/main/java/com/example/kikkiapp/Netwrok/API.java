@@ -6,6 +6,7 @@ import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
+import com.example.kikkiapp.Callbacks.CallbackGetConversations;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
 import com.example.kikkiapp.Callbacks.CallbackGetKikiiPosts;
@@ -144,8 +145,11 @@ public interface API {
                                          @Path("id") String id);
 
     @GET("conversation/messages")
-    Call<CallbackGetConversationMessages> getConversationMessages(@Header("Authorization") String auth,
+    Call<CallbackGetConversationMessages> getConversationMessages1(@Header("Authorization") String auth,
                                                           @Query("conversation_id") String conversation_id);
+    @GET("conversation/messages")
+    Call<CallbackGetConversationMessages> getConversationMessages2(@Header("Authorization") String auth,
+                                                                  @Query("user_match_id") String conversation_id);
 
     @GET("post/comments")
     Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
@@ -154,6 +158,8 @@ public interface API {
     @GET("community")
     Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
                                                 @Query("offset") String next_offset);
+    @GET("conversations")
+    Call<CallbackGetConversations> getConversations(@Header("Authorization") String auth);
 
     @GET("get/events")
     Call<CallbackGetEvents> getEvents(@Header("Authorization") String auth,

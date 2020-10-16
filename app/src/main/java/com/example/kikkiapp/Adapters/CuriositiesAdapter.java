@@ -66,7 +66,7 @@ public class CuriositiesAdapter extends ChipViewAdapter {
 
     @Override
     public int getBackgroundRes(int position) {
-            return 0;
+            return R.drawable.border_one_corner_round_red_fill;
     }
 
     @Override

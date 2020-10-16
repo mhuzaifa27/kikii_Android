@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.ChattingActivity;
+import com.example.kikkiapp.Model.Conversation;
+import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 
 import java.util.List;
@@ -18,10 +22,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.TravelBuddyViewHolder> {
-    private List<String> data;
+    private List<Conversation> data;
     Context context;
 
-    public MainChatAdapter(List<String> data, Context context) {
+    public MainChatAdapter(List<Conversation> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -35,12 +39,26 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
 
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
-        String s = data.get(position);
+        final Conversation conversation = data.get(position);
+
+        holder.tv_name.setText(conversation.getParticipant2().getName());
+        holder.tv_last_message.setText(conversation.getMessages().get(0).getBody());
+        Glide
+                .with(context)
+                .load(conversation.getParticipant2().getProfilePic())
+                .centerCrop()
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .centerCrop()
+                .placeholder(R.drawable.ic_user_dummy)
+                .into(holder.img_user);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, ChattingActivity.class));
+                Intent intent=new Intent(context, ChattingActivity.class);
+                intent.putExtra(Constant.CONVERSATION_ID,String.valueOf(conversation.getMessages().get(0).getConversationId()));
+                context.startActivity(intent);
             }
         });
     }
@@ -52,13 +70,16 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
     }
 
     public class TravelBuddyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_subject, tv_body, tv_date;
+        TextView tv_name, tv_last_message, tv_date;
         CircleImageView img_user;
         LinearLayout ll_notify;
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
+            img_user=itemView.findViewById(R.id.img_user);
 
+            tv_name=itemView.findViewById(R.id.tv_name);
+            tv_last_message=itemView.findViewById(R.id.tv_last_message);
 
         }
     }

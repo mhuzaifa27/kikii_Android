@@ -69,7 +69,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
     private String body;
     private RecyclerView rv_media;
     private PostMediaAdapter postMediaAdapter;
-    private List<String> mediaPaths;
+    private List<String> mediaPaths=new ArrayList<>();
     private List<MultipartBody.Part> imagesList=new ArrayList<>();
 
     @Override
@@ -196,6 +196,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                         if (responseResendCode.getSuccess()) {
                             Log.d(TAG, "onResponse: " + responseResendCode.getMessage());
                             Toast.makeText(context, responseResendCode.getMessage(), Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
                             onBackPressed();
                         } else {
                             Log.d(TAG, "onResponse: " + responseResendCode.getMessage());
@@ -230,6 +231,8 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                     if (responseResendCode.getSuccess()) {
                         Log.d(TAG, "onResponse: " + responseResendCode.getMessage());
                         Toast.makeText(context, responseResendCode.getMessage(), Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+
                         onBackPressed();
                     } else {
                         Log.d(TAG, "onResponse: " + responseResendCode.getMessage());

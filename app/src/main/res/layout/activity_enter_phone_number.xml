@@ -171,6 +171,8 @@
                 android:fontFamily="@font/lato_italic"
                 android:paddingLeft="10dp"
                 android:hint="323468838838"
+                android:singleLine="true"
+                android:inputType="phone"
                 android:textColorHint="@color/light_grey"
                 android:textColor="@color/black">
 

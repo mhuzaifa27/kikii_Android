@@ -1,5 +1,6 @@
 package com.example.kikkiapp.Fragments.Main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,7 +32,7 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private ImageView img_select_kikii, img_selected_kikii,
             img_select_event, img_selected_event,
             img_select_community, img_selected_community, img_add, img_kikii_info;
-
+    public static final int REQUEST_CREATE_POST=256;
     private CommunityFragment communityFragment;
     private EventsFragment eventsFragment;
     private KikiiFragment kikiiFragment;
@@ -99,7 +101,7 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 selectKikii();
                 break;
             case R.id.img_add:
-                if (navItemIndex == 0) startActivity(new Intent(context, CreatePostActivity.class));
+                if (navItemIndex == 0) startActivityForResult(new Intent(context, CreatePostActivity.class),REQUEST_CREATE_POST);
                 else startActivity(new Intent(context, EventDetailActivity.class));
                 break;
             case R.id.img_kikii_info:
@@ -185,6 +187,14 @@ public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRef
             default:
                 CURRENT_TAG=TAG_COMMUNITY;
                 return new CommunityFragment();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CREATE_POST && resultCode== Activity.RESULT_OK){
+            loadFragment();
         }
     }
 }

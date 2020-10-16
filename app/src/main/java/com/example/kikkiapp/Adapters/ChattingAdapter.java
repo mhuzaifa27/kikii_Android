@@ -10,7 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Model.Message;
+import com.example.kikkiapp.Model.Message
+        ;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.SessionManager;
 
@@ -22,16 +26,73 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<Message> data;
     private Context context;
     private SessionManager sessionManager;
+    private boolean isLoadingAdded=false;
 
-    public ChattingAdapter(List<Message> data, Context context) {
+    public ChattingAdapter(Context context) {
         this.data = data;
         this.context = context;
         sessionManager=new SessionManager(context);
     }
 
+    public void add(Message mc) {
+        data.add(0,mc);
+        if (data.size() > 1)
+            notifyItemInserted(0);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Message> mcList) {
+        data = mcList;
+        notifyDataSetChanged();
+    }
+
+    public void remove(Message
+                               city) {
+        int position = data.indexOf(city);
+        if (position > -1) {
+            data.remove(position);
+            notifyItemRemoved(position);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void clear() {
+        isLoadingAdded = false;
+        while (getItemCount() > 0) {
+            remove(getItem(0));
+        }
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        add(new Message
+                ());
+    }
+
+    public void removeLoadingFooter() {
+        isLoadingAdded = false;
+        int position = data.size() - 1;
+        Message
+                item = getItem(position);
+        if (item != null) {
+            data.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public Message
+    getItem(int position) {
+        return data.get(position);
+    }
+
+
     @Override
     public int getItemViewType(int position) {
-        if(data.get(position).getSenderId().toString().equalsIgnoreCase(sessionManager.getUserID())) return 0;
+        if(data.get(position).getSenderId().getId().toString().equalsIgnoreCase(sessionManager.getUserID())) return 0;
         else return 1;
     }
 
@@ -60,11 +121,30 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case 0:
                 SenderViewHolder senderViewHolder = (SenderViewHolder)holder;
                 senderViewHolder.tv_message.setText(message.getBody());
-
+                senderViewHolder.tv_name.setText(message.getSenderId().getName());
+                Glide
+                        .with(context)
+                        .load(message.getSenderId().getProfilePic())
+                        .centerCrop()
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_user_dummy)
+                        .into(senderViewHolder.img_user);
                 break;
             case 1:
                 ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder)holder;
                 receiverViewHolder.tv_message.setText(message.getBody());
+                receiverViewHolder.tv_name.setText(message.getReceiverId().getName());
+                Glide
+                        .with(context)
+                        .load(message.getReceiverId().getProfilePic())
+                        .centerCrop()
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_user_dummy)
+                        .into(receiverViewHolder.img_user);
                 break;
         }
     }

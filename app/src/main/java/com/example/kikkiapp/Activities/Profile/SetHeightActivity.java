@@ -7,15 +7,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.webianks.library.scroll_choice.ScrollChoice;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetHeightActivity extends AppCompatActivity {
+public class SetHeightActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "SetHeightActivity";
     private Context context=SetHeightActivity.this;
@@ -24,6 +26,8 @@ public class SetHeightActivity extends AppCompatActivity {
     private List<String> feetList = new ArrayList<>();
     private List<String> inchesList = new ArrayList<>();
     private String feet="5'",inches="1''";
+
+    private ImageView img_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class SetHeightActivity extends AppCompatActivity {
             }
         });
 
+        img_back.setOnClickListener(this);
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,5 +89,16 @@ public class SetHeightActivity extends AppCompatActivity {
 
         scroll_feet.addItems(feetList,1);
         scroll_inches.addItems(inchesList,1);
+
+        img_back=findViewById(R.id.img_back);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.img_back:
+                CommonMethods.goBack(this);
+                break;
+        }
     }
 }

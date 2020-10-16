@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
@@ -41,6 +43,7 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
     private Button btn_save;
     private SessionManager sessionManager;
     private CustomLoader customLoader;
+    private ImageView img_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_add_bio);
 
         initComponents();
+
+        img_back.setOnClickListener(this);
         btn_save.setOnClickListener(this);
     }
 
@@ -56,7 +61,10 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
         customLoader=new CustomLoader(this,false);
 
         et_bio=findViewById(R.id.et_bio);
+
         btn_save=findViewById(R.id.btn_save);
+
+        img_back=findViewById(R.id.img_back);
     }
 
     @Override
@@ -74,6 +82,9 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
                     /*updateParam.put(Constant.BIO,et_bio.getText().toString());
                     updateBio();*/
                 }
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

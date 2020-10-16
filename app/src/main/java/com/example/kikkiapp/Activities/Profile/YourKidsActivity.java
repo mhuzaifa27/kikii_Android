@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -21,6 +22,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
@@ -36,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class YourKidsActivity extends AppCompatActivity implements OnChipClickListener {
+public class YourKidsActivity extends AppCompatActivity implements OnChipClickListener, View.OnClickListener {
 
     private static final String TAG = "YourKidsActivity";
     private Context context = YourKidsActivity.this;
@@ -50,6 +52,7 @@ public class YourKidsActivity extends AppCompatActivity implements OnChipClickLi
     private CallbackGetCategory responseGetCategory;
 
     private String isChecked;
+    private ImageView img_back;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -61,6 +64,8 @@ public class YourKidsActivity extends AppCompatActivity implements OnChipClickLi
         getIdentity();
 
         chip_statuses.setOnChipClickListener(this);
+        img_back.setOnClickListener(this);
+
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +138,17 @@ public class YourKidsActivity extends AppCompatActivity implements OnChipClickLi
         sessionManager = new SessionManager(this);
 
         chip_statuses = findViewById(R.id.chip_statuses);
+
+        img_back=findViewById(R.id.img_back);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.img_back:
+                CommonMethods.goBack(this);
+                break;
+        }
     }
 }
 

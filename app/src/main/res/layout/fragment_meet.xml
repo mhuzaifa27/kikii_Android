@@ -16,7 +16,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        >
+    <ImageView
+        android:id="@+id/img_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+    </ImageView>
         <com.yuyakaido.android.cardstackview.CardStackView
             android:id="@+id/card_stack_view_frame"
             android:layout_width="match_parent"

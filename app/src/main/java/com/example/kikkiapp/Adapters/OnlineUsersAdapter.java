@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kikkiapp.Model.OnlineUser;
 import com.example.kikkiapp.R;
 
 import java.util.List;
@@ -16,10 +17,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineUsersAdapter extends RecyclerView.Adapter<OnlineUsersAdapter.TravelBuddyViewHolder> {
-    private List<String> data;
+    private List<OnlineUser> data;
     Context context;
 
-    public OnlineUsersAdapter(List<String> data, Context context) {
+    public OnlineUsersAdapter(List<OnlineUser> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -33,7 +34,7 @@ public class OnlineUsersAdapter extends RecyclerView.Adapter<OnlineUsersAdapter.
 
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
-        String s = data.get(position);
+        OnlineUser s = data.get(position);
     }
 
 
@@ -49,7 +50,7 @@ public class OnlineUsersAdapter extends RecyclerView.Adapter<OnlineUsersAdapter.
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
-
+            img_user=itemView.findViewById(R.id.img_user);
 
         }
     }

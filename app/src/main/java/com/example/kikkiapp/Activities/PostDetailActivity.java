@@ -35,6 +35,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.PaginationScrollListener;
 import com.example.kikkiapp.Utils.SessionManager;
@@ -109,6 +110,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
         img_send.setOnClickListener(this);
         img_post_menu.setOnClickListener(this);
+        img_back.setOnClickListener(this);
 
         rv_comments.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
@@ -252,6 +254,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.img_post_menu:
                 ShowPopupMenus.showPostMenu(activity,img_post_menu, post);
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

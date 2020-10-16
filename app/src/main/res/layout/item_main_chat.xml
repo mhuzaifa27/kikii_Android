@@ -3,15 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:background="@drawable/bg_chat_main"
-    android:orientation="vertical">
+    android:background="@drawable/bg_one_corner_round_white"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:elevation="5dp"
+    android:paddingVertical="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
 
     <LinearLayout
@@ -30,6 +33,7 @@
             android:weightSum="1">
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -52,6 +56,7 @@
             </TextView>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_last_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

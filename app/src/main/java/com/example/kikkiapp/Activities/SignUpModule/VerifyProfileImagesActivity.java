@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -42,6 +43,7 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
     private SelectableRoundedImageView img_user;
     private Bitmap bmp;
     private CustomLoader customLoader;
+    private ImageView img_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
         btn_upload_again.setOnClickListener(this);
         btn_verify.setOnClickListener(this);
         btn_next.setOnClickListener(this);
+        img_back.setOnClickListener(this);
 
 
     }
@@ -66,6 +69,7 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
         img_verify_fail=findViewById(R.id.img_verify_fail);
 
         img_user=findViewById(R.id.img_user);
+        img_back=findViewById(R.id.img_back);
 
         btn_upload_again =findViewById(R.id.btn_upload_again);
         btn_verify=findViewById(R.id.btn_verify);
@@ -103,6 +107,9 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
                 break;
             case R.id.btn_next:
                 goToNextActivity(bmp);
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

@@ -1,7 +1,5 @@
 package com.example.kikkiapp.Fragments.Main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,12 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,7 +23,6 @@ import com.example.kikkiapp.R;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
@@ -49,6 +44,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeAnimationSetting swipeAnimationSetting;
     private boolean isMenuVisible = false;
     private TextView tv_profile, tv_support, tv_logout;
+    private ImageView img_main;
 
 
     @Override
@@ -63,6 +59,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         tv_profile.setOnClickListener(this);
         tv_support.setOnClickListener(this);
         tv_logout.setOnClickListener(this);
+        img_main.setOnClickListener(this);
 
         return view;
     }
@@ -78,7 +75,9 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         ll_normal_view = view.findViewById(R.id.ll_normal_view);
         ll_menu = view.findViewById(R.id.ll_menu);
+
         rl_detail_view = view.findViewById(R.id.rl_detail_view);
+        img_main =view.findViewById(R.id.img_main);
 
         cardStackView = view.findViewById(R.id.card_stack_view_frame);
 
@@ -136,6 +135,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 startActivity(new Intent(context, SupportActivity.class));
                 break;
             case R.id.tv_logout:
+            case R.id.img_main:
                 closeMenu();
                 break;
         }

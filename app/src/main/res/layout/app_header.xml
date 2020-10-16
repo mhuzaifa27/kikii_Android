@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_back"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="20dp"
+                android:padding="10dp">
 
             </ImageView>
             <ImageView

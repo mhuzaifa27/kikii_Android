@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
@@ -19,6 +20,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SelectImage;
 import com.example.kikkiapp.Utils.SessionManager;
@@ -53,6 +55,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
 
     private Call<CallbackUpdateProfile> callbackStatusCall;
     private CallbackUpdateProfile responseUpdatePhoto;
+    private ImageView img_back;
 
 
     @Override
@@ -63,6 +66,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
         initComponents();
 
         btn_add_image.setOnClickListener(this);
+        img_back.setOnClickListener(this);
     }
 
     private void initComponents() {
@@ -71,6 +75,8 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
         sessionManager=new SessionManager(this);
 
         customLoader=new CustomLoader(this,false);
+
+        img_back=findViewById(R.id.img_back);
     }
 
     @Override
@@ -78,6 +84,9 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
         switch (v.getId()){
             case R.id.btn_add_image:
                 ShowSelectImageBottomSheet.showDialog(activity,getWindow().getDecorView().getRootView(),Constant.SINGLE);
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

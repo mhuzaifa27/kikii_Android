@@ -43,6 +43,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SelectImage;
 import com.example.kikkiapp.Utils.SessionManager;
@@ -113,6 +114,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private CallbackUpdateProfile responseUpdateProfile;
 
     private Map<String, RequestBody> editProfileMultipartParams = new HashMap<>();
+    private ImageView img_back;
 
 
     @Override
@@ -133,7 +135,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_select_6.setOnClickListener(this);
         img_select_7.setOnClickListener(this);
         img_select_8.setOnClickListener(this);
+
         img_ok.setOnClickListener(this);
+        img_back.setOnClickListener(this);
 
         ll_gender_identity.setOnClickListener(this);
         ll_sexual_identity.setOnClickListener(this);
@@ -262,6 +266,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_select_8 = findViewById(R.id.img_select_8);
 
         img_ok = findViewById(R.id.img_ok);
+        img_back=findViewById(R.id.img_back);
 
         chip_curiosities = findViewById(R.id.chip_curiosities);
     }
@@ -321,6 +326,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                         updateProfile();
                     }
                 }
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

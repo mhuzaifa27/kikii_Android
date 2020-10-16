@@ -15,6 +15,7 @@ import com.example.kikkiapp.Fragments.Others.MyFriendsFragment;
 import com.example.kikkiapp.Fragments.Others.PendingFragment;
 import com.example.kikkiapp.Fragments.Others.SentRequestsFragment;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 
 public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
@@ -34,6 +35,7 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
     public static int navItemIndex = 0;
 
     private Handler mHandler;
+    private ImageView img_back;
 
 
     @Override
@@ -47,6 +49,7 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
         img_select_my_friends.setOnClickListener(this);
         img_select_pending.setOnClickListener(this);
         img_select_sent_requests.setOnClickListener(this);
+        img_back.setOnClickListener(this);
     }
 
     private void initComponents() {
@@ -65,6 +68,7 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
         img_select_my_friends =findViewById(R.id.img_select_my_friends);
         img_selected_my_friends =findViewById(R.id.img_selected_my_friends);
 
+        img_back=findViewById(R.id.img_back);
     }
 
     @Override
@@ -83,6 +87,9 @@ public class FriendsActivity extends AppCompatActivity implements SwipeRefreshLa
                 break;
             case R.id.img_select_sent_requests:
                 selectSentRequests();
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }

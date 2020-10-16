@@ -4,7 +4,7 @@ package com.example.kikkiapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Message {
+public class LastMessage {
 
     @SerializedName("id")
     @Expose
@@ -12,24 +12,15 @@ public class Message {
     @SerializedName("body")
     @Expose
     private String body;
-    @SerializedName("sender_id")
-    @Expose
-    private SenderId senderId;
-    @SerializedName("receiver_id")
-    @Expose
-    private ReceiverId receiverId;
     @SerializedName("conversation_id")
     @Expose
     private Integer conversationId;
     @SerializedName("read_at")
     @Expose
     private Object readAt;
-    @SerializedName("created_at")
+    @SerializedName("media")
     @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private Object media;
 
     public Integer getId() {
         return id;
@@ -45,22 +36,6 @@ public class Message {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public SenderId getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(SenderId senderId) {
-        this.senderId = senderId;
-    }
-
-    public ReceiverId getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(ReceiverId receiverId) {
-        this.receiverId = receiverId;
     }
 
     public Integer getConversationId() {
@@ -79,20 +54,12 @@ public class Message {
         this.readAt = readAt;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public Object getMedia() {
+        return media;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setMedia(Object media) {
+        this.media = media;
     }
 
 }

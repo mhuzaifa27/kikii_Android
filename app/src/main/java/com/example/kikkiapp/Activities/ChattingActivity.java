@@ -3,6 +3,7 @@ package com.example.kikkiapp.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,14 +13,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Adapters.ChattingAdapter;
+import com.example.kikkiapp.Adapters.CommentsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
-import com.example.kikkiapp.Callbacks.CallbackGetMatch;
 import com.example.kikkiapp.Callbacks.CallbackSendMessage;
 import com.example.kikkiapp.Model.Message;
 import com.example.kikkiapp.Netwrok.API;
@@ -39,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChattingActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChattingActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "ChattingActivity";
     private Context context = ChattingActivity.this;
@@ -55,6 +57,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private CustomLoader customLoader;
     private SessionManager sessionManager;
+    private LinearLayoutManager linearLayoutManager;
 
     private Call<CallbackGetConversationMessages> callbackGetConversationMessagesCall;
     private CallbackGetConversationMessages responseGetConversationMessages;
@@ -64,9 +67,11 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private Map<String, String> sendMessageParam = new HashMap<>();
 
-    private String conversationId, receiverId;
+    private String conversationId, userMatchId;
     private int count = 0;
     private TextView tv_no;
+    private SwipeRefreshLayout swipe_refresh_layout;
+    private boolean isSwipeRefresh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +81,18 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         getIntentData();
         initComponents();
 
-        if (conversationId != null)
-            loadChat();
+        if (conversationId != null) {
+            loadChat1(conversationId);
+        } else if (userMatchId != null)
+            loadChat2(userMatchId);
         else
             tv_no.setVisibility(View.VISIBLE);
+
 
         img_video_call.setOnClickListener(this);
         img_voice_call.setOnClickListener(this);
         img_send.setOnClickListener(this);
+        swipe_refresh_layout.setOnRefreshListener(this);
 
 
         et_message.addTextChangedListener(new TextWatcher() {
@@ -111,15 +120,17 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getIntentData() {
-        receiverId = getIntent().getStringExtra(Constant.ID);
+        userMatchId = getIntent().getStringExtra(Constant.USER_MATCH_ID);
+        conversationId = getIntent().getStringExtra(Constant.CONVERSATION_ID);
     }
 
-    private void loadChat() {
+    private void loadChat1(String id) {
         chatList.clear();
-        customLoader.showIndicator();
+        if (!isSwipeRefresh)
+            customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetConversationMessagesCall = api.getConversationMessages(sessionManager.getAccessToken(), conversationId);
+        callbackGetConversationMessagesCall = api.getConversationMessages1(sessionManager.getAccessToken(), id);
         callbackGetConversationMessagesCall.enqueue(new Callback<CallbackGetConversationMessages>() {
             @Override
             public void onResponse(Call<CallbackGetConversationMessages> call, Response<CallbackGetConversationMessages> response) {
@@ -127,11 +138,60 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 responseGetConversationMessages = response.body();
                 if (responseGetConversationMessages != null) {
                     if (responseGetConversationMessages.getSuccess()) {
+                        swipe_refresh_layout.setRefreshing(false);
+                        isSwipeRefresh=false;
                         if (responseGetConversationMessages.getMessages().size() > 0) {
                             rv_chatting.setVisibility(View.VISIBLE);
                             tv_no.setVisibility(View.GONE);
                             setData();
                         } else {
+                            customLoader.hideIndicator();
+                            tv_no.setVisibility(View.VISIBLE);
+                            rv_chatting.setVisibility(View.GONE);
+                        }
+                        /*else
+                            currentPage = -1;*/
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseGetConversationMessages.getMessage());
+                        Toast.makeText(context, responseGetConversationMessages.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackGetConversationMessages> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+    private void loadChat2(String id) {
+        chatList.clear();
+        if (!isSwipeRefresh)
+            customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        callbackGetConversationMessagesCall = api.getConversationMessages2(sessionManager.getAccessToken(), id);
+        callbackGetConversationMessagesCall.enqueue(new Callback<CallbackGetConversationMessages>() {
+            @Override
+            public void onResponse(Call<CallbackGetConversationMessages> call, Response<CallbackGetConversationMessages> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseGetConversationMessages = response.body();
+                if (responseGetConversationMessages != null) {
+                    if (responseGetConversationMessages.getSuccess()) {
+                        swipe_refresh_layout.setRefreshing(false);
+                        isSwipeRefresh=false;
+                        if (responseGetConversationMessages.getMessages().size() > 0) {
+                            rv_chatting.setVisibility(View.VISIBLE);
+                            tv_no.setVisibility(View.GONE);
+                            setData();
+                        } else {
+                            customLoader.hideIndicator();
                             tv_no.setVisibility(View.VISIBLE);
                             rv_chatting.setVisibility(View.GONE);
                         }
@@ -158,14 +218,24 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setData() {
+        conversationId = responseGetConversationMessages.getMessages().get(0).getConversationId().toString();
+        sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+        linearLayoutManager=new LinearLayoutManager(context);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        rv_chatting.setLayoutManager(linearLayoutManager);
+        //currentPage = responseGetConversationMessages.getNextOffset();
+        chatList = responseGetConversationMessages.getMessages();
+        chattingAdapter.addAll(chatList);
+        rv_chatting.setAdapter(chattingAdapter);
         customLoader.hideIndicator();
-        rv_chatting.setLayoutManager(new LinearLayoutManager(context));
-        rv_chatting.setAdapter(new ChattingAdapter(chatList, context));
     }
 
     private void initComponents() {
         customLoader = new CustomLoader(activity, false);
         sessionManager = new SessionManager(context);
+
+        swipe_refresh_layout = findViewById(R.id.swipe_refresh_layout);
 
         img_video_call = findViewById(R.id.img_video_call);
         img_voice_call = findViewById(R.id.img_voice_call);
@@ -175,9 +245,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
         et_message = findViewById(R.id.et_message);
 
         rv_chatting = findViewById(R.id.rv_chatting);
-        chattingAdapter=new ChattingAdapter(chatList,context);
+        chattingAdapter = new ChattingAdapter(activity);
+        chattingAdapter.addAll(chatList);
 
-        tv_no=findViewById(R.id.tv_no);
+        tv_no = findViewById(R.id.tv_no);
     }
 
     @Override
@@ -194,7 +265,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                     et_message.setError(getResources().getString(R.string.et_error));
                 } else {
                     sendMessageParam.put(Constant.BODY, et_message.getText().toString());
-                    sendMessageParam.put(Constant.RECEIVER_ID, receiverId);
+                    sendMessageParam.put(Constant.RECEIVER_ID, userMatchId);
                     sendMessage();
                 }
                 break;
@@ -213,13 +284,18 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 responseSendMessage = response.body();
                 if (responseSendMessage != null) {
                     if (responseSendMessage.getSuccess()) {
+                        customLoader.hideIndicator();
                         Message message = responseSendMessage.getData();
-                        chatList.add(message);
-                        chattingAdapter.notifyDataSetChanged();
+                        sendMessageParam.clear();
                         conversationId = message.getConversationId().toString();
-                        if (count == 0){
-                            loadChat();
-                            count++;
+                        sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+                        chattingAdapter.add(message);
+                        et_message.setText("");
+                        tv_no.setVisibility(View.GONE);
+                        View view = ChattingActivity.this.getCurrentFocus();
+                        if (view != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         }
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetConversationMessages.getMessage());
@@ -239,5 +315,17 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        chatList.clear();
+        isSwipeRefresh=true;
+        if (conversationId != null)
+            loadChat1(conversationId);
+        else if (userMatchId != null)
+            loadChat2(userMatchId);
+        else
+            tv_no.setVisibility(View.VISIBLE);
     }
 }

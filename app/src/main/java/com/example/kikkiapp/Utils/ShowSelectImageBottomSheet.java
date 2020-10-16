@@ -158,7 +158,7 @@ public class ShowSelectImageBottomSheet {
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 Intent intent=new Intent(activity, ChattingActivity.class);
-                intent.putExtra(Constant.ID,String.valueOf(userId));
+                intent.putExtra(Constant.USER_MATCH_ID,String.valueOf(userId));
                 activity.startActivity(intent);
             }
         });

@@ -63,7 +63,9 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="-20dp"
-        android:elevation="10dp"
+        android:elevation="5dp"
+        android:layout_marginVertical="5dp"
+        android:paddingVertical="5dp"
         android:background="@drawable/bg_receiver_message"
         android:orientation="vertical">
 
@@ -73,19 +75,21 @@
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/tv_message"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
+                android:gravity="left"
+                android:layout_marginLeft="30dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/lato_regular"
-                android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor"
+                android:text=" sed diam nonumy eirmod tempor"
                 android:textColor="@color/black"
                 android:textSize="16sp"></TextView>
         </RelativeLayout>

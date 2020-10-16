@@ -76,7 +76,6 @@ public class YourMatchAdapter extends RecyclerView.Adapter<YourMatchAdapter.Trav
             img_user=itemView.findViewById(R.id.img_user);
             tv_user_name=itemView.findViewById(R.id.tv_user_name);
             tv_time_ago=itemView.findViewById(R.id.tv_time_ago);
-
         }
     }
 }

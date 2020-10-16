@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.FileUploader;
 import com.example.kikkiapp.Utils.SelectImage;
@@ -55,7 +56,8 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
     private static int setImageOn = 0;
     private MultipartBody.Part[] imageParts = new MultipartBody.Part[10];
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
-    ArrayList<String> files = new ArrayList<>();
+    private ArrayList<String> files = new ArrayList<>();
+    private ImageView img_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
         img_select_6.setOnClickListener(this);
         img_select_7.setOnClickListener(this);
         img_select_8.setOnClickListener(this);
-
+        img_back.setOnClickListener(this);
     }
 
     private void getIntentData() {
@@ -109,6 +111,8 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
         img_select_6 = findViewById(R.id.img_select_6);
         img_select_7 = findViewById(R.id.img_select_7);
         img_select_8 = findViewById(R.id.img_select_8);
+
+        img_back=findViewById(R.id.img_back);
 
     }
 
@@ -149,6 +153,9 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
             case R.id.img_select_8:
                 setImageOn = 8;
                 ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                break;
+            case R.id.img_back:
+                CommonMethods.goBack(this);
                 break;
         }
     }
