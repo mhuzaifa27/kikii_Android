@@ -61,7 +61,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -238,7 +237,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         tv_gender_identity = findViewById(R.id.tv_gender_identity);
         tv_sexual_identity = findViewById(R.id.tv_sexual_identity);
-        tv_pronouns = findViewById(R.id.tv_pronouns);
+        tv_pronouns = findViewById(R.id.tv_pronoun_2);
         tv_bio = findViewById(R.id.tv_bio);
 
         ll_gender_identity = findViewById(R.id.ll_gender_identity);

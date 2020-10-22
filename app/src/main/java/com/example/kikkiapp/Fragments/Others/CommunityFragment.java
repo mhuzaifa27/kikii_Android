@@ -48,6 +48,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
     private static final String TAG = "CommunityFragment";
     public static boolean NEED_TO_LOAD_DATA = true;
+    public static final int REQUEST_POST_DETAIL=245;
     private Context context;
     private Activity activity;
 
@@ -188,7 +189,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("post", post);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_POST_DETAIL);
             }
 
             @Override
@@ -232,7 +233,6 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 if (responseLike != null) {
                     if (responseLike.getSuccess()) {
                         customLoader.hideIndicator();
-                        Toast.makeText(context, responseAllPosts.getMessage(), Toast.LENGTH_SHORT).show();
                         Post post = communityPostsList.get(position);
                         int likeCount = post.getLikesCount();
                         if (post.getIsLiked().toString().equalsIgnoreCase("0")) {
@@ -273,5 +273,13 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     public void onRefresh() {
         communityPostsList.clear();
         loadCommunityPosts();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_POST_DETAIL && resultCode==Activity.RESULT_OK){
+            loadCommunityPosts();
+        }
     }
 }

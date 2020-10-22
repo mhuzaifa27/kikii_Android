@@ -197,6 +197,7 @@ public class ShowPopupMenus {
                         if (responseDeleteComment.getSuccess()) {
                             customLoader.hideIndicator();
                             commentsAdapter.remove(commentsList.get(position));
+                            activity.setResult(Activity.RESULT_OK);
                         } else {
                             Log.d(TAG, "onResponse: " + responseDeleteComment.getMessage());
                             customLoader.hideIndicator();

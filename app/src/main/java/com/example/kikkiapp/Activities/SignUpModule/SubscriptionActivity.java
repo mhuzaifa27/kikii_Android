@@ -68,11 +68,13 @@ public class SubscriptionActivity extends AppCompatActivity implements ViewPager
     }
     private void setViewPagerData() {
         galleryList = new ArrayList<>();
-        galleryList.add(R.drawable.dummy_flower);
-        galleryList.add(R.drawable.dummy_flower);
-        galleryList.add(R.drawable.dummy_flower);
-        galleryList.add(R.drawable.dummy_flower);
-        galleryList.add(R.drawable.dummy_flower);
+
+        galleryList.add(R.drawable.banner_image_1);
+        galleryList.add(R.drawable.banner_image_2);
+        galleryList.add(R.drawable.banner_image_6);
+        galleryList.add(R.drawable.banner_image_4);
+        galleryList.add(R.drawable.banner_image_5);
+
         galleryPagerAdapter = new GalleryPagerAdapter(this, galleryList);
         viewEvents.setAdapter(galleryPagerAdapter);
         viewEvents.setCurrentItem(0);

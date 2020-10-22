@@ -140,7 +140,7 @@
                     android:textStyle="normal"></TextView>
 
                 <TextView
-                    android:id="@+id/tv_gender"
+                    android:id="@+id/tv_pronoun_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -184,7 +184,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_gender"
+                            android:id="@+id/tv_gender_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_bold"
@@ -194,7 +194,7 @@
                             android:textStyle="normal"></TextView>
 
                         <TextView
-                            android:id="@+id/tv_pronouns"
+                            android:id="@+id/tv_pronoun_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -253,6 +253,7 @@
                         android:textStyle="bold"></TextView>
 
                     <TextView
+                        android:id="@+id/tv_bio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -298,11 +299,272 @@
                         android:textAllCaps="true"
                         android:textStyle="bold"></TextView>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_rel_status"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_relationship_status"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:drawablePadding="10dp"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_hieght"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_height"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_looking_for"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_looking_for"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_ciggerate"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/tv_cigerate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_drink"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/tv_drink"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_canabiese"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+
+                            <TextView
+                                android:id="@+id/tv_canabiese"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_political_views"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_political_views"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_religion"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_religion"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_diet"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_diet"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_sign"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_sign"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_pets"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_pet"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_cur_children"
+                                android:layout_marginRight="10dp">
+                            </ImageView>
+                            <TextView
+                                android:id="@+id/tv_children"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_toRightOf="@+id/img_curiosity"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="N/A"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="2"
+                        android:visibility="gone"
                         android:layout_marginTop="20dp"
                         tools:listitem="@layout/item_curiosities">
 
@@ -343,7 +605,7 @@
                         android:textStyle="bold"></TextView>
 
                     <Button
-                        android:id="@+id/btn_next"
+                        android:id="@+id/btn_view_posts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/btn_back_red"

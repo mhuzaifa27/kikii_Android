@@ -4,12 +4,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,26 +17,34 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
+import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
 import com.example.kikkiapp.Utils.CustomLoader;
-import com.example.kikkiapp.Utils.FileUploader;
 import com.example.kikkiapp.Utils.SelectImage;
 import com.example.kikkiapp.Utils.SessionManager;
+import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.ShowSelectImageBottomSheet;
 import com.joooonho.SelectableRoundedImageView;
 
+import net.alhazmy13.mediapicker.Image.ImagePicker;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddMoreProfileImagesActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "AddMoreProfileImagesAct";
-    private Context mContext = AddMoreProfileImagesActivity.this;
+    private Context context = AddMoreProfileImagesActivity.this;
     private Activity activity = AddMoreProfileImagesActivity.this;
 
     private Button btn_next;
@@ -57,7 +63,14 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
     private MultipartBody.Part[] imageParts = new MultipartBody.Part[10];
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     private ArrayList<String> files = new ArrayList<>();
+    private List<MultipartBody.Part> imagesList = new ArrayList<>();
     private ImageView img_back;
+    private Uri imageUri;
+    private String path;
+    private List<String> mediaPaths=new ArrayList<>();
+
+    private Call<CallbackUpdateProfile> callbackUpdateProfile;
+    private CallbackUpdateProfile responseUpdateProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +94,16 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
     }
 
     private void getIntentData() {
-        Bundle extras = getIntent().getExtras();
+      /*  Bundle extras = getIntent().getExtras();
         byte[] byteArray = extras.getByteArray("bitmap");
         bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        img_user.setImageBitmap(bmp);
+        img_user.setImageBitmap(bmp);*/
+        Bundle extras = getIntent().getExtras();
+       /* byte[] byteArray = extras.getByteArray("bitmap");
+        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
+        path=extras.getString("bitmap");
+        imageUri=Uri.parse(path);
+        img_user.setImageURI(imageUri);
     }
 
     private void initComponents() {
@@ -120,7 +139,12 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_next:
-                callUploadData();
+                //callUploadData();
+                if (mediaPaths.size() > 0 && mediaPaths.size()>2) {
+                    uploadFiles();
+                } else {
+                    Toast.makeText(context, "Please select at-least 3 images!", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.img_select_1:
                 setImageOn = 1;
@@ -173,88 +197,105 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        customLoader.showIndicator();
-        /**PROFILE PICTURE FROM CAMERA**/
-        if (requestCode == TAKE_PICTURE_FROM_CAMERA_FOR_PROFILE && resultCode == Activity.RESULT_OK) {
-            isSelected = true;
-            bitmap = (Bitmap) data.getExtras().get("data");
-            Uri uri = SelectImage.getImageUri(activity, bitmap);
-            if (uri != null) {
-                currentPhotoPath = SelectImage.compressImage(uri, activity);
-                Log.d(TAG, "onActivityResult: " + currentPhotoPath);
-                /*MultipartBody.Part body = prepareFilePart(Constant.PROFILE_PIC);
-                RequestBody token = RequestBody.create(MediaType.parse("authorization"), sessionManager.getAccessToken());
-                HashMap<String, RequestBody> map = new HashMap<>();
-                map.put("token", token);*/
-                customLoader.hideIndicator();
-                setBitmap(bitmap);
-                //goToNextActivity(bitmap);
-                //updateProfilePhoto(map, body);
-            } else {
-                customLoader.hideIndicator();
-                isSelected = false;
-                Toast.makeText(activity, "Image not captured", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE && resultCode == Activity.RESULT_OK) {
-            if (data.getClipData() != null) {
-                ClipData mClipData = data.getClipData();
-                if (mClipData.getItemCount() <= 8) {
-                    for (int i = 0; i < mClipData.getItemCount(); i++) {
-                        ClipData.Item item = mClipData.getItemAt(i);
-                        Uri uri = item.getUri();
-                        mArrayUri.add(uri);
-                        try {
-                            bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
-                            setBitmap(bitmap, i + 1);
-                            currentPhotoPath = SelectImage.compressImage(uri, activity);
-                            Log.d(TAG, "onActivityResult: " + currentPhotoPath);
-                            MultipartBody.Part body = SelectImage.prepareFilePart(Constant.PROFILE_PIC, currentPhotoPath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    Toast.makeText(mContext, "You cannot select more than 8 pictures", Toast.LENGTH_SHORT).show();
-                }
-                Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
-            } else if (data.getData() != null) {
-                Uri mImageUri = data.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), mImageUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                setBitmap(bitmap);
-            }
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> temp = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            if (setImageOn >= mediaPaths.size())
+                mediaPaths.add(temp.get(0));
+            else if (setImageOn < mediaPaths.size())
+                mediaPaths.add(setImageOn, temp.get(0));
+            setUriToImage(Uri.parse(temp.get(0)));
 
-            customLoader.hideIndicator();
+            Log.d("hhhh", "onActivityResult: " + mediaPaths.size());
 
-            /*isSelected = true;
-            bitmap = null;
-            Uri pictureUri = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), pictureUri);
-                isSelected = true;
-                *//*compressImage(pictureUri);
-                MultipartBody.Part body = prepareFilePart(Constant.PROFILE_PIC);
-                RequestBody token = RequestBody.create(
-                        MediaType.parse("authorization"), sessionManager.getAccessToken());
-                HashMap<String, RequestBody> map = new HashMap<>();
-                map.put("authorization", token);*//*
-                customLoader.hideIndicator();
-                setBitmap(bitmap);
-                //goToNextActivity(bitmap);
-                //updateProfilePhoto(map, body);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }*/
         } else {
             customLoader.hideIndicator();
         }
     }
 
-    private void setBitmap(Bitmap bitmap) {
+    private void setUriToImage(Uri uri) {
+        switch (setImageOn) {
+            case 1:
+                img_selected_1.setImageURI(uri);
+                img_select_1.setVisibility(View.GONE);
+                break;
+            case 2:
+                img_selected_2.setImageURI(uri);
+                img_select_2.setVisibility(View.GONE);
+
+                break;
+            case 3:
+                img_selected_3.setImageURI(uri);
+                img_select_3.setVisibility(View.GONE);
+
+                break;
+            case 4:
+                img_selected_4.setImageURI(uri);
+                img_select_4.setVisibility(View.GONE);
+                break;
+            case 5:
+                img_selected_5.setImageURI(uri);
+                img_select_5.setVisibility(View.GONE);
+
+                break;
+            case 6:
+                img_selected_6.setImageURI(uri);
+                img_select_6.setVisibility(View.GONE);
+                break;
+            case 7:
+                img_selected_7.setImageURI(uri);
+                img_select_7.setVisibility(View.GONE);
+                break;
+            case 8:
+                img_selected_8.setImageURI(uri);
+                img_select_8.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    private void uploadFiles() {
+        for (int i = 0; i < mediaPaths.size(); i++) {
+            imagesList.add(SelectImage.prepareFilePart("new_pics[]", mediaPaths.get(i)));
+        }
+        updateProfileWithImages();
+    }
+
+    private void updateProfileWithImages() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(this);
+        Log.d(TAG, "createPost: " + sessionManager.getAccessToken());
+        callbackUpdateProfile = api.updateOtherImages(sessionManager.getAccessToken(), imagesList);
+        callbackUpdateProfile.enqueue(new Callback<CallbackUpdateProfile>() {
+            @Override
+            public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseUpdateProfile = response.body();
+                if (responseUpdateProfile != null) {
+                    customLoader.hideIndicator();
+                    if (responseUpdateProfile.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseUpdateProfile.getMessage());
+                        Toast.makeText(context, responseUpdateProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(context,AgreementActivity.class));
+                        onBackPressed();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseUpdateProfile.getMessage());
+                        Toast.makeText(context, responseUpdateProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
+   /* private void setBitmap(Bitmap bitmap) {
         switch (setImageOn) {
             case 1:
                 img_selected_1.setImageBitmap(bitmap);
@@ -292,7 +333,7 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
                 img_select_8.setVisibility(View.GONE);
                 break;
         }
-    }
+    }*/
 
     private void setBitmap(Bitmap bitmap, int setImageOn) {
         switch (setImageOn) {
@@ -347,7 +388,7 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
         }
     }
 
-    public void uploadFiles() {
+    /*public void uploadFiles() {
         File[] filesToUpload = new File[files.size()];
         for (int i = 0; i < files.size(); i++) {
             filesToUpload[i] = new File(files.get(i));
@@ -382,7 +423,7 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
             }
         },sessionManager.getAccessToken());
     }
-
+*/
    /* public void updateProgress(int val, String title, String msg){
         pDialog.setTitle(title);
         pDialog.setMessage(msg);

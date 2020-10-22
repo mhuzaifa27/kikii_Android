@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Model.Message;
-import com.example.kikkiapp.Model.Message
-        ;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.SessionManager;
 
@@ -122,7 +120,6 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (holder.getItemViewType()) {
             case 0:
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
-                senderViewHolder.tv_message.setText(message.getBody());
                 senderViewHolder.tv_message.setText(message.getBody());
                 senderViewHolder.tv_name.setText(message.getSenderId().getName());
                 Glide

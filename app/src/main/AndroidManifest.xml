@@ -33,6 +33,7 @@
         <activity android:name="com.example.kikkiapp.Activities.EditProfileActivity"></activity>
         <activity android:name="com.example.kikkiapp.Activities.MyProfileActivity" />
         <activity android:name="com.example.kikkiapp.Activities.PrivacyPolicyActivity" />
+        <activity android:name="com.example.kikkiapp.Activities.TermsAndConditionsActivity" />
         <activity android:name="com.example.kikkiapp.Activities.SupportActivity" />
         <activity android:name="com.example.kikkiapp.Activities.FiltersActivity" />
         <activity android:name="com.example.kikkiapp.Activities.FriendsActivity" />

@@ -36,7 +36,7 @@ public class UtilityFunctions {
     }
     public static int getAge(String dobString){
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd mm yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             date = sdf.parse(dobString);
         } catch (ParseException e) {

@@ -78,17 +78,26 @@ public class SelectImage {
 
     private static void selectImageDialog(int i,String type) {
         if (i == 1) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+           /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (activityMain != null && takePictureIntent.resolveActivity(activityMain.getPackageManager()) != null) {
                 activityMain.startActivityForResult(takePictureIntent, TAKE_PICTURE_FROM_CAMERA_FOR_PROFILE);
-            }
+            }*/
+            new ImagePicker.Builder(activityMain)
+                    .mode(ImagePicker.Mode.CAMERA)
+                    .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                    .directory(ImagePicker.Directory.DEFAULT)
+                    .extension(ImagePicker.Extension.PNG)
+                    .scale(600, 600)
+                    .allowMultipleImages(false)
+                    .enableDebuggingMode(true)
+                    .build();
         } else if (i == 2) {
             if(type.equalsIgnoreCase(Constant.SINGLE)){
                 /*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 activityMain.startActivityForResult(photoPickerIntent, TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
                 new ImagePicker.Builder(activityMain)
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .mode(ImagePicker.Mode.GALLERY)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)
@@ -104,7 +113,7 @@ public class SelectImage {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 activityMain.startActivityForResult(Intent.createChooser(intent,"Select Picture"), TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
                 new ImagePicker.Builder(activityMain)
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .mode(ImagePicker.Mode.GALLERY)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)

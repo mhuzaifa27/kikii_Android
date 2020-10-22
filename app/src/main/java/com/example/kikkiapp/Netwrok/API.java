@@ -9,8 +9,10 @@ import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
 import com.example.kikkiapp.Callbacks.CallbackGetConversations;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetFilters;
 import com.example.kikkiapp.Callbacks.CallbackGetKikiiPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetMatch;
+import com.example.kikkiapp.Callbacks.CallbackGetMeetUsers;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
@@ -130,7 +132,10 @@ public interface API {
     Call<CallbackUpdateProfile> updateProfileWithImages(@Header("Authorization") String auth,
                                              @PartMap Map<String, String> text,
                                              @Part List<MultipartBody.Part> images);
-
+    @Multipart
+    @POST("update/profile")
+    Call<CallbackUpdateProfile> updateOtherImages(@Header("Authorization") String auth,
+                                                        @Part List<MultipartBody.Part> images);
 
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
@@ -139,6 +144,11 @@ public interface API {
     @GET("resend/phone-verification-code")
     Call<CallbackStatus> resendOTP(@Header("Authorization") String auth);
 
+    @GET("meet")
+    Call<CallbackGetMeetUsers> getMeetUsers(@Header("Authorization") String auth);
+
+    @GET("get/filters")
+    Call<CallbackGetFilters> getFilters(@Header("Authorization") String auth);
 
     @GET("likedislike/post/{id}")
     Call<CallbackStatus> likeDislikePost(@Header("Authorization") String auth,

@@ -23,10 +23,10 @@ public class OnBoardPagerAdapter extends PagerAdapter {
     }
 
     public int [] slideImages={
-            R.drawable.dummy_flower,
-            R.drawable.dummy_flower,
-            R.drawable.dummy_flower,
-            R.drawable.dummy_flower
+            R.drawable.dummy_find,
+            R.drawable.dummy_match,
+            R.drawable.dummy_chat,
+            R.drawable.dummy_news_feed
     };
 
     public String [] slideHeadings={

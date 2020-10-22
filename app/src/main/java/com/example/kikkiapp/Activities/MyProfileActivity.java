@@ -20,7 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
 import com.example.kikkiapp.Model.ProfileUser;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -28,10 +27,6 @@ import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.UtilityFunctions;
 import com.joooonho.SelectableRoundedImageView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -165,8 +160,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
         tv_bio = findViewById(R.id.tv_bio);
         tv_distance = findViewById(R.id.tv_distance);
-        tv_gender = findViewById(R.id.tv_gender);
-        tv_pronouns = findViewById(R.id.tv_pronouns);
+        tv_gender = findViewById(R.id.tv_gender_2);
+        tv_pronouns = findViewById(R.id.tv_pronoun_2);
         tv_friends_count = findViewById(R.id.tv_friends_count);
         tv_user_age = findViewById(R.id.tv_user_age);
         tv_user_name = findViewById(R.id.tv_user_name);

@@ -276,6 +276,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                         customLoader.hideIndicator();
                         commentsAdapter.add(responseAddComment.getComment());
                         et_comment.setText("");
+                        setResult(RESULT_OK);
                         View view = PostDetailActivity.this.getCurrentFocus();
                         if (view != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -276,6 +276,7 @@ public class KikiiPostDetailActivity extends AppCompatActivity implements View.O
                         commentsAdapter.add(responseAddComment.getComment());
                         et_comment.setText("");
                         View view = KikiiPostDetailActivity.this.getCurrentFocus();
+                        setResult(Activity.RESULT_OK);
                         if (view != null) {
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

@@ -35,11 +35,12 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 if(!sessionManager.checkLogin()){
                     if(sessionManager.getFirstAttempt()){
-                        startActivity(new Intent(SplashActivity.this,SignUpActivity.class));
+                        startActivity(new Intent(SplashActivity.this,OnBoardingActivity.class));
+                        sessionManager.saveFirstAttempt(false);
                     }
                     else{
                         sessionManager.saveFirstAttempt(false);
-                        startActivity(new Intent(SplashActivity.this,OnBoardingActivity.class));
+                        startActivity(new Intent(SplashActivity.this,SignUpActivity.class));
                     }
                 }
                 else{

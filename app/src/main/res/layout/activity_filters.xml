@@ -142,7 +142,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:text="Miles"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/grey"
                 android:textSize="18sp"></TextView>
 
             <TextView
@@ -195,7 +195,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/lato_regular"
-                android:text="Height"
+                android:text="Any Height"
                 android:textAllCaps="false"
                 android:textColor="@color/grey"
                 android:textSize="18sp"></TextView>
@@ -248,10 +248,22 @@
                     android:layout_marginTop="10dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3"
+                    android:visibility="gone"
                     tools:itemCount="20"
                     tools:listitem="@layout/item_premium_filters">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="Upgrade app For premium filter!"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/fira_sans_bold">
+
+                </TextView>
             </LinearLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

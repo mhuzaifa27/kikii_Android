@@ -11,8 +11,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Utils.CommonMethods;
+import com.example.kikkiapp.Utils.SessionManager;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
@@ -31,6 +34,9 @@ import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.MyAnimation;
 import com.example.kikkiapp.Utils.SelectImage;
 import com.joooonho.SelectableRoundedImageView;
+
+import java.io.File;
+import java.io.IOException;
 
 public class VerifyProfileImagesActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,8 +48,11 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
     private TextView tv_title;
     private SelectableRoundedImageView img_user;
     private Bitmap bmp;
+    private Uri imageUri;
+    private String path;
     private CustomLoader customLoader;
     private ImageView img_back;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,7 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
     }
 
     private void initComponents() {
+        sessionManager=new SessionManager(this);
         customLoader=new CustomLoader(this,false);
 
         img_verify_complete=findViewById(R.id.img_verify_complete);
@@ -80,9 +90,11 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
 
     private void getIntentData() {
         Bundle extras = getIntent().getExtras();
-        byte[] byteArray = extras.getByteArray("bitmap");
-        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        img_user.setImageBitmap(bmp);
+       /* byte[] byteArray = extras.getByteArray("bitmap");
+        bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
+        path=extras.getString("bitmap");
+        imageUri=Uri.fromFile(new File(path));
+        img_user.setImageURI(imageUri);
     }
 
     @Override
@@ -106,7 +118,7 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
                 //setVerifiedView();
                 break;
             case R.id.btn_next:
-                goToNextActivity(bmp);
+                goToNextActivity(path);
                 break;
             case R.id.img_back:
                 CommonMethods.goBack(this);
@@ -117,44 +129,51 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
     private void detectFace() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable=true;
-        Bitmap myBitmap = bmp;
+        Bitmap myBitmap = null;
+        try {
+            myBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            Paint myRectPaint = new Paint();
+            myRectPaint.setStrokeWidth(5);
+            myRectPaint.setColor(Color.RED);
+            myRectPaint.setStyle(Paint.Style.STROKE);
 
-        Paint myRectPaint = new Paint();
-        myRectPaint.setStrokeWidth(5);
-        myRectPaint.setColor(Color.RED);
-        myRectPaint.setStyle(Paint.Style.STROKE);
+            Bitmap tempBitmap = Bitmap.createBitmap(myBitmap.getWidth(), myBitmap.getHeight(), Bitmap.Config.RGB_565);
+            Canvas tempCanvas = new Canvas(tempBitmap);
+            tempCanvas.drawBitmap(myBitmap, 0, 0, null);
 
-        Bitmap tempBitmap = Bitmap.createBitmap(myBitmap.getWidth(), myBitmap.getHeight(), Bitmap.Config.RGB_565);
-        Canvas tempCanvas = new Canvas(tempBitmap);
-        tempCanvas.drawBitmap(myBitmap, 0, 0, null);
+            FaceDetector faceDetector = new
+                    FaceDetector.Builder(getApplicationContext()).setTrackingEnabled(false)
+                    .build();
+            if(!faceDetector.isOperational()){
+                new AlertDialog.Builder(this).setMessage("Could not set up the face detector!").show();
+                return;
+            }
+            Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+            SparseArray<Face> faces = faceDetector.detect(frame);
 
-        FaceDetector faceDetector = new
-                FaceDetector.Builder(getApplicationContext()).setTrackingEnabled(false)
-                .build();
-        if(!faceDetector.isOperational()){
-            new AlertDialog.Builder(this).setMessage("Could not set up the face detector!").show();
+            if(faces.size()>0){
+                for(int i=0; i<faces.size(); i++) {
+                    Face thisFace = faces.valueAt(i);
+                    float x1 = thisFace.getPosition().x;
+                    float y1 = thisFace.getPosition().y;
+                    float x2 = x1 + thisFace.getWidth();
+                    float y2 = y1 + thisFace.getHeight();
+                    tempCanvas.drawRoundRect(new RectF(x1, y1, x2, y2), 2, 2, myRectPaint);
+                }
+                //customLoader.hideIndicator();
+                setVerifiedView();
+            }
+            else{
+                setDeclinedView();
+                //customLoader.hideIndicator();
+                Toast.makeText(mContext, "Face is not detected!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "detectFace: "+e.getMessage());
             return;
         }
-        Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
-        SparseArray<Face> faces = faceDetector.detect(frame);
 
-        if(faces.size()>0){
-            for(int i=0; i<faces.size(); i++) {
-                Face thisFace = faces.valueAt(i);
-                float x1 = thisFace.getPosition().x;
-                float y1 = thisFace.getPosition().y;
-                float x2 = x1 + thisFace.getWidth();
-                float y2 = y1 + thisFace.getHeight();
-                tempCanvas.drawRoundRect(new RectF(x1, y1, x2, y2), 2, 2, myRectPaint);
-            }
-            //customLoader.hideIndicator();
-            setVerifiedView();
-        }
-        else{
-            setDeclinedView();
-            //customLoader.hideIndicator();
-            Toast.makeText(mContext, "Face is not detected!", Toast.LENGTH_SHORT).show();
-        }
         //img_face_detection.setImageDrawable(new BitmapDrawable(getResources(),tempBitmap));
     }
 
@@ -181,12 +200,10 @@ public class VerifyProfileImagesActivity extends AppCompatActivity implements Vi
 
         tv_title.setText("Verification Success");
     }
-    private void goToNextActivity(Bitmap bitmap){
-        byte[] byteArray = SelectImage.getByteArray(bitmap);
-        Intent intent=new Intent(mContext,AddMoreProfileImagesActivity.class);
-        intent.putExtra("bitmap",byteArray);
-        Log.d(TAG, "onActivityResult: "+byteArray);
+    private void goToNextActivity(String path){
+        Intent intent=new Intent(VerifyProfileImagesActivity.this,AddMoreProfileImagesActivity.class);
+        intent.putExtra("bitmap",path);
+        sessionManager.savePhoto(path);
         startActivity(intent);
-        finish();
     }
 }

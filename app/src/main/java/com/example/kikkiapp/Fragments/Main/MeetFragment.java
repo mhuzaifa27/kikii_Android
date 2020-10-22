@@ -1,5 +1,6 @@
 package com.example.kikkiapp.Fragments.Main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,7 +21,14 @@ import com.example.kikkiapp.Activities.FiltersActivity;
 import com.example.kikkiapp.Activities.MyProfileActivity;
 import com.example.kikkiapp.Activities.SupportActivity;
 import com.example.kikkiapp.Adapters.MeetCardSwipeStackAdapter;
+import com.example.kikkiapp.Callbacks.CallbackGetMeetUsers;
+import com.example.kikkiapp.Model.MeetUser;
+import com.example.kikkiapp.Netwrok.API;
+import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
+import com.example.kikkiapp.Utils.CustomLoader;
+import com.example.kikkiapp.Utils.SessionManager;
+import com.example.kikkiapp.Utils.ShowDialogues;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
@@ -27,13 +36,21 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private static final String TAG = "MeetFragment";
+
     private Context context;
+    private Activity activity;
+
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ArrayList<String> list = new ArrayList<>();
+    private List<MeetUser> meetUsersList = new ArrayList<>();
     private MeetCardSwipeStackAdapter meetCardSwipeStackAdapter;
     private ImageView img_open_details, img_close_details, img_menu, img_filters, img_search;
     private LinearLayout ll_normal_view, ll_menu;
@@ -43,15 +60,24 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private CardStackLayoutManager cardStackLayoutManager;
     private SwipeAnimationSetting swipeAnimationSetting;
     private boolean isMenuVisible = false;
-    private TextView tv_profile, tv_support, tv_logout;
+    private TextView tv_profile, tv_support, tv_logout,tv_no;
     private ImageView img_main;
+    private CustomLoader customLoader;
+    private SessionManager sessionManager;
+
+    private Call<CallbackGetMeetUsers> callbackGetMeetUsersCall;
+    private CallbackGetMeetUsers responseGetMeetUsers;
+    private ViewGroup parentLayout;
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meet, container, false);
+
         initComponents(view);
+        getMeetUsers();
 
         img_menu.setOnClickListener(this);
         img_filters.setOnClickListener(this);
@@ -64,8 +90,62 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return view;
     }
 
+    private void getMeetUsers() {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        callbackGetMeetUsersCall = api.getMeetUsers(sessionManager.getAccessToken());
+        callbackGetMeetUsersCall.enqueue(new Callback<CallbackGetMeetUsers>() {
+            @Override
+            public void onResponse(Call<CallbackGetMeetUsers> call, Response<CallbackGetMeetUsers> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseGetMeetUsers = response.body();
+                if (responseGetMeetUsers != null) {
+                    if (responseGetMeetUsers.getSuccess()) {
+                        customLoader.hideIndicator();
+                        //Toast.makeText(context, responseGetProfile.getMessage(), Toast.LENGTH_SHORT).show();
+                        if(responseGetMeetUsers.getUsers().size()>0){
+                            tv_no.setVisibility(View.GONE);
+                            cardStackView.setVisibility(View.VISIBLE);
+                            setData();
+                        }
+                        else{
+                            tv_no.setVisibility(View.VISIBLE);
+                            cardStackView.setVisibility(View.GONE);
+                        }
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseGetMeetUsers.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseGetMeetUsers.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackGetMeetUsers> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
+    private void setData() {
+        meetUsersList=responseGetMeetUsers.getUsers();
+        setCardSwipe();
+    }
+
     private void initComponents(View view) {
         context = getContext();
+        activity=getActivity();
+
+        parentLayout = view.findViewById(android.R.id.content);
+        customLoader=new CustomLoader(activity,false);
+        sessionManager=new SessionManager(context);
 
         img_open_details = view.findViewById(R.id.img_open_details);
         img_close_details = view.findViewById(R.id.img_close_details);
@@ -84,13 +164,14 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         tv_profile = view.findViewById(R.id.tv_profile);
         tv_support = view.findViewById(R.id.tv_support);
         tv_logout = view.findViewById(R.id.tv_logout);
+        tv_no=view.findViewById(R.id.tv_no);
 
-        list.add("php");
-        list.add("c");
-        list.add("python");
-        list.add("java");
+        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
 
-        setCardSwipe();
+        //tv_no.setVisibility(View.GONE);
+        swipeRefreshLayout.setEnabled(false);
+        cardStackView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -107,8 +188,16 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         cardStackLayoutManager.setCanScrollHorizontal(true);
         cardStackLayoutManager.setCanScrollVertical(false);
         cardStackView.setLayoutManager(cardStackLayoutManager);
-        meetCardSwipeStackAdapter = new MeetCardSwipeStackAdapter(list, context);
+        meetCardSwipeStackAdapter = new MeetCardSwipeStackAdapter(meetUsersList, context);
         cardStackView.setAdapter(meetCardSwipeStackAdapter);
+        meetCardSwipeStackAdapter.setOnListEndListener(new MeetCardSwipeStackAdapter.IListEnd() {
+            @Override
+            public void onListEndListener() {
+                tv_no.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setEnabled(true);
+                cardStackView.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -116,10 +205,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         switch (v.getId()) {
             case R.id.img_menu:
                 Log.d(TAG, "onClick: img_menu");
-                if (isMenuVisible)
-                    closeMenu();
-                else
-                    openMenu();
+                    ShowDialogues.showPostMenu(activity,img_menu,parentLayout);
                 break;
             case R.id.img_filters:
                 startActivity(new Intent(context, FiltersActivity.class));
@@ -135,6 +221,8 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 startActivity(new Intent(context, SupportActivity.class));
                 break;
             case R.id.tv_logout:
+                sessionManager.logoutUser();
+                activity.finish();
             case R.id.img_main:
                 closeMenu();
                 break;

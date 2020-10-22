@@ -117,6 +117,7 @@ public class Constant {
     public static final String PRONOUNS="pronouns";
     public static final String RELATIONSHIP_STATUS="relationship_status";
     public static final String HEIGHT="height";
+    public static final String DISTANCE_IN="distance_in";
     public static final String LOOKING_FOR="looking_for";
     public static final String DRINK="drink";
     public static final String DIET_LIKE="diet_like";

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,7 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private static final String TAG = "KikiiFragment";
     private Context context;
     private Activity activity;
+    public static final int REQUEST_POST_DETAIL=244;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tv_no;
@@ -163,7 +165,7 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("post", post);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_POST_DETAIL);
             }
         });
     }
@@ -198,7 +200,6 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 if (responseLike != null) {
                     if (responseLike.getSuccess()) {
                         customLoader.hideIndicator();
-                        Toast.makeText(context, responseGetKikiiPosts.getMessage(), Toast.LENGTH_SHORT).show();
                         KikiiPost post = kikiiPostsList.get(position);
                         int likeCount = post.getLikes_count();
                         if (post.getIsLiked().toString().equalsIgnoreCase("0")) {
@@ -235,7 +236,13 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         });
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_POST_DETAIL && resultCode==Activity.RESULT_OK){
+            getKikiiPosts();
+        }
+    }
     @Override
     public void onRefresh() {
         getKikiiPosts();

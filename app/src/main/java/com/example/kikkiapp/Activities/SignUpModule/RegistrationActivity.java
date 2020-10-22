@@ -123,7 +123,7 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         String birthdateStr = tv_birthday.getText().toString();
-                        SimpleDateFormat df = new SimpleDateFormat("dd-mm-yyyy");
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                         Date birthdate = null;
                         try {
                             birthdate = df.parse(birthdateStr);

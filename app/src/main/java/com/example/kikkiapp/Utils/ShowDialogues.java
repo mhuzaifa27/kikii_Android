@@ -4,20 +4,29 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Activities.SupportActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.example.kikkiapp.R;
 
 import java.util.Calendar;
 
 public class ShowDialogues {
+    static PopupWindow mypopupWindow = null;
+    static SessionManager sessionManager;
 
     public static void SHOW_DATE_PICKER_DIALOG(Context context, final TextView tv,DialogInterface.OnDismissListener onDismissListener){
         final Dialog alertDialog = new Dialog(context);
@@ -43,11 +52,11 @@ public class ShowDialogues {
                 int dayOfMonth=datePicker.getDayOfMonth();
                 String dateYouChoose = null;
                 if(dayOfMonth<10 && monthOfYear<10)
-                    dateYouChoose= "0"+dayOfMonth + "-" + "0"+(monthOfYear + 1) + "-" + year;
+                    dateYouChoose= year+ "-" + "0"+(monthOfYear + 1) + "-" +"0"+dayOfMonth;
                 else if(dayOfMonth<10)
-                    dateYouChoose= "0"+dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                    dateYouChoose=  year+ "-" + (monthOfYear + 1) + "-" +"0"+dayOfMonth;
                 else
-                    dateYouChoose= dayOfMonth + "-" + "0"+(monthOfYear + 1) + "-" + year;
+                    dateYouChoose= year + "-" + "0"+(monthOfYear + 1) + "-" + dayOfMonth;
                 tv.setText(dateYouChoose);
                 alertDialog.dismiss();
             }
@@ -94,5 +103,57 @@ public class ShowDialogues {
         tv_subject.setText(text);
         snackbarLayout.addView(customView);
         snackbar.show();
+    }
+
+    public static void showPostMenu(final Activity activity, View view, ViewGroup viewGroup) {
+        sessionManager=new SessionManager(activity);
+        LayoutInflater inflater = (LayoutInflater)
+                activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.home_menu, viewGroup,false);
+
+        TextView tv_profile = v.findViewById(R.id.tv_profile);
+        TextView tv_support = v.findViewById(R.id.tv_support);
+        TextView tv_logout = v.findViewById(R.id.tv_logout);
+
+        tv_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+                activity.startActivity(new Intent(activity, MyProfileActivity.class));
+            }
+        });
+        tv_support.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+                activity.startActivity(new Intent(activity, SupportActivity.class));
+            }
+        });
+        tv_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+                sessionManager.logoutUser();
+                activity.finish();
+
+            }
+        });
+        mypopupWindow = new PopupWindow(v,LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        if(v.getParent() != null) {
+            ((ViewGroup)v.getParent()).removeView(v); // <- fix
+        }
+        mypopupWindow.showAsDropDown(view, 0, 0);
+
+        mypopupWindow.getContentView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+            }
+        });
+    }
+
+    public boolean isShowingMenu() {
+        if (mypopupWindow.isShowing()) return true;
+        else return false;
     }
 }
