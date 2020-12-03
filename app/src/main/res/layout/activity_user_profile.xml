@@ -597,6 +597,7 @@
                                 android:fontFamily="@font/lato_bold"
                                 android:text="View Friends"
                                 android:textAllCaps="false"
+                                android:visibility="gone"
                                 android:textColor="@color/white"
                                 android:textSize="18sp">
 
@@ -710,7 +711,8 @@
             android:background="@drawable/bg_transparent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="0dp"

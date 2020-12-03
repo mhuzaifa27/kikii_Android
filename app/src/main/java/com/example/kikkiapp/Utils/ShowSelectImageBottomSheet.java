@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.kikkiapp.Activities.ChattingActivity;
 import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Activities.UserProfileActivity;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.example.kikkiapp.R;
@@ -166,8 +167,8 @@ public class ShowSelectImageBottomSheet {
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
-                Intent intent=new Intent(activity, MyProfileActivity.class);
-                intent.putExtra(Constant.ID,userId);
+                Intent intent=new Intent(activity, UserProfileActivity.class);
+                intent.putExtra(Constant.ID,String.valueOf(userId));
                 activity.startActivity(intent);
             }
         });

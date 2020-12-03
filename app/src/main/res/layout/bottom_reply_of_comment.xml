@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:id="@+id/bottomSheetLayout"
     android:background="@android:color/transparent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -166,7 +167,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:background="@color/light_white"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="50dp">
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"

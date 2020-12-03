@@ -43,8 +43,8 @@ public class YourMatchAdapter extends RecyclerView.Adapter<YourMatchAdapter.Trav
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
         final Match match = data.get(position);
 
-        //holder.tv_time_ago.setText(match.getLastOnline());
-        holder.tv_user_name.setText(match.getName());
+        holder.tv_time_ago.setText(match.getLastOnline());
+        holder.tv_user_name.setText(match.getName().split(" ")[0]+".");
         Glide
                 .with(context)
                 .load(match.getProfilePic())

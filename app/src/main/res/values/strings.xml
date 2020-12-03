@@ -113,4 +113,12 @@ A Note to Users Outside of the United States. HER is based in the U.S. If you ar
 
     <string name="facebook_app_id">3133369890124151</string>
     <string name="fb_login_protocol_scheme">fb3133369890124151</string>
+    <string name="your_likes">Your Likes</string>
+    <string name="upgrade_to_see_who_liked_you">Upgrade to see who liked you</string>
+    <string name="_6">+6</string>
+    <string name="_0_likes">0 Likes</string>
+    <string name="todo">TODO</string>
+    <string name="your_matches">Your Matches</string>
+    <string name="you_have_24_hours_to_start_conversations_with_a_match_or_it_is_removed">You have 24 hours to start conversations with a match or it is removed.</string>
+    <string name="no_match_found">No Match Found!</string>
 </resources>

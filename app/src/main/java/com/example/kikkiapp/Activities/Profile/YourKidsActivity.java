@@ -100,8 +100,10 @@ public class YourKidsActivity extends AppCompatActivity implements OnChipClickLi
                 if (responseGetCategory != null) {
                     if (responseGetCategory.getSuccess()) {
                         customLoader.hideIndicator();
-                        if (responseGetCategory.getValue().getValueAttr().size() > 0)
-                            setData();
+                        if (responseGetCategory.getValue() != null){
+                            if (responseGetCategory.getValue().getValueAttr().size() > 0)
+                                setData();
+                        }
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetCategory.getMessage());
                         customLoader.hideIndicator();

@@ -4,9 +4,8 @@ package com.example.kikkiapp.Callbacks;
 import com.example.kikkiapp.Model.CompleteUser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.example.kikkiapp.Model.UserVerifyOTP;
 
-public class CallbackUpdateProfile {
+public class CallbackContinueWithPhone {
 
     @SerializedName("success")
     @Expose
@@ -33,6 +32,7 @@ public class CallbackUpdateProfile {
     public void setMessage(String message) {
         this.message = message;
     }
+
     public CompleteUser getUser() {
         return user;
     }
@@ -40,4 +40,5 @@ public class CallbackUpdateProfile {
     public void setUser(CompleteUser user) {
         this.user = user;
     }
+
 }

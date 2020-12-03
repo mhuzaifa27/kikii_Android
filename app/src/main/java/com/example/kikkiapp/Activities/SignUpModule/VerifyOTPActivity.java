@@ -1,13 +1,17 @@
 package com.example.kikkiapp.Activities.SignUpModule;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Activities.MainActivity;
+import com.example.kikkiapp.Callbacks.CallbackContinueWithPhone;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
+import com.example.kikkiapp.Firebase.AppState;
+import com.example.kikkiapp.Firebase.ChangeEventListener;
+import com.example.kikkiapp.Firebase.Model.FirebaseUserModel;
+import com.example.kikkiapp.Firebase.Services.UserService;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
@@ -27,6 +36,18 @@ import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -50,13 +71,22 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
     private Call<CallbackVerifyOTP> callbackVerifyOTPCall;
     private CallbackVerifyOTP responseVerifyOTP;
 
+    private Call<CallbackContinueWithPhone> callbackContinueWithPhoneCall;
+    private CallbackContinueWithPhone responseContinueWithPhone;
+
     private Call<CallbackStatus> callbackStatusCall;
     private CallbackStatus responseResendCode;
 
     private String code;
     private Map<String, String> verifyOTPParams = new HashMap<>();
-    private LinearLayout ll_timer,ll_resend;
-    private TextView tv_time,tv_resend_code;
+    private LinearLayout ll_timer, ll_resend;
+    private TextView tv_time, tv_resend_code;
+    private String phoneNumber;
+    private boolean connected;
+    private FirebaseAuth mAuth;
+    private UserService userService;
+    private String mVerificationId;
+    private Map<String, String> sendOTPParams = new HashMap<>();
 
 
     @Override
@@ -64,6 +94,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
+        getIntentData();
         initComponents();
         startCountDown();
 
@@ -78,6 +109,10 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
         tv_resend_code.setOnClickListener(this);
     }
 
+    private void getIntentData() {
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
+    }
+
     private void startCountDown() {
         ll_resend.setVisibility(View.GONE);
         ll_timer.setVisibility(View.VISIBLE);
@@ -89,6 +124,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60);
                 tv_time.setText(text);
             }
+
             @Override
             public void onFinish() {
                 ll_resend.setVisibility(View.VISIBLE);
@@ -111,11 +147,12 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
 
         btn_next = findViewById(R.id.btn_next);
 
-        ll_resend=findViewById(R.id.ll_resend);
-        ll_timer=findViewById(R.id.ll_timer);
+        ll_resend = findViewById(R.id.ll_resend);
+        ll_timer = findViewById(R.id.ll_timer);
 
-        tv_resend_code=findViewById(R.id.tv_resend_code);
-        tv_time=findViewById(R.id.tv_time);
+        tv_resend_code = findViewById(R.id.tv_resend_code);
+        tv_time = findViewById(R.id.tv_time);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -135,18 +172,23 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                 } else if (et_otp_6.getText().toString().isEmpty()) {
                     ShowError();
                 } else {
-                    code =  et_otp_1.getText().toString() +
+                    code = et_otp_1.getText().toString() +
                             et_otp_2.getText().toString() +
                             et_otp_3.getText().toString() +
                             et_otp_4.getText().toString() +
                             et_otp_5.getText().toString() +
                             et_otp_6.getText().toString();
-                    verifyOTPParams.put(Constant.CODE,code);
-                    verifyOTP();
+                    verifyOTPParams.put(Constant.CODE, code);
+                    if (!TextUtils.isEmpty(code) || !TextUtils.isEmpty(mVerificationId))
+                        signInWithPhoneAuthCredential(PhoneAuthProvider.getCredential(mVerificationId, code));
+                    //verifyOTP();
                 }
                 break;
             case R.id.tv_resend_code:
-                resendCode();
+                if (connected)
+                    recreate();
+                else
+                    Toast.makeText(mContext, "Please Connect to Internet!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -258,21 +300,20 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                 if (responseVerifyOTP != null) {
                     if (responseVerifyOTP.getSuccess()) {
                         Log.d(TAG, "onResponse: " + responseVerifyOTP.getMessage());
-                        String email=responseVerifyOTP.getData().getUser().getEmail();
+                        String email = responseVerifyOTP.getData().getUser().getEmail();
                         customLoader.hideIndicator();
                         Toast.makeText(mContext, responseVerifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
-                        if(email!=null){
+                        if (email != null) {
                             sessionManager.saveUserEmail(responseVerifyOTP.getData().getUser().getEmail());
                             sessionManager.saveUserName(responseVerifyOTP.getData().getUser().getName());
                             sessionManager.saveBirthday(responseVerifyOTP.getData().getUser().getBirthday());
                             sessionManager.saveUserID(responseVerifyOTP.getData().getUser().getId().toString());
-                            sessionManager.createLoginSession("Bearer "+responseVerifyOTP.getData().getUser().getAuthToken(),responseVerifyOTP.getData().getUser().getId().toString());
+                            sessionManager.createLoginSession("Bearer " + responseVerifyOTP.getData().getUser().getAuthToken(), responseVerifyOTP.getData().getUser().getId().toString());
                             Toast.makeText(mContext, responseVerifyOTP.getMessage(), Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(mContext, MainActivity.class);
                             TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
                             verifyOTPParams.clear();
-                        }
-                        else{
+                        } else {
                             startActivity(new Intent(mContext, LocationActivity.class));
                             finish();
                         }
@@ -300,4 +341,183 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
     private void ShowError() {
         Toast.makeText(mContext, "Please enter complete OTP", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            initiateAuth(phoneNumber);
+            //we are connected to a network
+            connected = true;
+        } else
+            Toast.makeText(this, "Please Connect to Internet!", Toast.LENGTH_SHORT).show();
+        connected = false;
+    }
+
+    private void initiateAuth(String phone) {
+        customLoader.showIndicator();
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, this,
+                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onCodeAutoRetrievalTimeOut(String s) {
+                        super.onCodeAutoRetrievalTimeOut(s);
+                    }
+
+                    @Override
+                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                        customLoader.hideIndicator();
+                        signInWithPhoneAuthCredential(phoneAuthCredential);
+                    }
+
+                    @Override
+                    public void onVerificationFailed(FirebaseException e) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onVerificationFailed: "+e.getMessage());
+                    }
+
+                    @Override
+                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        super.onCodeSent(verificationId, forceResendingToken);
+                        mVerificationId = verificationId;
+                        customLoader.hideIndicator();
+                    }
+                });
+    }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
+        customLoader.showIndicator();
+        mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                initUserService();
+                if (task.isSuccessful()) {
+                    AppState.currentFireUser = mAuth.getCurrentUser();
+                    AppState.currentBpackCustomer = userService.getUserById(AppState.currentFireUser.getUid());
+
+                    if (AppState.currentBpackCustomer == null) {
+                        createUser(AppState.currentFireUser);
+                    } else {
+                        sessionManager.saveFirebaseId(AppState.currentFireUser.getUid());
+                        sessionManager.saveUserPhoneNo(phoneNumber);
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/order_" + AppState.currentFireUser.getUid());
+                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/order_" + AppState.currentFireUser.getUid());
+                        sendOTPParams.put(Constant.PHONE, phoneNumber);
+                        continueWithPhone();
+                    }
+                } else {
+                    Log.d("messagee", "onComplete: " + task.getResult());
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(mContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    customLoader.hideIndicator();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mContext, "Verification Fail!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PhoneVerificationForUser.this, String.format(getString(R.string.error_detail), e.getMessage()) != null ? "\n" + e.getMessage() : "", Toast.LENGTH_LONG).show();
+                customLoader.hideIndicator();
+            }
+        });
+    }
+
+    private void continueWithPhone() {
+        //customLoader.showIndicator();
+        API api = RestAdapter.createAPI(mContext);
+        Log.d(TAG, "sendOTP: " + code);
+        callbackContinueWithPhoneCall = api.continueWithPhone(sendOTPParams);
+        callbackContinueWithPhoneCall.enqueue(new Callback<CallbackContinueWithPhone>() {
+            @Override
+            public void onResponse(Call<CallbackContinueWithPhone> call, Response<CallbackContinueWithPhone> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseContinueWithPhone = response.body();
+                if (responseContinueWithPhone != null) {
+                    if (responseContinueWithPhone.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseContinueWithPhone.getMessage());
+                        String email = responseContinueWithPhone.getUser().getEmail();
+                        customLoader.hideIndicator();
+                        Toast.makeText(mContext, responseContinueWithPhone.getMessage(), Toast.LENGTH_SHORT).show();
+                        if (email != null) {
+                            sessionManager.saveUserEmail(responseContinueWithPhone.getUser().getEmail());
+                            sessionManager.saveUserName(responseContinueWithPhone.getUser().getName());
+                            sessionManager.saveBirthday(responseContinueWithPhone.getUser().getBirthday());
+                            sessionManager.saveUserID(responseContinueWithPhone.getUser().getId().toString());
+                            sessionManager.createLoginSession("Bearer " + responseContinueWithPhone.getUser().getAuthToken(), responseContinueWithPhone.getUser().getId().toString());
+                            Toast.makeText(mContext, responseContinueWithPhone.getMessage(), Toast.LENGTH_SHORT).show();
+                            Intent loginIntent = new Intent(mContext, MainActivity.class);
+                            TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
+                            sendOTPParams.clear();
+                        } else {
+                            sessionManager.createLoginSession("Bearer " + responseContinueWithPhone.getUser().getAuthToken(), responseContinueWithPhone.getUser().getId().toString());
+                            startActivity(new Intent(mContext, LocationActivity.class));
+                            finish();
+                        }
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseContinueWithPhone.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(mContext, responseContinueWithPhone.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(mContext);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackContinueWithPhone> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
+    private void createUser(final FirebaseUser currentUser) {
+        if (currentUser.getUid() != null) {
+            userService.registerUser(currentUser.getUid(), phoneNumber, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError == null) {
+                        //customLoader.hideIndicator();
+                        sessionManager.saveUserID(AppState.currentFireUser.getUid());
+                        sessionManager.saveUserPhoneNo(phoneNumber);
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/order_" + AppState.currentFireUser.getUid());
+                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/order_" + AppState.currentFireUser.getUid());
+                        sendOTPParams.put(Constant.PHONE, phoneNumber);
+                        continueWithPhone();
+                    } else {
+                        customLoader.hideIndicator();
+                        Log.d("messagee", "onComplete: " + databaseError.getMessage());
+                        Toast.makeText(mContext, "SigUp failed - database error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } else {
+            Toast.makeText(mContext, "SigUp failed, email empty. Please try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void initUserService() {
+        userService = new UserService();
+        userService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+            }
+
+            @Override
+            public void onDataChanged() {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
 }

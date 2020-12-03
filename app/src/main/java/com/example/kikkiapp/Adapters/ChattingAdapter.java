@@ -34,10 +34,10 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void add(Message mc) {
-        data.add(0, mc);
-        if (data.size() > 1)
+        data.add(mc);
+        if (data.size() > 1){
             notifyItemInserted(0);
-        notifyDataSetChanged();
+        }
     }
 
     public void addAll(List<Message> mcList) {
@@ -135,10 +135,10 @@ public class ChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case 1:
                 ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder) holder;
                 receiverViewHolder.tv_message.setText(message.getBody());
-                receiverViewHolder.tv_name.setText(message.getReceiverId().getName());
+                receiverViewHolder.tv_name.setText(message.getSenderId().getName());
                 Glide
                         .with(context)
-                        .load(message.getReceiverId().getProfilePic())
+                        .load(message.getSenderId().getProfilePic())
                         .centerCrop()
                         .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

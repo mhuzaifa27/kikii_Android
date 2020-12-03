@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,6 +12,7 @@
         android:background="@drawable/bg_menu"
         android:clickable="true"
         android:focusable="true"
+        android:elevation="10dp"
         android:orientation="vertical"
         android:paddingVertical="10dp"
         android:visibility="visible">
@@ -24,7 +24,43 @@
             android:layout_marginHorizontal="15dp"
             android:text="Profile"
             android:textColor="@color/black"
-            android:textSize="18sp"></TextView>
+            android:textSize="18sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:alpha="0.6"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/tv_incognito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="Incognito"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:alpha="0.6"
+            android:visibility="gone"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/tv_rewind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:text="Rewind"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
 
         <View
             android:layout_width="match_parent"
@@ -43,7 +79,7 @@
             android:layout_marginTop="10dp"
             android:text="Support"
             android:textColor="@color/black"
-            android:textSize="18sp"></TextView>
+            android:textSize="18sp"/>
 
         <View
             android:layout_width="match_parent"
@@ -63,7 +99,7 @@
             android:layout_marginBottom="10dp"
             android:text="Log Out"
             android:textColor="@color/black"
-            android:textSize="18sp"></TextView>
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </RelativeLayout>

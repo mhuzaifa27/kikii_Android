@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/app_header"
-        layout="@layout/app_header_with_tick"></include>
+        layout="@layout/app_header_with_tick"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                                     android:id="@+id/img_selected_1"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -137,7 +137,7 @@
                             android:layout_weight="1"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="0dp"
-                            >
+                            app:cardBackgroundColor="@android:color/transparent">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -148,7 +148,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -201,7 +201,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -237,7 +237,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -273,7 +273,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -317,7 +317,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -353,7 +353,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -389,7 +389,7 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:src="@drawable/bg_add_img_small"
+                                    android:src="@drawable/bg_one_corner_round_white"
                                     android:layout_centerInParent="true"
                                     app:sriv_left_bottom_corner_radius="30dp"
                                     app:sriv_left_top_corner_radius="10dp"
@@ -695,10 +695,161 @@
                     </LinearLayout>
                 </LinearLayout>
                 <View
-                    android:id="@+id/view5"
+                    android:id="@+id/view22"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_below="@+id/ll_bio"
+                    android:layout_marginTop="20dp"
+                    android:alpha="0.3"
+                    android:background="@color/light_grey">
+
+                </View>
+
+                <LinearLayout
+                    android:id="@+id/ll_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view22"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="LOCATION"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view1"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view1"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/lato_bold"
+                                android:text="Show your location"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal"/>
+                        </LinearLayout>
+                        <Switch
+                            android:id="@+id/swch_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/colorPrimaryDark"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view23"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@+id/ll_location"
+                    android:layout_marginTop="20dp"
+                    android:alpha="0.3"
+                    android:background="@color/light_grey">
+
+                </View>
+
+                <LinearLayout
+                    android:id="@+id/ll_incognito"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view23"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="INCOGNITO"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view1"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:visibility="visible"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/view1"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:visibility="visible"
+                            android:weightSum="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/lato_bold"
+                                android:text="Make your profile private"
+                                android:textAllCaps="false"
+                                android:textColor="@color/black"
+                                android:textSize="17sp"
+                                android:textStyle="normal"/>
+                        </LinearLayout>
+                        <Switch
+                            android:id="@+id/swch_incognito"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:thumbTint="@color/colorPrimaryDark"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@+id/ll_incognito"
                     android:layout_marginTop="20dp"
                     android:alpha="0.3"
                     android:background="@color/light_grey"/>

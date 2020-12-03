@@ -274,7 +274,7 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
                         Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
                         customLoader.hideIndicator();
                         goToNextActivity();
-                    } else {
+                    }else {
                         Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
                         customLoader.hideIndicator();
                         Toast.makeText(mContext, responseLatLongUpdate.getMessage(), Toast.LENGTH_SHORT).show();

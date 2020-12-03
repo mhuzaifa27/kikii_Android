@@ -29,6 +29,9 @@ public class PostComment {
     @SerializedName("comment_id")
     @Expose
     private Integer comment_id;
+    @SerializedName("media")
+    @Expose
+    private List<CommentMedia> media = null;
     @SerializedName("replies")
     @Expose
     private List<CommentReply> replies = null;
@@ -106,5 +109,21 @@ public class PostComment {
 
     public void setReplies(List<CommentReply> replies) {
         this.replies = replies;
+    }
+
+    public List<CommentMedia> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<CommentMedia> media) {
+        this.media = media;
+    }
+
+    public PostCommenter getUser() {
+        return user;
+    }
+
+    public void setUser(PostCommenter user) {
+        this.user = user;
     }
 }

@@ -49,18 +49,21 @@
             android:weightSum="3">
 
             <ImageView
+                android:id="@+id/img_dislike_user"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_clean"></ImageView>
 
             <ImageView
+                android:id="@+id/img_follow_user"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_request"></ImageView>
 
             <ImageView
+                android:id="@+id/img_like_user"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

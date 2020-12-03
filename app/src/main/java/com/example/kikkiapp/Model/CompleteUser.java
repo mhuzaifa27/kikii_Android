@@ -1,11 +1,10 @@
 
 package com.example.kikkiapp.Model;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProfileUser {
+public class CompleteUser {
 
     @SerializedName("id")
     @Expose
@@ -30,70 +29,76 @@ public class ProfileUser {
     private String role;
     @SerializedName("profile_pic")
     @Expose
-    private String profilePic;
+    private Object profilePic;
     @SerializedName("birthday")
     @Expose
     private String birthday;
-    @SerializedName("profile_verified")
+    @SerializedName("upgraded")
     @Expose
-    private Integer profileVerified;
+    private Integer upgraded;
+    @SerializedName("incognito")
+    @Expose
+    private Integer incognito;
+    @SerializedName("show_location")
+    @Expose
+    private Integer showLocation;
     @SerializedName("gender_identity")
     @Expose
-    private String genderIdentity;
+    private Object genderIdentity;
     @SerializedName("sexual_identity")
     @Expose
     private Object sexualIdentity;
     @SerializedName("pronouns")
     @Expose
-    private String pronouns;
+    private Object pronouns;
     @SerializedName("bio")
     @Expose
-    private String bio;
+    private Object bio;
     @SerializedName("relationship_status")
     @Expose
-    private String relationshipStatus;
+    private Object relationshipStatus;
     @SerializedName("height")
     @Expose
-    private String height;
+    private Object height;
     @SerializedName("looking_for")
     @Expose
-    private String lookingFor;
+    private Object lookingFor;
     @SerializedName("drink")
     @Expose
-    private String drink;
+    private Object drink;
     @SerializedName("smoke")
     @Expose
-    private String smoke;
+    private Object smoke;
     @SerializedName("cannabis")
     @Expose
-    private String cannabis;
+    private Object cannabis;
     @SerializedName("political_views")
     @Expose
-    private String politicalViews;
+    private Object politicalViews;
     @SerializedName("religion")
     @Expose
-    private String religion;
+    private Object religion;
     @SerializedName("diet_like")
     @Expose
-    private String dietLike;
+    private Object dietLike;
     @SerializedName("sign")
     @Expose
-    private String sign;
+    private Object sign;
     @SerializedName("pets")
     @Expose
-    private String pets;
+    private Object pets;
     @SerializedName("kids")
     @Expose
-    private String kids;
+    private Object kids;
     @SerializedName("facebook")
     @Expose
-    private String facebook;
+    private Object facebook;
     @SerializedName("instagram")
     @Expose
-    private String instagram;
+    private Object instagram;
     @SerializedName("tiktok")
     @Expose
-    private String tiktok;
+    private Object tiktok;
     @SerializedName("last_online")
     @Expose
     private String lastOnline;
@@ -103,30 +108,12 @@ public class ProfileUser {
     @SerializedName("longitude")
     @Expose
     private Object longitude;
-    @SerializedName("friends_count")
-    @Expose
-    private Integer friends_count;
     @SerializedName("auth_token")
     @Expose
     private String authToken;
-    @SerializedName("created_at")
+    @SerializedName("deleted_at")
     @Expose
-    private String createdAt;
-    @SerializedName("upgraded")
-    @Expose
-    private Integer upgraded;
-    @SerializedName("incognito")
-    @Expose
-    private Integer incognito;
-    @SerializedName("show_location")
-    @Expose
-    private Integer show_location;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
-    @SerializedName("profile_pics")
-    @Expose
-    private List<ProfilePic> profilePics = null;
+    private Object deletedAt;
 
     public Integer getId() {
         return id;
@@ -134,14 +121,6 @@ public class ProfileUser {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getFriends_count() {
-        return friends_count;
-    }
-
-    public void setFriends_count(Integer friends_count) {
-        this.friends_count = friends_count;
     }
 
     public String getName() {
@@ -192,11 +171,11 @@ public class ProfileUser {
         this.role = role;
     }
 
-    public String getProfilePic() {
+    public Object getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(String profilePic) {
+    public void setProfilePic(Object profilePic) {
         this.profilePic = profilePic;
     }
 
@@ -208,19 +187,35 @@ public class ProfileUser {
         this.birthday = birthday;
     }
 
-    public Integer getProfileVerified() {
-        return profileVerified;
+    public Integer getUpgraded() {
+        return upgraded;
     }
 
-    public void setProfileVerified(Integer profileVerified) {
-        this.profileVerified = profileVerified;
+    public void setUpgraded(Integer upgraded) {
+        this.upgraded = upgraded;
     }
 
-    public String getGenderIdentity() {
+    public Integer getIncognito() {
+        return incognito;
+    }
+
+    public void setIncognito(Integer incognito) {
+        this.incognito = incognito;
+    }
+
+    public Integer getShowLocation() {
+        return showLocation;
+    }
+
+    public void setShowLocation(Integer showLocation) {
+        this.showLocation = showLocation;
+    }
+
+    public Object getGenderIdentity() {
         return genderIdentity;
     }
 
-    public void setGenderIdentity(String genderIdentity) {
+    public void setGenderIdentity(Object genderIdentity) {
         this.genderIdentity = genderIdentity;
     }
 
@@ -232,139 +227,139 @@ public class ProfileUser {
         this.sexualIdentity = sexualIdentity;
     }
 
-    public String getPronouns() {
+    public Object getPronouns() {
         return pronouns;
     }
 
-    public void setPronouns(String pronouns) {
+    public void setPronouns(Object pronouns) {
         this.pronouns = pronouns;
     }
 
-    public String getBio() {
+    public Object getBio() {
         return bio;
     }
 
-    public void setBio(String bio) {
+    public void setBio(Object bio) {
         this.bio = bio;
     }
 
-    public String getRelationshipStatus() {
+    public Object getRelationshipStatus() {
         return relationshipStatus;
     }
 
-    public void setRelationshipStatus(String relationshipStatus) {
+    public void setRelationshipStatus(Object relationshipStatus) {
         this.relationshipStatus = relationshipStatus;
     }
 
-    public String getHeight() {
+    public Object getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(Object height) {
         this.height = height;
     }
 
-    public String getLookingFor() {
+    public Object getLookingFor() {
         return lookingFor;
     }
 
-    public void setLookingFor(String lookingFor) {
+    public void setLookingFor(Object lookingFor) {
         this.lookingFor = lookingFor;
     }
 
-    public String getDrink() {
+    public Object getDrink() {
         return drink;
     }
 
-    public void setDrink(String drink) {
+    public void setDrink(Object drink) {
         this.drink = drink;
     }
 
-    public String getSmoke() {
+    public Object getSmoke() {
         return smoke;
     }
 
-    public void setSmoke(String smoke) {
+    public void setSmoke(Object smoke) {
         this.smoke = smoke;
     }
 
-    public String getCannabis() {
+    public Object getCannabis() {
         return cannabis;
     }
 
-    public void setCannabis(String cannabis) {
+    public void setCannabis(Object cannabis) {
         this.cannabis = cannabis;
     }
 
-    public String getPoliticalViews() {
+    public Object getPoliticalViews() {
         return politicalViews;
     }
 
-    public void setPoliticalViews(String politicalViews) {
+    public void setPoliticalViews(Object politicalViews) {
         this.politicalViews = politicalViews;
     }
 
-    public String getReligion() {
+    public Object getReligion() {
         return religion;
     }
 
-    public void setReligion(String religion) {
+    public void setReligion(Object religion) {
         this.religion = religion;
     }
 
-    public String getDietLike() {
+    public Object getDietLike() {
         return dietLike;
     }
 
-    public void setDietLike(String dietLike) {
+    public void setDietLike(Object dietLike) {
         this.dietLike = dietLike;
     }
 
-    public String getSign() {
+    public Object getSign() {
         return sign;
     }
 
-    public void setSign(String sign) {
+    public void setSign(Object sign) {
         this.sign = sign;
     }
 
-    public String getPets() {
+    public Object getPets() {
         return pets;
     }
 
-    public void setPets(String pets) {
+    public void setPets(Object pets) {
         this.pets = pets;
     }
 
-    public String getKids() {
+    public Object getKids() {
         return kids;
     }
 
-    public void setKids(String kids) {
+    public void setKids(Object kids) {
         this.kids = kids;
     }
 
-    public String getFacebook() {
+    public Object getFacebook() {
         return facebook;
     }
 
-    public void setFacebook(String facebook) {
+    public void setFacebook(Object facebook) {
         this.facebook = facebook;
     }
 
-    public String getInstagram() {
+    public Object getInstagram() {
         return instagram;
     }
 
-    public void setInstagram(String instagram) {
+    public void setInstagram(Object instagram) {
         this.instagram = instagram;
     }
 
-    public String getTiktok() {
+    public Object getTiktok() {
         return tiktok;
     }
 
-    public void setTiktok(String tiktok) {
+    public void setTiktok(Object tiktok) {
         this.tiktok = tiktok;
     }
 
@@ -400,51 +395,12 @@ public class ProfileUser {
         this.authToken = authToken;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public Object getDeletedAt() {
+        return deletedAt;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setDeletedAt(Object deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<ProfilePic> getProfilePics() {
-        return profilePics;
-    }
-
-    public void setProfilePics(List<ProfilePic> profilePics) {
-        this.profilePics = profilePics;
-    }
-
-    public Integer getUpgraded() {
-        return upgraded;
-    }
-
-    public void setUpgraded(Integer upgraded) {
-        this.upgraded = upgraded;
-    }
-
-    public Integer getIncognito() {
-        return incognito;
-    }
-
-    public void setIncognito(Integer incognito) {
-        this.incognito = incognito;
-    }
-
-    public Integer getShow_location() {
-        return show_location;
-    }
-
-    public void setShow_location(Integer show_location) {
-        this.show_location = show_location;
-    }
 }

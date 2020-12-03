@@ -120,6 +120,15 @@ public class MeetUser {
     @SerializedName("age")
     @Expose
     private Integer age;
+    @SerializedName("upgraded")
+    @Expose
+    private Integer upgraded;
+    @SerializedName("incognito")
+    @Expose
+    private Integer incognito;
+    @SerializedName("show_location")
+    @Expose
+    private Integer show_location;
 
     public Integer getId() {
         return id;
@@ -423,5 +432,29 @@ public class MeetUser {
 
     public void setFriends_count(Integer friends_count) {
         this.friends_count = friends_count;
+    }
+
+    public Integer getUpgraded() {
+        return upgraded;
+    }
+
+    public void setUpgraded(Integer upgraded) {
+        this.upgraded = upgraded;
+    }
+
+    public Integer getIncognito() {
+        return incognito;
+    }
+
+    public void setIncognito(Integer incognito) {
+        this.incognito = incognito;
+    }
+
+    public Integer getShow_location() {
+        return show_location;
+    }
+
+    public void setShow_location(Integer show_location) {
+        this.show_location = show_location;
     }
 }

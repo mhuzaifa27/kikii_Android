@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,6 +23,7 @@ import com.example.kikkiapp.Adapters.OnlineUsersAdapter;
 import com.example.kikkiapp.Adapters.YourMatchAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetConversations;
 import com.example.kikkiapp.Callbacks.CallbackGetMatch;
+import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.Conversation;
 import com.example.kikkiapp.Model.OnlineUser;
 import com.example.kikkiapp.Netwrok.API;
@@ -47,6 +50,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private TextView tv_no;
 
     private RecyclerView rv_online_users,rv_chat_main;
+    private ItemTouchHelper itemTouchHelper;
     private OnlineUsersAdapter onlineUsersAdapter;
     private MainChatAdapter mainChatAdapter;
 
@@ -55,6 +59,8 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private Call<CallbackGetConversations> callbackGetConversationsCall;
     private CallbackGetConversations responseGetConversations;
+    private Call<CallbackStatus> callbackStatusCall;
+    private CallbackStatus responseStatus;
 
     private List<OnlineUser> onlineUserList=new ArrayList<>();
     private List<Conversation> mainChatList=new ArrayList<>();
@@ -64,8 +70,29 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
+
         initComponents(view);
         loadConversations();
+
+        ItemTouchHelper.SimpleCallback simpleCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        if(direction==ItemTouchHelper.LEFT){
+                            Conversation conversation=mainChatList.get(viewHolder.getAdapterPosition());
+                            int position=viewHolder.getAdapterPosition();
+                            deleteConversation(conversation.getId(),position);
+                        }
+                    }
+                };
+        itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rv_chat_main);
 
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
@@ -131,7 +158,8 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void setConversations() {
         mainChatList=responseGetConversations.getConversations();
         rv_chat_main.setLayoutManager(new LinearLayoutManager(context));
-        rv_chat_main.setAdapter(new MainChatAdapter(mainChatList,context));
+        mainChatAdapter=new MainChatAdapter(mainChatList,context);
+        rv_chat_main.setAdapter(mainChatAdapter);
         customLoader.hideIndicator();
     }
 
@@ -156,5 +184,40 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mainChatList.clear();
         onlineUserList.clear();
         loadConversations();
+    }
+    private void deleteConversation(Integer id, final int position) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        callbackStatusCall = api.deleteConversation(String.valueOf(id),sessionManager.getAccessToken());
+        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseStatus = response.body();
+                if (responseStatus != null) {
+                    if (responseStatus.getSuccess()) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(context, responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+                        mainChatList.remove(position);
+                        mainChatAdapter.notifyItemRemoved(position);
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseStatus.getMessage());
+                        Toast.makeText(context, responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
     }
 }

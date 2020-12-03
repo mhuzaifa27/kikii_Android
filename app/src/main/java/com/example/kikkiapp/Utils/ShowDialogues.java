@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +17,32 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kikkiapp.Activities.MyProfileActivity;
 import com.example.kikkiapp.Activities.SupportActivity;
+import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
+import com.example.kikkiapp.Netwrok.API;
+import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.google.android.material.snackbar.Snackbar;
 import com.example.kikkiapp.R;
 
 import java.util.Calendar;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShowDialogues {
+    private static final String TAG = "ShowDialogues";
     static PopupWindow mypopupWindow = null;
     static SessionManager sessionManager;
+    static CustomLoader customLoader;
+    private static Call<CallbackUpdateProfile> callbackStatusCall;
+    private static CallbackUpdateProfile responseLatLongUpdate;
 
-    public static void SHOW_DATE_PICKER_DIALOG(Context context, final TextView tv,DialogInterface.OnDismissListener onDismissListener){
+    public static void SHOW_DATE_PICKER_DIALOG(Context context, final TextView tv, DialogInterface.OnDismissListener onDismissListener) {
         final Dialog alertDialog = new Dialog(context);
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(R.layout.dialogue_date_picker);
@@ -36,8 +50,8 @@ public class ShowDialogues {
         final DatePicker datePicker = alertDialog.findViewById(R.id.date_picker);
         Calendar c = Calendar.getInstance();
         datePicker.setMaxDate(c.getTimeInMillis());
-        Button btn_ok=alertDialog.findViewById(R.id.btn_ok);
-        Button btn_cancel=alertDialog.findViewById(R.id.btn_cancel);
+        Button btn_ok = alertDialog.findViewById(R.id.btn_ok);
+        Button btn_cancel = alertDialog.findViewById(R.id.btn_cancel);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,16 +61,18 @@ public class ShowDialogues {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int year=datePicker.getYear();
-                int monthOfYear=datePicker.getMonth();
-                int dayOfMonth=datePicker.getDayOfMonth();
+                int year = datePicker.getYear();
+                int monthOfYear = datePicker.getMonth() + 1;
+                int dayOfMonth = datePicker.getDayOfMonth();
                 String dateYouChoose = null;
-                if(dayOfMonth<10 && monthOfYear<10)
-                    dateYouChoose= year+ "-" + "0"+(monthOfYear + 1) + "-" +"0"+dayOfMonth;
-                else if(dayOfMonth<10)
-                    dateYouChoose=  year+ "-" + (monthOfYear + 1) + "-" +"0"+dayOfMonth;
+                if (dayOfMonth < 10 && monthOfYear < 10)
+                    dateYouChoose = year + "-" + "0" + (monthOfYear) + "-" + "0" + dayOfMonth;
+                else if (dayOfMonth < 10)
+                    dateYouChoose = year + "-" + (monthOfYear) + "-" + "0" + dayOfMonth;
+                else if (monthOfYear < 10)
+                    dateYouChoose = year + "-" + "0" + (monthOfYear) + "-" + dayOfMonth;
                 else
-                    dateYouChoose= year + "-" + "0"+(monthOfYear + 1) + "-" + dayOfMonth;
+                    dateYouChoose = year + "-" + (monthOfYear) + "-" + dayOfMonth;
                 tv.setText(dateYouChoose);
                 alertDialog.dismiss();
             }
@@ -94,6 +110,7 @@ public class ShowDialogues {
         });
         alertDialog.show();
     }
+
     public static void SHOW_SNACK_BAR(View parentLayout, Activity activity, String text) {
         Snackbar snackbar = Snackbar.make(parentLayout, text, Snackbar.LENGTH_LONG);
         View customView = activity.getLayoutInflater().inflate(R.layout.snackbar_internet_connection, null);
@@ -106,12 +123,14 @@ public class ShowDialogues {
     }
 
     public static void showPostMenu(final Activity activity, View view, ViewGroup viewGroup) {
-        sessionManager=new SessionManager(activity);
+        sessionManager = new SessionManager(activity);
         LayoutInflater inflater = (LayoutInflater)
                 activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.home_menu, viewGroup,false);
+        View v = inflater.inflate(R.layout.home_menu, viewGroup, false);
 
         TextView tv_profile = v.findViewById(R.id.tv_profile);
+        TextView tv_incognito = v.findViewById(R.id.tv_incognito);
+        TextView tv_rewind = v.findViewById(R.id.tv_rewind);
         TextView tv_support = v.findViewById(R.id.tv_support);
         TextView tv_logout = v.findViewById(R.id.tv_logout);
 
@@ -120,6 +139,21 @@ public class ShowDialogues {
             public void onClick(View v) {
                 mypopupWindow.dismiss();
                 activity.startActivity(new Intent(activity, MyProfileActivity.class));
+            }
+        });
+        tv_incognito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+               // onIncognitoMode(activity,params);
+                //activity.startActivity(new Intent(activity, MyProfileActivity.class));
+            }
+        });
+        tv_rewind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mypopupWindow.dismiss();
+                //activity.startActivity(new Intent(activity, MyProfileActivity.class));
             }
         });
         tv_support.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +172,9 @@ public class ShowDialogues {
 
             }
         });
-        mypopupWindow = new PopupWindow(v,LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-        if(v.getParent() != null) {
-            ((ViewGroup)v.getParent()).removeView(v); // <- fix
+        mypopupWindow = new PopupWindow(v, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        if (v.getParent() != null) {
+            ((ViewGroup) v.getParent()).removeView(v); // <- fix
         }
         mypopupWindow.showAsDropDown(view, 0, 0);
 

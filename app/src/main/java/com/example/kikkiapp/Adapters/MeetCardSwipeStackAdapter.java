@@ -28,28 +28,27 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
     private List<MeetUser> data;
     private Context context;
     private IListEnd iListEnd;
+    private IClick iClick;
 
     public interface IListEnd{
         void onListEndListener();
     }
+    public interface IClick{
+        void onLikeUserClick(MeetUser user);
+        void onDislikeUserClick(MeetUser user);
+        void onFollowUserClick(MeetUser user);
+    }
     public void setOnListEndListener(IListEnd iListEnd){
         this.iListEnd=iListEnd;
     }
+    public void setOnClickListener(IClick iClick){
+        this.iClick=iClick;
+    }
+
     public MeetCardSwipeStackAdapter(List<MeetUser> data, Context context) {
         this.data = data;
         this.context = context;
     }
-    /*public int [] slideImages={
-            R.drawable.profile_1,
-            R.drawable.profile_2,
-            R.drawable.profile_3,
-            R.drawable.profile_4,
-            R.drawable.profile_1,
-            R.drawable.profile_2,
-            R.drawable.profile_3,
-            R.drawable.profile_4
-    };*/
-
     @Override
     public TravelBuddyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -59,7 +58,7 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
 
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
-        MeetUser user = data.get(position);
+        final MeetUser user = data.get(position);
 
        /***Set User Data***/
         holder.tv_user_name.setText(user.getName()+",");
@@ -109,8 +108,14 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(holder.img_user);
         holder.tv_user_age.setText(String.valueOf(user.getAge()));
-        holder.tv_distance.setText(user.getDistance());
-        holder.tv_distance2.setText(user.getDistance());
+        if(user.getShow_location()==1){
+            holder.tv_distance.setText(user.getDistance());
+            holder.tv_distance2.setText(user.getDistance());
+        }
+        else{
+            holder.tv_distance.setVisibility(View.GONE);
+            holder.tv_distance2.setVisibility(View.GONE);
+        }
        /******/
 
         if(position==data.size()){
@@ -118,6 +123,38 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
                 iListEnd.onListEndListener();
             }
         }
+        holder.img_like_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onLikeUserClick(user);
+                }
+            }
+        });
+        holder.img_dislike_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onDislikeUserClick(user);
+                }
+            }
+        });
+        holder.img_follow_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onFollowUserClick(user);
+                }
+            }
+        });
+        holder.btn_add_friend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onFollowUserClick(user);
+                }
+            }
+        });
 
         holder.img_close_details.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +190,7 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
                 ,tv_friends_count;
         private Button btn_view_posts,btn_view_friends,btn_add_friend;
         private TextView tv_relationship_status,tv_height,tv_looking_for,tv_cigerate,tv_drink,tv_canabiese,tv_political_views,tv_religion,tv_diet,tv_sign,tv_pet,tv_children;
+        private ImageView img_like_user,img_dislike_user,img_follow_user;
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
@@ -186,6 +224,9 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
 
             img_open_details=itemView.findViewById(R.id.img_open_details);
             img_close_details=itemView.findViewById(R.id.img_close_details);
+            img_like_user=itemView.findViewById(R.id.img_like_user);
+            img_dislike_user=itemView.findViewById(R.id.img_dislike_user);
+            img_follow_user=itemView.findViewById(R.id.img_follow_user);
 
             ll_normal_view=itemView.findViewById(R.id.ll_normal_view);
             rl_detail_view=itemView.findViewById(R.id.rl_detail_view);

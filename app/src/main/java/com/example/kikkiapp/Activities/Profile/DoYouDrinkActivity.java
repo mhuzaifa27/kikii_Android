@@ -38,10 +38,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClickListener , View.OnClickListener {
+public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClickListener, View.OnClickListener {
 
     private static final String TAG = "DoYouDrinkActivity";
-    private Context context= DoYouDrinkActivity.this;
+    private Context context = DoYouDrinkActivity.this;
 
     private List<Chip> chipList = new ArrayList<>();
     private ChipViewAdapter chipViewAdapter;
@@ -69,9 +69,9 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent();
-                intent.putExtra(Constant.DRINK,isChecked);
-                setResult(RESULT_OK,intent);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.DRINK, isChecked);
+                setResult(RESULT_OK, intent);
                 onBackPressed();
             }
         });
@@ -80,12 +80,13 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
 
     @Override
     public void onChipClick(Chip chip) {
-        isChecked=chip.getText();
-        chipViewAdapter =new ChipAdapter(context,isChecked);
+        isChecked = chip.getText();
+        chipViewAdapter = new ChipAdapter(context, isChecked);
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);
         //Toast.makeText(this, "chip clicked", Toast.LENGTH_SHORT).show();
     }
+
     private void getIdentity() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
@@ -99,8 +100,10 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
                 if (responseGetCategory != null) {
                     if (responseGetCategory.getSuccess()) {
                         customLoader.hideIndicator();
-                        if (responseGetCategory.getValue().getValueAttr().size() > 0)
-                            setData();
+                        if (responseGetCategory.getValue() != null){
+                            if (responseGetCategory.getValue().getValueAttr().size() > 0)
+                                setData();
+                        }
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetCategory.getMessage());
                         customLoader.hideIndicator();
@@ -124,25 +127,26 @@ public class DoYouDrinkActivity extends AppCompatActivity implements OnChipClick
 
     private void setData() {
         for (int i = 0; i < responseGetCategory.getValue().getValueAttr().size(); i++) {
-            Log.d(TAG, "setData: "+responseGetCategory.getValue().getValueAttr().get(i));
+            Log.d(TAG, "setData: " + responseGetCategory.getValue().getValueAttr().get(i));
             chipList.add(new ChipModel(responseGetCategory.getValue().getValueAttr().get(i)));
         }
-        chipViewAdapter =new ChipAdapter(context,responseGetCategory.getIsChecked());
+        chipViewAdapter = new ChipAdapter(context, responseGetCategory.getIsChecked());
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);
     }
+
     private void initComponents() {
-        customLoader=new CustomLoader(this,false);
-        sessionManager=new SessionManager(this);
+        customLoader = new CustomLoader(this, false);
+        sessionManager = new SessionManager(this);
 
         chip_statuses = findViewById(R.id.chip_statuses);
 
-        img_back=findViewById(R.id.img_back);
+        img_back = findViewById(R.id.img_back);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.img_back:
                 CommonMethods.goBack(this);
                 break;

@@ -36,7 +36,7 @@ import retrofit2.Response;
 public class EnterPhoneNumberActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "EnterPhoneNumberActivity";
-    private Context mContext=EnterPhoneNumberActivity.this;
+    private Context mContext = EnterPhoneNumberActivity.this;
     private Button btn_next;
     private CountryCodePicker cpp_countries;
     private TextView tv_country_code;
@@ -44,7 +44,7 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
 
     private Call<CallbackSentOTP> callbackSentOTPCall;
     private CallbackSentOTP responseSentOTP;
-    private String countryCode,phone;
+    private String countryCode, phone;
     private EditText et_phone_number;
     private SessionManager sessionManager;
     private Map<String, String> sendOTPParams = new HashMap<>();
@@ -62,11 +62,13 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
             public void onCcpDialogOpen(Dialog dialog) {
 
             }
+
             @Override
             public void onCcpDialogDismiss(DialogInterface dialogInterface) {
                 tv_country_code.setText(cpp_countries.getSelectedCountryCodeWithPlus());
-                countryCode=cpp_countries.getSelectedCountryCodeWithPlus();
+                countryCode = cpp_countries.getSelectedCountryCodeWithPlus();
             }
+
             @Override
             public void onCcpDialogCancel(DialogInterface dialogInterface) {
 
@@ -75,38 +77,42 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
     }
 
     private void initComponents() {
-        customLoader=new CustomLoader(this,false);
-        sessionManager=new SessionManager(this);
+        customLoader = new CustomLoader(this, false);
+        sessionManager = new SessionManager(this);
 
-        btn_next=findViewById(R.id.btn_next);
+        btn_next = findViewById(R.id.btn_next);
 
         cpp_countries = findViewById(R.id.cpp_countries);
 
-        tv_country_code=findViewById(R.id.tv_country_code);
-        countryCode=cpp_countries.getSelectedCountryCodeWithPlus();
+        tv_country_code = findViewById(R.id.tv_country_code);
+        countryCode = cpp_countries.getSelectedCountryCodeWithPlus();
         tv_country_code.setText(countryCode);
 
-        et_phone_number=findViewById(R.id.et_phone_number);
+        et_phone_number = findViewById(R.id.et_phone_number);
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_next:
-                if(et_phone_number.getText().toString().isEmpty()){
+                if (et_phone_number.getText().toString().isEmpty()) {
                     et_phone_number.setError(getString(R.string.et_error));
-                }
-                else{
-                    phone=countryCode+et_phone_number.getText().toString();
-                    sendOTPParams.put(Constant.PHONE,phone);
-                    sendOTP();
+                } else {
+                    phone = countryCode + et_phone_number.getText().toString();
+                    sendOTPParams.put(Constant.PHONE, phone);
+                    sendForPhoneVerification();
                 }
                 break;
         }
     }
 
-    public void sendOTP() {
+    private void sendForPhoneVerification() {
+        Intent intent = new Intent(mContext, VerifyOTPActivity.class);
+        intent.putExtra("phoneNumber", phone);
+        startActivity(intent);
+    }
+   /* public void sendOTP() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(mContext);
         Log.d(TAG, "sendOTP: "+phone);
@@ -142,5 +148,5 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
                 }
             }
         });
-    }
+    }*/
 }

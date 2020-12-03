@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,6 +116,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private Map<String, RequestBody> editProfileMultipartParams = new HashMap<>();
     private ImageView img_back;
+    private Switch swch_location, swch_incognito;
 
 
     @Override
@@ -138,10 +141,27 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_ok.setOnClickListener(this);
         img_back.setOnClickListener(this);
 
+        img_user.setOnClickListener(this);
+
         ll_gender_identity.setOnClickListener(this);
         ll_sexual_identity.setOnClickListener(this);
         ll_pronouns.setOnClickListener(this);
         ll_bio.setOnClickListener(this);
+
+        swch_location.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) updateProfileParams.put(Constant.SHOW_LOCATION, "1");
+                else updateProfileParams.put(Constant.SHOW_LOCATION, "0");
+            }
+        });
+        swch_incognito.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) updateProfileParams.put(Constant.INCOGNITO, "1");
+                else updateProfileParams.put(Constant.INCOGNITO, "0");
+            }
+        });
     }
 
     private void setData() {
@@ -170,6 +190,16 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             tv_pronouns.setText(user.getPronouns());
         if (user.getBio() != null)
             tv_bio.setText(user.getBio());
+
+        if (user.getShow_location() == 1)
+            swch_location.setChecked(true);
+        else
+            swch_location.setChecked(false);
+
+        if (user.getIncognito() == 1)
+            swch_incognito.setChecked(true);
+        else
+            swch_incognito.setChecked(false);
 
         setCuriosities();
     }
@@ -227,6 +257,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         curiositiesAdapter = new CuriositiesAdapter(context);
         chip_curiosities.setAdapter(curiositiesAdapter);
         chip_curiosities.setChipList(chipList);
+
     }
 
     private void initComponents() {
@@ -265,9 +296,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         img_select_8 = findViewById(R.id.img_select_8);
 
         img_ok = findViewById(R.id.img_ok);
-        img_back=findViewById(R.id.img_back);
+        img_back = findViewById(R.id.img_back);
 
         chip_curiosities = findViewById(R.id.chip_curiosities);
+
+        swch_location = findViewById(R.id.swch_location);
+        swch_incognito = findViewById(R.id.swch_incognito);
     }
 
     @Override
@@ -329,6 +363,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.img_back:
                 CommonMethods.goBack(this);
                 break;
+            case R.id.img_user:
+                //setImageOn=-1;
+                //ShowSelectImageBottomSheet.showDialog(activity,getWindow().getDecorView().getRootView(),Constant.SINGLE);
+                break;
         }
     }
 
@@ -376,6 +414,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void setUriToImage(Uri uri) {
         switch (setImageOn) {
+            case -1:
+                img_user.setImageURI(uri);
+                break;
             case 1:
                 img_selected_1.setImageURI(uri);
                 img_select_1.setVisibility(View.GONE);
@@ -563,11 +604,15 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> temp = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
-            if (setImageOn >= mediaPaths.size())
-                mediaPaths.add(temp.get(0));
-            else if (setImageOn < mediaPaths.size())
-                mediaPaths.add(setImageOn, temp.get(0));
-            setUriToImage(Uri.parse(temp.get(0)));
+            if (setImageOn == -1) {
+                setUriToImage(Uri.parse(temp.get(0)));
+            } else {
+                if (setImageOn >= mediaPaths.size())
+                    mediaPaths.add(temp.get(0));
+                else if (setImageOn < mediaPaths.size())
+                    mediaPaths.add(setImageOn, temp.get(0));
+                setUriToImage(Uri.parse(temp.get(0)));
+            }
 
             Log.d("hhhh", "onActivityResult: " + mediaPaths.size());
 

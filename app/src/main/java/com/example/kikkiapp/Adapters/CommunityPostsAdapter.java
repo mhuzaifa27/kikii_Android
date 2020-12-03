@@ -1,9 +1,6 @@
 package com.example.kikkiapp.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,29 +8,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.kikkiapp.Activities.PostDetailActivity;
 import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Model.PostMedia;
 import com.example.kikkiapp.R;
-import com.fasterxml.jackson.databind.node.POJONode;
-import com.squareup.picasso.Picasso;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.http.POST;
 
 public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Post> data;

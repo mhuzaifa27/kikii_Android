@@ -1,6 +1,7 @@
 package com.example.kikkiapp.Netwrok;
 
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
+import com.example.kikkiapp.Callbacks.CallbackContinueWithPhone;
 import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
@@ -49,7 +50,7 @@ public interface API {
 
     @POST("continue/with-phone")
     @FormUrlEncoded
-    Call<CallbackSentOTP> sendOTP(@FieldMap Map<String, String> params);
+    Call<CallbackContinueWithPhone> continueWithPhone(@FieldMap Map<String, String> params);
 
     @POST("continue/with-facebook")
     @FormUrlEncoded
@@ -95,6 +96,12 @@ public interface API {
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
 
+    @Multipart
+    @POST("add/comment")
+    Call<CallbackAddComment> addCommentWithImages(@Header("Authorization") String auth,
+                                                        @PartMap Map<String, String> text,
+                                                        @Part MultipartBody.Part image);
+
     @POST("attend/event")
     @FormUrlEncoded
     Call<CallbackStatus> attendEvent(
@@ -112,6 +119,25 @@ public interface API {
     Call<CallbackSendMessage> sendMessage(
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
+    @POST("like/user")
+    @FormUrlEncoded
+    Call<CallbackStatus> likeUser(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+    @POST("dislike/user")
+    @FormUrlEncoded
+    Call<CallbackStatus> dislikeUser(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+    @POST("follow/user")
+    @FormUrlEncoded
+    Call<CallbackStatus> followUser(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
+    @POST("rewind-swipes")
+    Call<CallbackStatus> rewindSwipes(
+            @Header("Authorization") String auth);
 
     @Multipart
     @POST("update/profile")
@@ -208,6 +234,10 @@ public interface API {
 
     @DELETE("delete/comment/{id}")
     Call<CallbackStatus> deleteComment(@Path("id") String id,
+                                       @Header("Authorization") String auth);
+
+    @DELETE("delete/conversation/{id}")
+    Call<CallbackStatus> deleteConversation(@Path("id") String id,
                                        @Header("Authorization") String auth);
 
     @DELETE("delete/post/{id}")

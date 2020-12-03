@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -55,8 +56,8 @@ public class ShowReplyOfCommentsBottomSheet {
     private static LinearLayoutManager layoutManager;
 
     public static void showDialog(final Activity activity, View view, final Object obj) {
-        customLoader=new CustomLoader(activity,false);
-        sessionManager=new SessionManager(activity);
+        customLoader = new CustomLoader(activity, false);
+        sessionManager = new SessionManager(activity);
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 activity, R.style.AppBottomSheetDialogTheme
         );
@@ -68,6 +69,8 @@ public class ShowReplyOfCommentsBottomSheet {
         } else {
             bottomSheetView.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.transparent));
         }
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         CircleImageView img_user = bottomSheetView.findViewById(R.id.img_user);
         TextView tv_name = bottomSheetView.findViewById(R.id.tv_name);
         TextView tv_no = bottomSheetView.findViewById(R.id.tv_no);
@@ -93,11 +96,13 @@ public class ShowReplyOfCommentsBottomSheet {
         /*******/
 
         /****SET REPLIES LIST*****/
-        if(postComment.getReplies().size()>0){
-            repliesAdapter=new RepliesAdapter(activity);
-            repliesAdapter.addAll(postComment.getReplies());
-            rv_replies.setLayoutManager(new LinearLayoutManager(activity));
-            rv_replies.setAdapter(repliesAdapter);
+        if (postComment.getReplies() != null) {
+            if (postComment.getReplies().size() > 0) {
+                repliesAdapter = new RepliesAdapter(activity);
+                repliesAdapter.addAll(postComment.getReplies());
+                rv_replies.setLayoutManager(new LinearLayoutManager(activity));
+                rv_replies.setAdapter(repliesAdapter);
+            }
         }
         /********/
 
@@ -116,9 +121,10 @@ public class ShowReplyOfCommentsBottomSheet {
             }
         });
         /******/
+
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
-        setupFullHeight(activity,bottomSheetDialog);
+        setupFullHeight(activity, bottomSheetDialog);
     }
 
     private static void addReply(final Activity activity) {
@@ -146,6 +152,7 @@ public class ShowReplyOfCommentsBottomSheet {
                     ShowDialogues.SHOW_SERVER_ERROR_DIALOG(activity);
                 }
             }
+
             @Override
             public void onFailure(Call<CallbackAddComment> call, Throwable t) {
                 if (!call.isCanceled()) {
@@ -155,6 +162,7 @@ public class ShowReplyOfCommentsBottomSheet {
             }
         });
     }
+
     private static void setupFullHeight(Activity activity, BottomSheetDialog bottomSheetDialog) {
         FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
@@ -167,6 +175,7 @@ public class ShowReplyOfCommentsBottomSheet {
         bottomSheet.setLayoutParams(layoutParams);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
+
     private static int getWindowHeight(Activity activity) {
         // Calculate window height for fullscreen use
         DisplayMetrics displayMetrics = new DisplayMetrics();

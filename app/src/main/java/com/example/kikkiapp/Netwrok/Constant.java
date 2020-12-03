@@ -110,6 +110,10 @@ public class Constant {
     public static final String RECEIVER_ID="receiver_id";
     public static final String USER_MATCH_ID="user_match_id";
     public static final String CONVERSATION_ID="conversation_id";
+    public static final String INCOGNITO="incognito";
+    public static final String UPGRADED="upgraded";
+    public static final String SHOW_LOCATION="show_location";
+    public static final String MEDIA="media[]";
 
     /**Categories keyword***/
     public static final String GENDER_IDENTITY="gender_identity";

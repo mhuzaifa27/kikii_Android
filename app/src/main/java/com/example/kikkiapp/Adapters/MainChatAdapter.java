@@ -42,7 +42,10 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
         final Conversation conversation = data.get(position);
 
         holder.tv_name.setText(conversation.getParticipant2().getName());
-        holder.tv_last_message.setText(conversation.getMessages().get(0).getBody());
+        if (conversation.getMessages().size() > 0)
+            holder.tv_last_message.setText(conversation.getMessages().get(0).getBody());
+        else
+            holder.tv_last_message.setText(".......");
         Glide
                 .with(context)
                 .load(conversation.getParticipant2().getProfilePic())
@@ -56,10 +59,12 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, ChattingActivity.class);
-                intent.putExtra(Constant.CONVERSATION_ID,String.valueOf(conversation.getMessages().get(0).getConversationId()));
-                intent.putExtra(Constant.USER_MATCH_ID,String.valueOf(conversation.getParticipant2Id()));
-                context.startActivity(intent);
+                if (conversation.getMessages().size() > 0) {
+                    Intent intent = new Intent(context, ChattingActivity.class);
+                    intent.putExtra(Constant.CONVERSATION_ID, String.valueOf(conversation.getMessages().get(0).getConversationId()));
+                    intent.putExtra(Constant.USER_MATCH_ID, String.valueOf(conversation.getParticipant2Id()));
+                    context.startActivity(intent);
+                }
             }
         });
     }
@@ -77,10 +82,10 @@ public class MainChatAdapter extends RecyclerView.Adapter<MainChatAdapter.Travel
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
-            img_user=itemView.findViewById(R.id.img_user);
+            img_user = itemView.findViewById(R.id.img_user);
 
-            tv_name=itemView.findViewById(R.id.tv_name);
-            tv_last_message=itemView.findViewById(R.id.tv_last_message);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_last_message = itemView.findViewById(R.id.tv_last_message);
 
         }
     }

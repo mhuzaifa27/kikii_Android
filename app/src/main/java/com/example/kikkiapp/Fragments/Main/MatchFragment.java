@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +68,8 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private Call<CallbackGetMatch> callbackGetMatchCall;
     private CallbackGetMatch responseGetMatch;
-    private TextView tv_total_likes;
+    private TextView tv_total_likes,tv_upgrade_text;
+    private ImageView img_blur_users;
 
     /*****/
     ProgressBar progressBar;
@@ -156,14 +158,27 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         customLoader.hideIndicator();
     }
     private void setLikesData() {
-        yourLikesList=responseGetMatch.getLikes();
-        tv_total_likes.setText(yourLikesList.size()+" Likes");
-        if(yourLikesList.size()>5){
-            yourLikesList.add(4,new MatchLike(-1));
+        if(sessionManager.getProfileUser().getUpgraded()==1){
+            yourLikesList=responseGetMatch.getLikes();
+            tv_total_likes.setText(yourLikesList.size()+" Likes");
+            if(yourLikesList.size()>5){
+                yourLikesList.add(4,new MatchLike(-1));
+            }
+            img_blur_users.setVisibility(View.GONE);
+            tv_upgrade_text.setVisibility(View.GONE);
+            rv_likes.setVisibility(View.VISIBLE);
+            tv_total_likes.setVisibility(View.VISIBLE);
+
+            rv_likes.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
+            rv_likes.setAdapter(new MatchLikesAdapter(yourLikesList,context));
+            rv_likes.addItemDecoration(new ItemDecorator(-20));
         }
-        rv_likes.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
-        rv_likes.setAdapter(new MatchLikesAdapter(yourLikesList,context));
-        rv_likes.addItemDecoration(new ItemDecorator(-20));
+        else{
+            img_blur_users.setVisibility(View.VISIBLE);
+            tv_upgrade_text.setVisibility(View.VISIBLE);
+            rv_likes.setVisibility(View.GONE);
+            tv_total_likes.setVisibility(View.GONE);
+        }
     }
     private void initComponents(View view) {
         context=getContext();
@@ -178,6 +193,9 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         tv_no=view.findViewById(R.id.tv_no);
         tv_total_likes=view.findViewById(R.id.tv_total_likes);
+        tv_upgrade_text=view.findViewById(R.id.tv_upgrade_text);
+
+        img_blur_users=view.findViewById(R.id.img_blur_users);
     }
 
     @Override

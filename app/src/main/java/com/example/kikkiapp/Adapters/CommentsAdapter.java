@@ -94,9 +94,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
 
     public void add(PostComment mc) {
         data.add(mc);
-        if (data.size() > 1)
-            notifyItemInserted(data.size() - 1);
-        //notifyDataSetChanged();
+        if (data.size() > 0) {
+            notifyItemInserted(0);
+            notifyDataSetChanged();
+        }
     }
 
     public void addAll(List<PostComment> mcList) {
