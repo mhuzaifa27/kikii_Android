@@ -17,9 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kikkiapp.Adapters.FriendsAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetMyFriends;
+import com.example.kikkiapp.Callbacks.CallbackGetPendingRequests;
+import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.FellowUser;
+import com.example.kikkiapp.Model.MeetUser;
 import com.example.kikkiapp.Netwrok.API;
+import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -27,7 +31,9 @@ import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,14 +50,18 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private RecyclerView rv_pending;
     private FriendsAdapter friendsAdapter;
-    private List<FellowUser> pendingList =new ArrayList<>();
+    private List<FellowUser> pendingList = new ArrayList<>();
     private LinearLayoutManager layoutManager;
 
     private CustomLoader customLoader;
     private SessionManager sessionManager;
 
-    private Call<CallbackGetFellowUsers> callbackGetPendingRequestsCall;
-    private CallbackGetFellowUsers responsePendingRequests;
+    private Call<CallbackGetPendingRequests> callbackGetPendingRequestsCall;
+    private CallbackGetPendingRequests responsePendingRequests;
+
+    private Call<CallbackStatus> callbackStatusCall;
+    private CallbackStatus responseStatus;
+
     /*****/
     ProgressBar progressBar;
 
@@ -68,6 +78,8 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     /*****/
 
+    private Map<String, String> paramsList = new HashMap<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,37 +89,36 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
         initComponents(view);
         loadPendingRequests();
 
+
+        swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
+
     private void loadPendingRequests() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadEvents: " + sessionManager.getAccessToken());
         callbackGetPendingRequestsCall = api.getPendingRequests(sessionManager.getAccessToken(), String.valueOf(0));
-        callbackGetPendingRequestsCall.enqueue(new Callback<CallbackGetFellowUsers>() {
+        callbackGetPendingRequestsCall.enqueue(new Callback<CallbackGetPendingRequests>() {
             @Override
-            public void onResponse(Call<CallbackGetFellowUsers> call, Response<CallbackGetFellowUsers> response) {
+            public void onResponse(Call<CallbackGetPendingRequests> call, Response<CallbackGetPendingRequests> response) {
                 Log.d(TAG, "onResponse: " + response);
                 responsePendingRequests = response.body();
                 if (responsePendingRequests != null) {
-                    if (responsePendingRequests.getSuccess()) {
-                        customLoader.hideIndicator();
-                        swipeRefreshLayout.setRefreshing(false);
-                        if (responsePendingRequests.getFellowUsers().size() > 0){
+                    customLoader.hideIndicator();
+                    swipeRefreshLayout.setRefreshing(false);
+                    if(responsePendingRequests.getFellowUsers()!=null){
+                        if (responsePendingRequests.getFellowUsers().size() > 0) {
                             tv_no.setVisibility(View.GONE);
                             rv_pending.setVisibility(View.VISIBLE);
                             setData();
-                        }
-                        else{
+                        } else {
                             tv_no.setVisibility(View.VISIBLE);
                             rv_pending.setVisibility(View.GONE);
                         }
-                        /*else
-                            currentPage = -1;*/
                     } else {
-                        Log.d(TAG, "onResponse: " + responsePendingRequests.getMessage());
-                        customLoader.hideIndicator();
-                        Toast.makeText(context, responsePendingRequests.getMessage(), Toast.LENGTH_SHORT).show();
+                        tv_no.setVisibility(View.VISIBLE);
+                        rv_pending.setVisibility(View.GONE);
                     }
                 } else {
                     customLoader.hideIndicator();
@@ -116,7 +127,7 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
 
             @Override
-            public void onFailure(Call<CallbackGetFellowUsers> call, Throwable t) {
+            public void onFailure(Call<CallbackGetPendingRequests> call, Throwable t) {
                 if (!call.isCanceled()) {
                     Log.d(TAG, "onResponse: " + t.getMessage());
                     customLoader.hideIndicator();
@@ -134,21 +145,70 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void initComponents(View view) {
-        context=getContext();
-        activity=getActivity();
+        context = getContext();
+        activity = getActivity();
 
-        customLoader=new CustomLoader(activity,false);
-        sessionManager=new SessionManager(context);
-        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
+        customLoader = new CustomLoader(activity, false);
+        sessionManager = new SessionManager(context);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
 
-        rv_pending =view.findViewById(R.id.rv_pending);
-        layoutManager=new LinearLayoutManager(context);
+        rv_pending = view.findViewById(R.id.rv_pending);
+        layoutManager = new LinearLayoutManager(context);
         rv_pending.setLayoutManager(layoutManager);
-        friendsAdapter=new FriendsAdapter("pendings",pendingList,getContext());
+        friendsAdapter = new FriendsAdapter("pendings", pendingList, getContext());
         rv_pending.setAdapter(friendsAdapter);
 
-        tv_no=view.findViewById(R.id.tv_no);
+        tv_no = view.findViewById(R.id.tv_no);
+
+        friendsAdapter.setOnClickListener(new FriendsAdapter.IClicks() {
+            @Override
+            public void onFollowUser(View view, FellowUser user) {
+                followUser(user);
+            }
+
+            @Override
+            public void onUnFollowUser(View view, FellowUser user) {
+
+            }
+        });
     }
+
+    private void followUser(FellowUser user) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        paramsList.put(Constant.ID, user.getId().toString());
+        callbackStatusCall = api.followUser(sessionManager.getAccessToken(), paramsList);
+        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseStatus = response.body();
+                if (responseStatus != null) {
+                    if (!responseStatus.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseStatus.getMessage());
+                        loadPendingRequests();
+                    }
+                    customLoader.hideIndicator();
+                    Toast.makeText(context, responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
     @Override
-    public void onRefresh() { }
+    public void onRefresh() {
+        loadPendingRequests();
+    }
 }

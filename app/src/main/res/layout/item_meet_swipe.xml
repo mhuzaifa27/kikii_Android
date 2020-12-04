@@ -19,7 +19,7 @@
         <com.joooonho.SelectableRoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_user"
-            android:src="@drawable/image_7"
+            android:src="@drawable/ic_place_holder_image"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="520dp"
@@ -92,7 +92,7 @@
                     android:fontFamily="@font/lato_bold"
                     android:text="Jerry Kazz"
                     android:textColor="@color/black"
-                    android:textSize="24sp"></TextView>
+                    android:textSize="24sp"/>
 
                 <TextView
                     android:id="@+id/tv_user_age"
@@ -101,13 +101,13 @@
                     android:fontFamily="@font/lato_bold"
                     android:text=", 24"
                     android:textColor="@color/black"
-                    android:textSize="24sp"></TextView>
+                    android:textSize="24sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_online"></ImageView>
+                    android:src="@drawable/ic_online"/>
             </LinearLayout>
 
             <LinearLayout
@@ -155,11 +155,12 @@
 
                 <ImageView
                     android:id="@+id/img_open_details"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/arrow_down_red"></ImageView>
+                    android:padding="10dp"
+                    android:src="@drawable/arrow_down_red"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -784,6 +785,7 @@
                             android:src="@drawable/ic_share"
                             android:layout_marginHorizontal="10dp"/>
                         <ImageView
+                            android:id="@+id/img_block"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_block"
@@ -800,14 +802,15 @@
 
                 <ImageView
                     android:id="@+id/img_close_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_alignParentBottom="true"
                     android:layout_below="@+id/ll_request_options"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/arrow_up_red"></ImageView>
+                    android:padding="15dp"
+                    android:src="@drawable/arrow_up_red"/>
 
             </RelativeLayout>
         </LinearLayout>

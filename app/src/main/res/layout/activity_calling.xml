@@ -23,7 +23,7 @@
                 android:id="@+id/img_user"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/dummy_flower">
+                android:src="@drawable/ic_user_dummy">
             </de.hdodenhof.circleimageview.CircleImageView>
             <TextView
                 android:layout_width="wrap_content"

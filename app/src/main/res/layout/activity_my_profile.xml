@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="320dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_user_dummy"
+                    android:src="@drawable/ic_place_holder_image"
                     app:sriv_left_bottom_corner_radius="50dp"
                     app:sriv_left_top_corner_radius="10dp"
                     app:sriv_right_bottom_corner_radius="10dp"

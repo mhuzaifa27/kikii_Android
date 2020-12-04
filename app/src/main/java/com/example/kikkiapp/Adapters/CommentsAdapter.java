@@ -66,6 +66,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
 
         holder.tv_name.setText(postComment.getCommenter().getName());
         holder.tv_comment.setText(postComment.getBody());
+        holder.tv_date.setText(postComment.getCreatedAt());
         Glide
                 .with(context)
                 .load(postComment.getCommenter().getProfilePic())

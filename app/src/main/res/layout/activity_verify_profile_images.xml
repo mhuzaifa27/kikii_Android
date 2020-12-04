@@ -85,7 +85,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/dummy_person"
+                        android:src="@drawable/ic_place_holder_image"
                         app:sriv_left_bottom_corner_radius="50dp"
                         app:sriv_left_top_corner_radius="10dp"
                         app:sriv_right_bottom_corner_radius="10dp"

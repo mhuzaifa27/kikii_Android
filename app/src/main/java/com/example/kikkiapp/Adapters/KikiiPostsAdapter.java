@@ -50,6 +50,15 @@ public class KikiiPostsAdapter extends RecyclerView.Adapter<KikiiPostsAdapter.Ki
         notifyDataSetChanged();
     }
 
+    public void addList(List<KikiiPost> mc) {
+        if (mc.size() > 0) {
+            for (int i = 0; i < mc.size(); i++) {
+                data.add(mc.get(i));
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public void addAll(List<KikiiPost> mcList) {
         data = mcList;
         notifyDataSetChanged();

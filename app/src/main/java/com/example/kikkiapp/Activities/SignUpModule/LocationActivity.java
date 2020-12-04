@@ -58,7 +58,7 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
         LocationListener {
 
     private static final String TAG = "LocationActivity";
-    private Context mContext= LocationActivity.this;
+    private Context mContext = LocationActivity.this;
     private Button btn_enable_location;
 
     private GoogleApiClient googleApiClient;
@@ -70,8 +70,9 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
     private CustomLoader customLoader;
     private Call<CallbackUpdateProfile> callbackStatusCall;
     private CallbackUpdateProfile responseLatLongUpdate;
-    private Map<String ,String> updateLocationParams =new HashMap<>();
+    private Map<String, String> updateLocationParams = new HashMap<>();
     private Double latitude, longitude;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +84,16 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initComponents() {
-        sessionManager=new SessionManager(this);
+        sessionManager = new SessionManager(this);
 
-        customLoader=new CustomLoader(this,false);
+        customLoader = new CustomLoader(this, false);
 
-        btn_enable_location=findViewById(R.id.btn_enable_location);
+        btn_enable_location = findViewById(R.id.btn_enable_location);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_enable_location:
                 setUpGClient();
                 checkPermissions();
@@ -245,45 +246,50 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
 
                 if (!sessionManager.getLat().isEmpty()
                         && !sessionManager.getLng().isEmpty()) {
-                    updateLocationParams.put(Constant.LATITUDE,sessionManager.getLat());
-                    updateLocationParams.put(Constant.LONGITUDE,sessionManager.getLat());
-                    updateLocation();
+                    updateLocationParams.put(Constant.LATITUDE, sessionManager.getLat());
+                    updateLocationParams.put(Constant.LONGITUDE, sessionManager.getLng());
+
+                    if (count % 10 == 0)
+                        updateLocation();
+                    else
+                        count++;
                     //customLoader.hideIndicator();
 
                     //startActivity(new Intent(mContext,RegistrationActivity.class));
                 }
             }
-        }
-        catch (Exception e){
-            Log.d("TAG", "onLocationChanged: "+e.getMessage());
+        } catch (Exception e) {
+            Log.d("TAG", "onLocationChanged: " + e.getMessage());
         }
     }
+
     public void updateLocation() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(mContext);
-        Log.d(TAG, "sendOTP: "+ updateLocationParams.size());
-        Log.d(TAG, "token: "+sessionManager.getAccessToken());
+        Log.d(TAG, "sendOTP: " + updateLocationParams.size());
+        Log.d(TAG, "token: " + sessionManager.getAccessToken());
         callbackStatusCall = api.updateProfile(sessionManager.getAccessToken(), updateLocationParams);
         callbackStatusCall.enqueue(new Callback<CallbackUpdateProfile>() {
             @Override
             public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
                 Log.d(TAG, "onResponse: " + response);
                 responseLatLongUpdate = response.body();
-                if(responseLatLongUpdate != null){
+                if (responseLatLongUpdate != null) {
                     if (responseLatLongUpdate.getSuccess()) {
-                        Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
+                        Log.d(TAG, "onResponse: " + responseLatLongUpdate.getMessage());
                         customLoader.hideIndicator();
                         goToNextActivity();
-                    }else {
-                        Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseLatLongUpdate.getMessage());
                         customLoader.hideIndicator();
                         Toast.makeText(mContext, responseLatLongUpdate.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     customLoader.hideIndicator();
                     ShowDialogues.SHOW_SERVER_ERROR_DIALOG(mContext);
                 }
             }
+
             @Override
             public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
                 if (!call.isCanceled()) {
@@ -297,24 +303,22 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
     private void goToNextActivity() {
         Toast.makeText(mContext, responseLatLongUpdate.getMessage(), Toast.LENGTH_SHORT).show();
         Intent loginIntent;
-        if(sessionManager.getFbLogin()){
+        if (sessionManager.getFbLogin()) {
             sessionManager.saveUserEmail(responseLatLongUpdate.getUser().getEmail());
             sessionManager.saveUserName(responseLatLongUpdate.getUser().getName());
             sessionManager.saveUserID(responseLatLongUpdate.getUser().getId().toString());
-            sessionManager.createLoginSession("Bearer "+responseLatLongUpdate.getUser().getAuthToken(), responseLatLongUpdate.getUser().getId().toString());
+            sessionManager.createLoginSession("Bearer " + responseLatLongUpdate.getUser().getAuthToken(), responseLatLongUpdate.getUser().getId().toString());
             loginIntent = new Intent(mContext, RegistrationActivity.class);
             TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
             updateLocationParams.clear();
-        }
-        else if(sessionManager.getInstaLogin()){
+        } else if (sessionManager.getInstaLogin()) {
             sessionManager.saveUserName(responseLatLongUpdate.getUser().getName());
             sessionManager.saveUserID(responseLatLongUpdate.getUser().getId().toString());
-            sessionManager.createLoginSession("Bearer "+responseLatLongUpdate.getUser().getAuthToken(), responseLatLongUpdate.getUser().getId().toString());
+            sessionManager.createLoginSession("Bearer " + responseLatLongUpdate.getUser().getAuthToken(), responseLatLongUpdate.getUser().getId().toString());
             loginIntent = new Intent(mContext, RegistrationActivity.class);
             TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
             updateLocationParams.clear();
-        }
-        else{
+        } else {
             loginIntent = new Intent(mContext, RegistrationActivity.class);
             TaskStackBuilder.create(mContext).addNextIntentWithParentStack(loginIntent).startActivities();
             updateLocationParams.clear();

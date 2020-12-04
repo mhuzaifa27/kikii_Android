@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kikkiapp.Adapters.FriendsAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetMyFriends;
 import com.example.kikkiapp.Model.FellowUser;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.RestAdapter;
@@ -44,14 +43,14 @@ public class MyFriendsFragment extends Fragment implements SwipeRefreshLayout.On
 
     private RecyclerView rv_my_friends;
     private FriendsAdapter friendsAdapter;
-    private List<FellowUser> myFriendsList =new ArrayList<>();
+    private List<FellowUser> myFriendsList = new ArrayList<>();
     private LinearLayoutManager layoutManager;
 
     private CustomLoader customLoader;
     private SessionManager sessionManager;
 
-    private Call<CallbackGetFellowUsers> callbackGetMyFriends;
-    private CallbackGetFellowUsers responseMyFriends;
+    private Call<CallbackGetMyFriends> callbackGetMyFriends;
+    private CallbackGetMyFriends responseMyFriends;
     /*****/
     ProgressBar progressBar;
 
@@ -80,35 +79,35 @@ public class MyFriendsFragment extends Fragment implements SwipeRefreshLayout.On
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
+
     private void loadMyFriends() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadMyFriends: " + sessionManager.getAccessToken());
         callbackGetMyFriends = api.getMyFriends(sessionManager.getAccessToken(), String.valueOf(0));
-        callbackGetMyFriends.enqueue(new Callback<CallbackGetFellowUsers>() {
+        callbackGetMyFriends.enqueue(new Callback<CallbackGetMyFriends>() {
             @Override
-            public void onResponse(Call<CallbackGetFellowUsers> call, Response<CallbackGetFellowUsers> response) {
+            public void onResponse(Call<CallbackGetMyFriends> call, Response<CallbackGetMyFriends> response) {
                 Log.d(TAG, "onResponse: " + response);
                 responseMyFriends = response.body();
                 if (responseMyFriends != null) {
-                    if (responseMyFriends.getSuccess()) {
-                        customLoader.hideIndicator();
-                        swipeRefreshLayout.setRefreshing(false);
-                        if (responseMyFriends.getFellowUsers().size() > 0){
+                    customLoader.hideIndicator();
+                    swipeRefreshLayout.setRefreshing(false);
+                    if(responseMyFriends.getFellowUsers()!=null){
+                        if (responseMyFriends.getFellowUsers().size() > 0) {
                             tv_no.setVisibility(View.GONE);
                             rv_my_friends.setVisibility(View.VISIBLE);
                             setData();
                         }
-                        else{
+                    /*else
+                    currentPage = -1;*/
+                        else {
                             tv_no.setVisibility(View.VISIBLE);
                             rv_my_friends.setVisibility(View.GONE);
                         }
-                        /*else
-                            currentPage = -1;*/
                     } else {
-                        Log.d(TAG, "onResponse: " + responseMyFriends.getMessage());
-                        customLoader.hideIndicator();
-                        Toast.makeText(context, responseMyFriends.getMessage(), Toast.LENGTH_SHORT).show();
+                        tv_no.setVisibility(View.VISIBLE);
+                        rv_my_friends.setVisibility(View.GONE);
                     }
                 } else {
                     customLoader.hideIndicator();
@@ -117,7 +116,7 @@ public class MyFriendsFragment extends Fragment implements SwipeRefreshLayout.On
             }
 
             @Override
-            public void onFailure(Call<CallbackGetFellowUsers> call, Throwable t) {
+            public void onFailure(Call<CallbackGetMyFriends> call, Throwable t) {
                 if (!call.isCanceled()) {
                     Log.d(TAG, "onResponse: " + t.getMessage());
                     customLoader.hideIndicator();
@@ -135,23 +134,25 @@ public class MyFriendsFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     private void initComponents(View view) {
-        context=getContext();
-        activity=getActivity();
+        context = getContext();
+        activity = getActivity();
 
-        customLoader=new CustomLoader(activity,false);
-        sessionManager=new SessionManager(context);
-        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
+        customLoader = new CustomLoader(activity, false);
+        sessionManager = new SessionManager(context);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
 
-        rv_my_friends =view.findViewById(R.id.rv_my_friends);
-        layoutManager=new LinearLayoutManager(context);
+        rv_my_friends = view.findViewById(R.id.rv_my_friends);
+        layoutManager = new LinearLayoutManager(context);
         rv_my_friends.setLayoutManager(layoutManager);
-        friendsAdapter=new FriendsAdapter("myFriends",myFriendsList,getContext());
+        friendsAdapter = new FriendsAdapter("myFriends", myFriendsList, getContext());
         rv_my_friends.setAdapter(friendsAdapter);
 
-        tv_no=view.findViewById(R.id.tv_no);
+        tv_no = view.findViewById(R.id.tv_no);
 
     }
+
     @Override
     public void onRefresh() {
-        loadMyFriends(); }
+        loadMyFriends();
+    }
 }

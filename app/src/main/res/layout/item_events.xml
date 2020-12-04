@@ -16,7 +16,7 @@
             <com.joooonho.SelectableRoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/img_event"
-                android:src="@drawable/dummy_flower"
+                android:src="@drawable/ic_place_holder_image"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"

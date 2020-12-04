@@ -61,7 +61,7 @@ public class UtilityFunctions {
         if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
             age--;
         }
-        return age+1;
+        return age;
     }
 
     /*public static void ShowImageViewer(Activity activity,List<PostMedia> postMedia){

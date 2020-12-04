@@ -12,7 +12,7 @@
         android:layout_height="60dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
-        android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+        android:src="@drawable/ic_user_dummy"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -37,7 +37,7 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+                android:src="@drawable/ic_user_dummy"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,7 +97,21 @@
                 android:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna."
                 android:textColor="@color/black"
                 android:layout_marginBottom="20dp"
-                android:textSize="16sp"></TextView>
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/img_media"
+                android:src="@drawable/ic_place_holder_image"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/border_four_corner_plan_white"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="5dp"
+                android:padding="2dp"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/tv_description"/>
 
             <View
                 android:id="@+id/view1"
@@ -173,6 +187,18 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:id="@+id/tv_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_vertical"
+                android:text="No Comments"
+                android:layout_below="@+id/rl_post"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="50dp"
+                android:textStyle="bold"
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -276,14 +302,4 @@
             </View>
         </LinearLayout>
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_no"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|center_vertical"
-        android:text="No Comments"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
 </RelativeLayout>

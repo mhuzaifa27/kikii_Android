@@ -29,7 +29,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_gravity="left"
-            android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+            android:src="@drawable/ic_user_dummy"/>
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
             android:gravity="center_vertical"
             android:text="Almos B."
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"></TextView>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tv_time_ago"

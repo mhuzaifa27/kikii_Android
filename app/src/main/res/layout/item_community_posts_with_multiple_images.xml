@@ -15,7 +15,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+        android:src="@drawable/ic_user_dummy"/>
 
     <LinearLayout
         android:id="@+id/ll_user"
@@ -100,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/dummy_person"
+                    android:src="@drawable/ic_place_holder_image"
                     android:scaleType="centerCrop">
 
                 </ImageView>
@@ -116,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/image_7"
+                    android:src="@drawable/ic_place_holder_image"
                     android:scaleType="centerCrop">
                 </ImageView>
             </RelativeLayout>
@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/dummy_person"
+                    android:src="@drawable/ic_place_holder_image"
                     android:scaleType="centerCrop">
 
                 </ImageView>
@@ -166,7 +166,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:src="@drawable/image_7"
+                            android:src="@drawable/ic_place_holder_image"
                             android:scaleType="centerCrop">
 
                         </ImageView>
@@ -182,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:src="@drawable/dummy_person"
+                            android:src="@drawable/ic_place_holder_image"
                             android:scaleType="centerCrop">
                         </ImageView>
                         <RelativeLayout
@@ -231,7 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@drawable/dummy_person"
+                    android:src="@drawable/ic_place_holder_image"
                     android:scaleType="centerCrop">
                 </ImageView>
             </RelativeLayout>
@@ -254,7 +254,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:src="@drawable/image_7"
+                            android:src="@drawable/ic_place_holder_image"
                             android:scaleType="centerCrop">
 
                         </ImageView>
@@ -269,7 +269,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:src="@drawable/dummy_person"
+                            android:src="@drawable/ic_place_holder_image"
                             android:scaleType="centerCrop">
                         </ImageView>
                         <!--<RelativeLayout

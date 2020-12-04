@@ -14,7 +14,7 @@
             <com.joooonho.SelectableRoundedImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/img_view_pager"
-                android:src="@drawable/dummy_flower"
+                android:src="@drawable/ic_place_holder_image"
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -35,7 +35,7 @@
             android:textAllCaps="false"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/text_heading"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/tv_description_pager"
@@ -48,5 +48,5 @@
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="@dimen/text_description"
-            android:textStyle="normal"></TextView>
+            android:textStyle="normal"/>
     </LinearLayout>

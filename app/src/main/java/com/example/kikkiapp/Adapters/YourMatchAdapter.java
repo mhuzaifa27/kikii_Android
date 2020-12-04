@@ -52,7 +52,7 @@ public class YourMatchAdapter extends RecyclerView.Adapter<YourMatchAdapter.Trav
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
-                .placeholder(R.drawable.dummy_flower)
+                .placeholder(R.drawable.ic_user_dummy)
                 .into(holder.img_user);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

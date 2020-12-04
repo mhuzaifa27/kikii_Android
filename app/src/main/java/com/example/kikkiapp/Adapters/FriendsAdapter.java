@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.kikkiapp.Model.Event;
 import com.example.kikkiapp.Model.FellowUser;
 import com.example.kikkiapp.R;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
 
@@ -25,6 +23,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     Context context;
     private boolean isLoadingAdded;
     private String type;
+    private IClicks iClicks;
+
+    public interface IClicks{
+        void onFollowUser(View view,FellowUser user);
+        void onUnFollowUser(View view,FellowUser user);
+    }
+    public void setOnClickListener(IClicks iClicks){
+        this.iClicks=iClicks;
+    }
 
     public FriendsAdapter(String type,List<FellowUser> data, Context context) {
         this.data = data;
@@ -48,22 +55,22 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
 
     @Override
     public void onBindViewHolder(final FriendsViewHolder holder, int position) {
-        FellowUser user = data.get(position);
+        final FellowUser user = data.get(position);
 
         switch (holder.getItemViewType()){
             case 0:
                 holder.img_my_friend.setVisibility(View.VISIBLE);
-                holder.img_send_request.setVisibility(View.GONE);
+                holder.img_pending_requests.setVisibility(View.GONE);
                 holder.img_cancel_request.setVisibility(View.GONE);
                 break;
             case 1:
                 holder.img_my_friend.setVisibility(View.GONE);
-                holder.img_send_request.setVisibility(View.VISIBLE);
+                holder.img_pending_requests.setVisibility(View.VISIBLE);
                 holder.img_cancel_request.setVisibility(View.GONE);
                 break;
             case 2:
                 holder.img_my_friend.setVisibility(View.GONE);
-                holder.img_send_request.setVisibility(View.GONE);
+                holder.img_pending_requests.setVisibility(View.GONE);
                 holder.img_cancel_request.setVisibility(View.VISIBLE);
                 break;
         }
@@ -78,6 +85,24 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(holder.img_user);
+
+        holder.img_cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClicks!=null){
+                    iClicks.onUnFollowUser(v,user);
+                }
+            }
+        });
+        holder.img_pending_requests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClicks!=null){
+                    iClicks.onFollowUser(v,user);
+                }
+            }
+        });
+
     }
 
     public void add(FellowUser mc) {
@@ -139,14 +164,14 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendsV
     public class FriendsViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
         CircleImageView img_user;
-        ImageView img_my_friend,img_send_request,img_cancel_request;
+        ImageView img_my_friend,img_pending_requests,img_cancel_request;
 
         public FriendsViewHolder(View itemView) {
             super(itemView);
             tv_name=itemView.findViewById(R.id.tv_name);
             img_user=itemView.findViewById(R.id.img_user);
             img_my_friend=itemView.findViewById(R.id.img_my_friend);
-            img_send_request=itemView.findViewById(R.id.img_send_request);
+            img_pending_requests=itemView.findViewById(R.id.img_pending_requests);
             img_cancel_request=itemView.findViewById(R.id.img_cancel_request);
         }
     }

@@ -543,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.d("TAG", "onLocationChanged:LONGITUDE " + longitude);
 
                     updateLocationParams.put(Constant.LATITUDE,sessionManager.getLat());
-                    updateLocationParams.put(Constant.LONGITUDE,sessionManager.getLat());
+                    updateLocationParams.put(Constant.LONGITUDE,sessionManager.getLng());
                     updateLocation();
             }
         }

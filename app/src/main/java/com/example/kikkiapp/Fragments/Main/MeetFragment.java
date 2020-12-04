@@ -236,6 +236,11 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 followUser(user);
             }
 
+            @Override
+            public void onBlockUserClick(MeetUser user) {
+                blockUser(user);
+            }
+
         });
     }
 
@@ -245,6 +250,39 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
         paramsList.put(Constant.ID, user.getId().toString());
         callbackStatusCall = api.followUser(sessionManager.getAccessToken(), paramsList);
+        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseStatus = response.body();
+                if (responseStatus != null) {
+                    if (!responseStatus.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseStatus.getMessage());
+                    }
+                    customLoader.hideIndicator();
+                    Toast.makeText(context, responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
+    private void blockUser(MeetUser user) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        paramsList.put(Constant.ID, user.getId().toString());
+        callbackStatusCall = api.blockUser(sessionManager.getAccessToken(), paramsList);
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override
             public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {

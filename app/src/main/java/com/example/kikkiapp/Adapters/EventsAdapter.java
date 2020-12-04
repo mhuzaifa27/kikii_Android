@@ -65,7 +65,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
                 .dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .centerCrop()
-                .placeholder(R.drawable.dummy_flower)
+                .placeholder(R.drawable.ic_place_holder_image)
                 .into(holder.img_event);
 
         List<Attendant> attendantList =event.getAttendants();

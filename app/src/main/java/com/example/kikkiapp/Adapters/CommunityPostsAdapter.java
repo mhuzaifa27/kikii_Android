@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Model.Post;
@@ -17,8 +19,10 @@ import com.example.kikkiapp.Model.PostMedia;
 import com.example.kikkiapp.R;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.stfalcon.imageviewer.loader.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -51,6 +55,15 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         data.add(mc);
         if (data.size() > 1)
             notifyItemInserted(data.size() - 1);
+        notifyDataSetChanged();
+    }
+
+    public void addList(List<Post> mc) {
+        if (mc.size() > 0) {
+            for (int i = 0; i < mc.size(); i++) {
+                data.add(mc.get(i));
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -153,6 +166,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 holder.tv_description.setText(post.getBody());
                 holder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 holder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
+                holder.tv_time_ago.setText(post.getCreatedAt());
 
                 if (post.getIsLiked().toString().equalsIgnoreCase("0"))
                     holder.tv_likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_empty_heart, 0, 0, 0);
@@ -269,6 +283,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 singleImagePostViewHolder.tv_description.setText(post.getBody());
                 singleImagePostViewHolder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 singleImagePostViewHolder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
+                singleImagePostViewHolder.tv_time_ago.setText(post.getCreatedAt());
 
                 if (post.getIsLiked().toString().equalsIgnoreCase("0"))
                     singleImagePostViewHolder.tv_likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_empty_heart, 0, 0, 0);
@@ -291,12 +306,12 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         .dontAnimate()
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .centerCrop()
-                        .placeholder(R.drawable.dummy_flower)
+                        .placeholder(R.drawable.ic_place_holder_image)
                         .into(singleImagePostViewHolder.img_media);
                 singleImagePostViewHolder.img_media.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showImageViewer(0,post);
+                        showImageViewer(0, post);
                     }
                 });
 
@@ -342,6 +357,8 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 multipleImagePostViewHolder.tv_description.setText(post.getBody());
                 multipleImagePostViewHolder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 multipleImagePostViewHolder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
+                multipleImagePostViewHolder.tv_time_ago.setText(post.getCreatedAt());
+
                 if (post.getIsLiked().toString().equalsIgnoreCase("0"))
                     multipleImagePostViewHolder.tv_likes.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_empty_heart, 0, 0, 0);
                 else
@@ -368,7 +385,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop()
-                            .placeholder(R.drawable.dummy_flower)
+                            .placeholder(R.drawable.ic_place_holder_image)
                             .into(multipleImagePostViewHolder.ll_2_img_1);
                     multipleImagePostViewHolder.ll_2_img_1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -385,7 +402,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop()
-                            .placeholder(R.drawable.dummy_flower)
+                            .placeholder(R.drawable.ic_place_holder_image)
                             .into(multipleImagePostViewHolder.ll_2_img_2);
                     multipleImagePostViewHolder.ll_2_img_2.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -407,7 +424,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop()
-                            .placeholder(R.drawable.dummy_flower)
+                            .placeholder(R.drawable.ic_place_holder_image)
                             .into(multipleImagePostViewHolder.ll_3_img_1);
                     multipleImagePostViewHolder.ll_3_img_1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -424,7 +441,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop()
-                            .placeholder(R.drawable.dummy_flower)
+                            .placeholder(R.drawable.ic_place_holder_image)
                             .into(multipleImagePostViewHolder.ll_3_img_2);
                     multipleImagePostViewHolder.ll_3_img_2.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -441,7 +458,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop()
-                            .placeholder(R.drawable.dummy_flower)
+                            .placeholder(R.drawable.ic_place_holder_image)
                             .into(multipleImagePostViewHolder.ll_3_img_3);
                     multipleImagePostViewHolder.ll_3_img_3.setOnClickListener(new View.OnClickListener() {
                         @Override

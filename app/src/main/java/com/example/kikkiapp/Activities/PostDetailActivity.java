@@ -100,6 +100,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private List<String> mediaPaths = new ArrayList<>();
     private RelativeLayout rl_media;
     private MultipartBody.Part media;
+    private ImageView img_media;
 
     /*****/
     ProgressBar progressBar;
@@ -171,6 +172,19 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 .centerCrop()
                 .placeholder(R.drawable.ic_user_dummy)
                 .into(img_user);
+        if(post.getMedia().size()>0){
+            img_media.setVisibility(View.VISIBLE);
+            Glide
+                    .with(context)
+                    .load(post.getMedia().get(0).getPath())
+                    .centerCrop()
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_place_holder_image)
+                    .into(img_media);
+
+        }
     }
 
     private void getIntentData() {
@@ -259,6 +273,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         img_select_media = findViewById(R.id.img_select_media);
         img_selected = findViewById(R.id.img_selected);
         img_cancel=findViewById(R.id.img_cancel);
+        img_media=findViewById(R.id.img_media);
 
         rl_media = findViewById(R.id.rl_media);
 

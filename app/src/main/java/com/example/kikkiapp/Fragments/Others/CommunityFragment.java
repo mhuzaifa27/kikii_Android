@@ -48,7 +48,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
     private static final String TAG = "CommunityFragment";
     public static boolean NEED_TO_LOAD_DATA = true;
-    public static final int REQUEST_POST_DETAIL=245;
+    public static final int REQUEST_POST_DETAIL = 245;
     private Context context;
     private Activity activity;
 
@@ -92,7 +92,10 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         View view = inflater.inflate(R.layout.fragment_community, container, false);
         initComponents(view);
         //if (NEED_TO_LOAD_DATA)
-            loadCommunityPosts();
+        isLastPage=false;
+        isLoading=false;
+        currentPage=0;
+        loadCommunityPosts();
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
@@ -106,6 +109,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 //Increment page index to load the next one
                /* if (currentPage != -1)
                     loadCommunityPosts();*/
+                loadCommunityPosts();
             }
 
             @Override
@@ -129,7 +133,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetCommunityPostsCall = api.getAllPosts(sessionManager.getAccessToken(), String.valueOf(0));
+        callbackGetCommunityPostsCall = api.getAllPosts(sessionManager.getAccessToken(), String.valueOf(currentPage));
         callbackGetCommunityPostsCall.enqueue(new Callback<CallbackGetCommunityPosts>() {
             @Override
             public void onResponse(Call<CallbackGetCommunityPosts> call, Response<CallbackGetCommunityPosts> response) {
@@ -138,17 +142,34 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 if (responseAllPosts != null) {
                     if (responseAllPosts.getSuccess()) {
                         swipeRefreshLayout.setRefreshing(false);
-                        if (responseAllPosts.getPosts().size() > 0){
-                            tv_no.setVisibility(View.GONE);
-                            rv_community_posts.setVisibility(View.VISIBLE);
-                            setData();
-                        }else{
+                        if (responseAllPosts.getPosts().size() > 0) {
+                            if (currentPage == 0) {
+                                tv_no.setVisibility(View.GONE);
+                                rv_community_posts.setVisibility(View.VISIBLE);
+                                setData();
+                            } else {
+                                currentPage = responseAllPosts.getNextOffset();
+                                if (responseAllPosts.getPosts().size() > 0) {
+                                    communityPostsAdapter.addList(responseAllPosts.getPosts());
+                                }
+                                else {
+                                    isLastPage = true;
+                                    currentPage = 0;
+                                }
+                                isLoading = false;
+                                customLoader.hideIndicator();
+                            }
+                        } else {
+                            if(currentPage!=0){
+                                isLastPage = true;
+                                currentPage = 0;
+                            }
+                            else{
+                                tv_no.setVisibility(View.VISIBLE);
+                                rv_community_posts.setVisibility(View.GONE);
+                            }
                             customLoader.hideIndicator();
-                            tv_no.setVisibility(View.VISIBLE);
-                            rv_community_posts.setVisibility(View.GONE);
                         }
-                        /*else
-                            currentPage = -1;*/
                     } else {
                         Log.d(TAG, "onResponse: " + responseAllPosts.getMessage());
                         customLoader.hideIndicator();
@@ -189,7 +210,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("post", post);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,REQUEST_POST_DETAIL);
+                startActivityForResult(intent, REQUEST_POST_DETAIL);
             }
 
             @Override
@@ -198,7 +219,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
             @Override
             public void onMenuClick(View view, final Post post, final int position) {
-                ShowPopupMenus.showPostMenu(activity,view, post,position,rv_community_posts,communityPostsList,communityPostsAdapter);
+                ShowPopupMenus.showPostMenu(activity, view, post, position, rv_community_posts, communityPostsList, communityPostsAdapter);
             }
         });
     }
@@ -209,7 +230,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
         customLoader = new CustomLoader(activity, false);
         sessionManager = new SessionManager(context);
-        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         communityPostsAdapter = new CommunityPostsAdapter(context);
         communityPostsAdapter.addAll(communityPostsList);
 
@@ -217,7 +238,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         layoutManager = new LinearLayoutManager(context);
         rv_community_posts.setLayoutManager(layoutManager);
 
-        tv_no=view.findViewById(R.id.tv_no);
+        tv_no = view.findViewById(R.id.tv_no);
     }
 
     private void likeDislikePost(Integer id, final int position, final TextView tv_likes) {
@@ -272,13 +293,16 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         communityPostsList.clear();
+        isLastPage=false;
+        isLoading=false;
+        currentPage=PAGE_START;
         loadCommunityPosts();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==REQUEST_POST_DETAIL && resultCode==Activity.RESULT_OK){
+        if (requestCode == REQUEST_POST_DETAIL && resultCode == Activity.RESULT_OK) {
             loadCommunityPosts();
         }
     }

@@ -9,20 +9,21 @@ import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
 import com.example.kikkiapp.Callbacks.CallbackGetConversations;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
-import com.example.kikkiapp.Callbacks.CallbackGetFellowUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetMyFriends;
 import com.example.kikkiapp.Callbacks.CallbackGetFilters;
 import com.example.kikkiapp.Callbacks.CallbackGetKikiiPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetMatch;
 import com.example.kikkiapp.Callbacks.CallbackGetMeetUsers;
+import com.example.kikkiapp.Callbacks.CallbackGetPendingRequests;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
+import com.example.kikkiapp.Callbacks.CallbackGetSentRequests;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
 import com.example.kikkiapp.Callbacks.CallbackSendMessage;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.google.gson.JsonElement;
-import com.example.kikkiapp.Callbacks.CallbackSentOTP;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
 
@@ -135,6 +136,18 @@ public interface API {
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
 
+    @POST("unfollow/user")
+    @FormUrlEncoded
+    Call<CallbackStatus> unFollowUser(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
+    @POST("block/user")
+    @FormUrlEncoded
+    Call<CallbackStatus> blockUser(
+            @Header("Authorization") String auth,
+            @FieldMap Map<String, String> params);
+
     @POST("rewind-swipes")
     Call<CallbackStatus> rewindSwipes(
             @Header("Authorization") String auth);
@@ -202,16 +215,16 @@ public interface API {
                                       @Query("offset") String next_offset);
 
     @GET("pending/requests")
-    Call<CallbackGetFellowUsers> getPendingRequests(@Header("Authorization") String auth,
-                                                    @Query("offset") String next_offset);
+    Call<CallbackGetPendingRequests> getPendingRequests(@Header("Authorization") String auth,
+                                                        @Query("offset") String next_offset);
 
     @GET("my/friends")
-    Call<CallbackGetFellowUsers> getMyFriends(@Header("Authorization") String auth,
-                                              @Query("offset") String next_offset);
+    Call<CallbackGetMyFriends> getMyFriends(@Header("Authorization") String auth,
+                                            @Query("offset") String next_offset);
 
     @GET("sent/requests")
-    Call<CallbackGetFellowUsers> getSentRequests(@Header("Authorization") String auth,
-                                                 @Query("offset") String next_offset);
+    Call<CallbackGetSentRequests> getSentRequests(@Header("Authorization") String auth,
+                                                  @Query("offset") String next_offset);
 
     @GET("profile")
     Call<CallbackGetProfile> getProfile(@Header("Authorization") String auth,

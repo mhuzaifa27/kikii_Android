@@ -71,9 +71,9 @@ public class SubscriptionActivity extends AppCompatActivity implements ViewPager
 
         galleryList.add(R.drawable.banner_image_1);
         galleryList.add(R.drawable.banner_image_2);
-        galleryList.add(R.drawable.banner_image_6);
-        galleryList.add(R.drawable.banner_image_4);
-        galleryList.add(R.drawable.banner_image_5);
+        galleryList.add(R.drawable.banner_image_1);
+        galleryList.add(R.drawable.banner_image_2);
+        galleryList.add(R.drawable.banner_image_1);
 
         galleryPagerAdapter = new GalleryPagerAdapter(this, galleryList);
         viewEvents.setAdapter(galleryPagerAdapter);

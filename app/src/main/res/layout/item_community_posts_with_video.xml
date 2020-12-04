@@ -15,7 +15,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/dummy_flower"></de.hdodenhof.circleimageview.CircleImageView>
+        android:src="@drawable/ic_user_dummy"/>
 
     <LinearLayout
         android:id="@+id/ll_user"
@@ -85,7 +85,7 @@
         <com.joooonho.SelectableRoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_video_thumbnail"
-            android:src="@drawable/dummy_flower"
+            android:src="@drawable/ic_place_holder_image"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="250dp"

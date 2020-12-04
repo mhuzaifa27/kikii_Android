@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
+import com.example.kikkiapp.Utils.PaginationScrollListener;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.ShowPopupMenus;
@@ -93,18 +95,51 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         View view = inflater.inflate(R.layout.fragment_kikii, container, false);
 
+        isLastPage=false;
+        isLoading=false;
+        currentPage=0;
+
         initComponents(view);
         getKikiiPosts();
 
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        rv_kikii_posts.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                //Increment page index to load the next one
+               /* if (currentPage != -1)
+                    loadCommunityPosts();*/
+                getKikiiPosts();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+    }
+
 
     private void getKikiiPosts() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadEvents: " + sessionManager.getAccessToken());
-        callbackGetKikiiPostsCall = api.getKikiiPosts(sessionManager.getAccessToken(), String.valueOf(0));
+        callbackGetKikiiPostsCall = api.getKikiiPosts(sessionManager.getAccessToken(), String.valueOf(currentPage));
         callbackGetKikiiPostsCall.enqueue(new Callback<CallbackGetKikiiPosts>() {
             @Override
             public void onResponse(Call<CallbackGetKikiiPosts> call, Response<CallbackGetKikiiPosts> response) {
@@ -112,19 +147,35 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 responseGetKikiiPosts = response.body();
                 if (responseGetKikiiPosts != null) {
                     if (responseGetKikiiPosts.getSuccess()) {
-                        customLoader.hideIndicator();
                         swipeRefreshLayout.setRefreshing(false);
-                        if (responseGetKikiiPosts.getPosts().size() > 0){
-                            tv_no.setVisibility(View.GONE);
-                            rv_kikii_posts.setVisibility(View.VISIBLE);
-                            setData();
+                        if (responseGetKikiiPosts.getPosts().size() > 0) {
+                            if (currentPage == 0) {
+                                tv_no.setVisibility(View.GONE);
+                                rv_kikii_posts.setVisibility(View.VISIBLE);
+                                setData();
+                            } else {
+                                currentPage = responseGetKikiiPosts.getNextOffset();
+                                if (responseGetKikiiPosts.getPosts().size() > 0) {
+                                    kikiiPostsAdapter.addList(responseGetKikiiPosts.getPosts());
+                                }
+                                else {
+                                    isLastPage = true;
+                                    currentPage = 0;
+                                }
+                                isLoading = false;
+                                customLoader.hideIndicator();
+                            }
+                        } else {
+                            if(currentPage!=0){
+                                isLastPage = true;
+                                currentPage = 0;
+                            }
+                            else{
+                                tv_no.setVisibility(View.VISIBLE);
+                                rv_kikii_posts.setVisibility(View.GONE);
+                            }
+                            customLoader.hideIndicator();
                         }
-                        else{
-                            tv_no.setVisibility(View.VISIBLE);
-                            rv_kikii_posts.setVisibility(View.GONE);
-                        }
-                        /*else
-                            currentPage = -1;*/
                     } else {
                         Log.d(TAG, "onResponse: " + responseGetKikiiPosts.getMessage());
                         customLoader.hideIndicator();
@@ -245,6 +296,10 @@ public class KikiiFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
     @Override
     public void onRefresh() {
+        kikiiPostsList.clear();
+        isLastPage=false;
+        isLoading=false;
+        currentPage=PAGE_START;
         getKikiiPosts();
     }
 }

@@ -34,7 +34,7 @@ public class GalleryPagerAdapter extends PagerAdapter {
         Glide
                 .with(mContext)
                 .load(gallery.get(position))
-                .placeholder(R.drawable.image_3)
+                .placeholder(R.drawable.ic_place_holder_image)
                 .into(iv_bottom_foster);
 
         container.addView(itemView);

@@ -57,7 +57,7 @@
         <activity android:name="com.example.kikkiapp.Activities.Profile.GenderIdentityActivity" />
         <activity android:name="com.example.kikkiapp.Activities.Profile.LookingForActivity" />
         <activity android:name="com.example.kikkiapp.Activities.PostDetailActivity"
-            android:windowSoftInputMode="adjustResize|adjustPan" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.kikkiapp.Activities.CreatePostActivity" />
         <activity android:name="com.example.kikkiapp.Activities.MatchActivity" />
         <activity android:name="com.example.kikkiapp.Activities.EventDetailActivity" />
