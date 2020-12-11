@@ -121,4 +121,6 @@ A Note to Users Outside of the United States. HER is based in the U.S. If you ar
     <string name="your_matches">Your Matches</string>
     <string name="you_have_24_hours_to_start_conversations_with_a_match_or_it_is_removed">You have 24 hours to start conversations with a match or it is removed.</string>
     <string name="no_match_found">No Match Found!</string>
+    <string name="Images">Images</string>
+    <string name="video">Videos</string>
 </resources>

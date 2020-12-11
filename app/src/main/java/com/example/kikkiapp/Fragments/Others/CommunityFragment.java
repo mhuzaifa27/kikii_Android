@@ -3,13 +3,12 @@ package com.example.kikkiapp.Fragments.Others;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,11 +33,19 @@ import com.example.kikkiapp.Utils.PaginationScrollListener;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.ShowPopupMenus;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +56,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     private static final String TAG = "CommunityFragment";
     public static boolean NEED_TO_LOAD_DATA = true;
     public static final int REQUEST_POST_DETAIL = 245;
+    public static final int REQUEST_UPDATE_POST = 24;
     private Context context;
     private Activity activity;
 
@@ -82,6 +90,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     private int TOTAL_PAGES = 3;
     // indicates the current page which Pagination is fetching.
     private int currentPage = PAGE_START;
+    private Uri postLink;
 
     /*****/
 
@@ -92,9 +101,9 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
         View view = inflater.inflate(R.layout.fragment_community, container, false);
         initComponents(view);
         //if (NEED_TO_LOAD_DATA)
-        isLastPage=false;
-        isLoading=false;
-        currentPage=0;
+        isLastPage = false;
+        isLoading = false;
+        currentPage = 0;
         loadCommunityPosts();
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
@@ -151,8 +160,7 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                                 currentPage = responseAllPosts.getNextOffset();
                                 if (responseAllPosts.getPosts().size() > 0) {
                                     communityPostsAdapter.addList(responseAllPosts.getPosts());
-                                }
-                                else {
+                                } else {
                                     isLastPage = true;
                                     currentPage = 0;
                                 }
@@ -160,11 +168,10 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                                 customLoader.hideIndicator();
                             }
                         } else {
-                            if(currentPage!=0){
+                            if (currentPage != 0) {
                                 isLastPage = true;
                                 currentPage = 0;
-                            }
-                            else{
+                            } else {
                                 tv_no.setVisibility(View.VISIBLE);
                                 rv_community_posts.setVisibility(View.GONE);
                             }
@@ -215,6 +222,8 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
 
             @Override
             public void onShareClick(View view, Post post) {
+                customLoader.showIndicator();
+                createShareLink(post);
             }
 
             @Override
@@ -222,6 +231,43 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
                 ShowPopupMenus.showPostMenu(activity, view, post, position, rv_community_posts, communityPostsList, communityPostsAdapter);
             }
         });
+    }
+
+    private void createShareLink(Post post) {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://play.google.com/store/apps/?post_id=" + post.getId()))
+                .setDynamicLinkDomain("kikiiapp.page.link")
+                // Open links with this app on Android
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.example.kikkiapp")
+                                .setMinimumVersion(125)
+                                .build())
+                // Open links with com.example.ios on iOS
+                .buildDynamicLink();
+        postLink = dynamicLink.getUri();
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(postLink)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            customLoader.hideIndicator();
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            Log.d(TAG, "onComplete: " + shortLink);
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString());
+                            startActivity(Intent.createChooser(intent, "Share"));
+                        } else {
+                            customLoader.hideIndicator();
+                            Log.d(TAG, "ERROR: " + task.getException());
+                        }
+                    }
+                });
     }
 
     private void initComponents(View view) {
@@ -293,9 +339,9 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         communityPostsList.clear();
-        isLastPage=false;
-        isLoading=false;
-        currentPage=PAGE_START;
+        isLastPage = false;
+        isLoading = false;
+        currentPage = PAGE_START;
         loadCommunityPosts();
     }
 
@@ -303,6 +349,9 @@ public class CommunityFragment extends Fragment implements SwipeRefreshLayout.On
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_POST_DETAIL && resultCode == Activity.RESULT_OK) {
+            loadCommunityPosts();
+        }
+        if (requestCode == REQUEST_UPDATE_POST && resultCode == Activity.RESULT_OK) {
             loadCommunityPosts();
         }
     }

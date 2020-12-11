@@ -27,10 +27,9 @@ import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
 import com.example.kikkiapp.Firebase.AppState;
 import com.example.kikkiapp.Firebase.ChangeEventListener;
-import com.example.kikkiapp.Firebase.Model.FirebaseUserModel;
 import com.example.kikkiapp.Firebase.Services.UserService;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -178,18 +177,18 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                             et_otp_4.getText().toString() +
                             et_otp_5.getText().toString() +
                             et_otp_6.getText().toString();
-                    verifyOTPParams.put(Constant.CODE, code);
+                    verifyOTPParams.put(Constants.CODE, code);
                     if (!TextUtils.isEmpty(code) || !TextUtils.isEmpty(mVerificationId))
                         signInWithPhoneAuthCredential(PhoneAuthProvider.getCredential(mVerificationId, code));
                     //verifyOTP();
                 }
                 break;
             case R.id.tv_resend_code:
-                if (connected)
-                    recreate();
+                recreate();
+               /* if (connected)
                 else
                     Toast.makeText(mContext, "Please Connect to Internet!", Toast.LENGTH_SHORT).show();
-                break;
+                break;*/
         }
     }
 
@@ -404,7 +403,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                         sessionManager.saveUserPhoneNo(phoneNumber);
                         FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/order_" + AppState.currentFireUser.getUid());
                         FirebaseMessaging.getInstance().subscribeToTopic("/topics/order_" + AppState.currentFireUser.getUid());
-                        sendOTPParams.put(Constant.PHONE, phoneNumber);
+                        sendOTPParams.put(Constants.PHONE, phoneNumber);
                         continueWithPhone();
                     }
                 } else {
@@ -488,7 +487,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements View.OnClick
                         sessionManager.saveUserPhoneNo(phoneNumber);
                         FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/order_" + AppState.currentFireUser.getUid());
                         FirebaseMessaging.getInstance().subscribeToTopic("/topics/order_" + AppState.currentFireUser.getUid());
-                        sendOTPParams.put(Constant.PHONE, phoneNumber);
+                        sendOTPParams.put(Constants.PHONE, phoneNumber);
                         continueWithPhone();
                     } else {
                         customLoader.hideIndicator();

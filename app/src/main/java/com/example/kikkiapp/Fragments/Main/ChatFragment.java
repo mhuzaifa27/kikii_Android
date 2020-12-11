@@ -7,12 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,18 +19,25 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kikkiapp.Adapters.MainChatAdapter;
 import com.example.kikkiapp.Adapters.OnlineUsersAdapter;
-import com.example.kikkiapp.Adapters.YourMatchAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetConversations;
-import com.example.kikkiapp.Callbacks.CallbackGetMatch;
+import com.example.kikkiapp.Callbacks.CallbackGetOnlineUsers;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
-import com.example.kikkiapp.Model.Conversation;
+import com.example.kikkiapp.Firebase.AppState;
+import com.example.kikkiapp.Firebase.ChangeEventListener;
+import com.example.kikkiapp.Firebase.Model.FirebaseUserModel;
+import com.example.kikkiapp.Firebase.Model.InboxItem;
+import com.example.kikkiapp.Firebase.Model.Message;
+import com.example.kikkiapp.Firebase.Services.InboxService;
+import com.example.kikkiapp.Firebase.Services.UserService;
 import com.example.kikkiapp.Model.OnlineUser;
+import com.example.kikkiapp.Model.User;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,13 +63,17 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private CustomLoader customLoader;
     private SessionManager sessionManager;
 
-    private Call<CallbackGetConversations> callbackGetConversationsCall;
-    private CallbackGetConversations responseGetConversations;
+    private Call<CallbackGetOnlineUsers> callbackGetOnlineUsersCall;
+    private CallbackGetOnlineUsers responseGetOnlineUsers;
     private Call<CallbackStatus> callbackStatusCall;
     private CallbackStatus responseStatus;
 
-    private List<OnlineUser> onlineUserList=new ArrayList<>();
-    private List<Conversation> mainChatList=new ArrayList<>();
+    private List<User> onlineUserList=new ArrayList<>();
+    private List<InboxItem> mainChatList=new ArrayList<>();
+
+    private InboxService inboxService;
+    private UserService userService;
+    private ImageView img_add;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,9 +82,14 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
         initComponents(view);
-        loadConversations();
+        if(sessionManager.getProfileUser().getUpgraded().toString().equalsIgnoreCase("1")){
+            loadConversations();
+        }
+        else{
+            rv_online_users.setVisibility(View.GONE);
+        }
 
-        ItemTouchHelper.SimpleCallback simpleCallback =
+        /*ItemTouchHelper.SimpleCallback simpleCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
@@ -92,8 +107,81 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     }
                 };
         itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rv_chat_main);
+        itemTouchHelper.attachToRecyclerView(rv_chat_main);*/
 
+        userService = new UserService();
+        userService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+
+            }
+
+            @Override
+            public void onDataChanged() {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
+        inboxService = new InboxService();
+        inboxService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+
+            }
+
+            @Override
+            public void onDataChanged() {
+                //progressHUD.show();
+                mainChatList.clear();
+                if (inboxService.getCount() > 0) {
+                    for (int i = 0; i < inboxService.getCount(); i++) {
+                        DataSnapshot sp = inboxService.getItem(i);
+                        if (sp.getChildrenCount() > 0) {
+                            for (int j = 0; j < sp.getChildrenCount(); j++) {
+                                String map = sp.getKey();
+                                if (map.contains("___")) {
+                                    String userId = map.split("___")[0];
+                                    if (userId.equalsIgnoreCase(AppState.currentBpackCustomer.getUserId())) {
+                                        FirebaseUserModel user = userService.getUserById(map.split("___")[1]);
+                                        Message message = sp.getValue(Message.class);
+                                        mainChatList.add(new InboxItem("2", user.getUserName(), user.getImage(), message.getTime(), message.getMessage(), user.getUserId()));
+                                        break;
+                                    }
+                                }
+                                /*******WORKING CODE FOR GROUP CHAT********/
+                                /*else {
+                                    Group group=groupService.getGroupById(map);
+                                    List<String> members=group.getMembersList();
+                                    if(members.contains(AppState.currentFireUser.getUid()) || group.getAdmin().equalsIgnoreCase(AppState.currentFireUser.getUid())){
+                                        //User user = userService.getUserById(map);
+                                        Message message = sp.getValue(Message.class);
+                                        inboxList.add(new InboxItem("2", group.getName(), "Group", message.getTime(), message.getMessage(), group.getGroupId()));
+                                        break;
+                                    }
+                                }*/
+                                /*******WORKING CODE FOR GROUP CHAT********/
+                            }
+                            mainChatAdapter.addAll(mainChatList);
+                            //progressHUD.dismiss();
+                        }
+                    }
+                    if(mainChatList.size()==0){
+                        tv_no.setVisibility(View.VISIBLE);
+                        rv_chat_main.setVisibility(View.GONE);
+                    }
+                }
+                //progressHUD.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
@@ -102,36 +190,26 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetConversationsCall = api.getConversations(sessionManager.getAccessToken());
-        callbackGetConversationsCall.enqueue(new Callback<CallbackGetConversations>() {
+        callbackGetOnlineUsersCall = api.getOnlineUsers(sessionManager.getAccessToken());
+        callbackGetOnlineUsersCall.enqueue(new Callback<CallbackGetOnlineUsers>() {
             @Override
-            public void onResponse(Call<CallbackGetConversations> call, Response<CallbackGetConversations> response) {
+            public void onResponse(Call<CallbackGetOnlineUsers> call, Response<CallbackGetOnlineUsers> response) {
                 Log.d(TAG, "onResponse: " + response);
-                responseGetConversations = response.body();
-                if (responseGetConversations != null) {
-                    if (responseGetConversations.getSuccess()) {
+                responseGetOnlineUsers = response.body();
+                if (responseGetOnlineUsers != null) {
+                    if (responseGetOnlineUsers.getSuccess()) {
                         swipeRefreshLayout.setRefreshing(false);
-                        if (responseGetConversations.getOnlineUsers().size() > 0){
+                        if (responseGetOnlineUsers.getOnlineUsers().size() > 0){
                             rv_online_users.setVisibility(View.VISIBLE);
                             setOnlineUsers();
                         }else{
+                            customLoader.hideIndicator();
                             rv_online_users.setVisibility(View.GONE);
                         }
-                        if (responseGetConversations.getConversations().size() > 0){
-                            tv_no.setVisibility(View.GONE);
-                            rv_chat_main.setVisibility(View.VISIBLE);
-                            setConversations();
-                        }else{
-                            customLoader.hideIndicator();
-                            tv_no.setVisibility(View.VISIBLE);
-                            rv_chat_main.setVisibility(View.GONE);
-                        }
-
-                        /*else
-                            currentPage = -1;*/
                     } else {
-                        Log.d(TAG, "onResponse: " + responseGetConversations.getMessage());
-                        Toast.makeText(context, responseGetConversations.getMessage(), Toast.LENGTH_SHORT).show();
+                        customLoader.hideIndicator();
+                        Log.d(TAG, "onResponse: ERROR");
+                        //Toast.makeText(context, responseGetOnlineUsers.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     customLoader.hideIndicator();
@@ -140,7 +218,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
 
             @Override
-            public void onFailure(Call<CallbackGetConversations> call, Throwable t) {
+            public void onFailure(Call<CallbackGetOnlineUsers> call, Throwable t) {
                 if (!call.isCanceled()) {
                     Log.d(TAG, "onResponse: " + t.getMessage());
                     customLoader.hideIndicator();
@@ -150,16 +228,9 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void setOnlineUsers() {
-        onlineUserList=responseGetConversations.getOnlineUsers();
+        onlineUserList= responseGetOnlineUsers.getOnlineUsers();
         rv_online_users.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
         rv_online_users.setAdapter(new OnlineUsersAdapter(onlineUserList,context));
-    }
-
-    private void setConversations() {
-        mainChatList=responseGetConversations.getConversations();
-        rv_chat_main.setLayoutManager(new LinearLayoutManager(context));
-        mainChatAdapter=new MainChatAdapter(mainChatList,context);
-        rv_chat_main.setAdapter(mainChatAdapter);
         customLoader.hideIndicator();
     }
 
@@ -174,8 +245,18 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         rv_online_users=view.findViewById(R.id.rv_online_users);
         rv_chat_main=view.findViewById(R.id.rv_chat_main);
 
+        rv_chat_main.setLayoutManager(new LinearLayoutManager(context));
+        mainChatAdapter=new MainChatAdapter(mainChatList,context);
+        rv_chat_main.setAdapter(mainChatAdapter);
+
+        rv_online_users.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
+        onlineUsersAdapter=new OnlineUsersAdapter(onlineUserList,context);
+        rv_online_users.setAdapter(onlineUsersAdapter);
+
         tv_no=view.findViewById(R.id.tv_no);
 
+        img_add=view.findViewById(R.id.img_add);
+        img_add.setVisibility(View.GONE);
 
     }
 
@@ -183,7 +264,76 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onRefresh() {
         mainChatList.clear();
         onlineUserList.clear();
-        loadConversations();
+        userService = new UserService();
+        userService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+
+            }
+
+            @Override
+            public void onDataChanged() {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
+        inboxService = new InboxService();
+        inboxService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+
+            }
+
+            @Override
+            public void onDataChanged() {
+                //progressHUD.show();
+                mainChatList.clear();
+                if (inboxService.getCount() > 0) {
+                    for (int i = 0; i < inboxService.getCount(); i++) {
+                        DataSnapshot sp = inboxService.getItem(i);
+                        if (sp.getChildrenCount() > 0) {
+                            for (int j = 0; j < sp.getChildrenCount(); j++) {
+                                String map = sp.getKey();
+                                if (map.contains("___")) {
+                                    String userId = map.split("___")[0];
+                                    if (userId.equalsIgnoreCase(AppState.currentBpackCustomer.getUserId())) {
+                                        FirebaseUserModel user = userService.getUserById(map.split("___")[1]);
+                                        Message message = sp.getValue(Message.class);
+                                        mainChatList.add(new InboxItem("2", user.getUserName(), user.getImage(), message.getTime(), message.getMessage(), user.getUserId()));
+                                        break;
+                                    }
+                                }
+                                /*******WORKING CODE FOR GROUP CHAT********/
+                                /*else {
+                                    Group group=groupService.getGroupById(map);
+                                    List<String> members=group.getMembersList();
+                                    if(members.contains(AppState.currentFireUser.getUid()) || group.getAdmin().equalsIgnoreCase(AppState.currentFireUser.getUid())){
+                                        //User user = userService.getUserById(map);
+                                        Message message = sp.getValue(Message.class);
+                                        inboxList.add(new InboxItem("2", group.getName(), "Group", message.getTime(), message.getMessage(), group.getGroupId()));
+                                        break;
+                                    }
+                                }*/
+                                /*******WORKING CODE FOR GROUP CHAT********/
+                            }
+                            mainChatAdapter.addAll(mainChatList);
+                            //progressHUD.dismiss();
+                        }
+                    }
+                }
+                swipeRefreshLayout.setRefreshing(false);
+                //progressHUD.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
     }
     private void deleteConversation(Integer id, final int position) {
         customLoader.showIndicator();

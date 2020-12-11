@@ -45,6 +45,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
 }
 
@@ -137,6 +141,17 @@ dependencies {
 
     //ChipView
     implementation 'com.github.Plumillon:ChipView:1.2.0'
+
+    //AxoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
+
+    implementation 'com.github.HamidrezaAmz:MagicalExoPlayer:1.0.16'
+
+    implementation 'com.karumi:dexter:6.2.1'
+
+    //Firebase Dynamic Links
+    implementation 'com.google.firebase:firebase-dynamic-links'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

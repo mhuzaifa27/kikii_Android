@@ -17,13 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kikkiapp.Adapters.FriendsAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetMyFriends;
 import com.example.kikkiapp.Callbacks.CallbackGetPendingRequests;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.FellowUser;
-import com.example.kikkiapp.Model.MeetUser;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -177,7 +175,7 @@ public class PendingFragment extends Fragment implements SwipeRefreshLayout.OnRe
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        paramsList.put(Constant.ID, user.getId().toString());
+        paramsList.put(Constants.ID, user.getId().toString());
         callbackStatusCall = api.followUser(sessionManager.getAccessToken(), paramsList);
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override

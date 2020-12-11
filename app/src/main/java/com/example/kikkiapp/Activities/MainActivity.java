@@ -11,6 +11,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,12 +32,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.kikkiapp.Activities.SignUpModule.LocationActivity;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
+import com.example.kikkiapp.Firebase.AppState;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
-import com.example.kikkiapp.Utils.CustomLoader;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -48,6 +48,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.kikkiapp.Events.CheckInternetEvent;
 import com.example.kikkiapp.Fragments.Main.ChatFragment;
@@ -59,6 +61,14 @@ import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CheckConnectivity;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    private static final String TAG ="MainActivity" ;
-    private Context mContext=MainActivity.this;
+    private static final String TAG = "MainActivity";
+    private Context mContext = MainActivity.this;
     BottomNavigationView bottomNavigationView;
     FrameLayout main_frame;
 
@@ -118,8 +128,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private Call<CallbackUpdateProfile> callbackStatusCall;
     private CallbackUpdateProfile responseLatLongUpdate;
-    private Map<String ,String> updateLocationParams =new HashMap<>();
+    private Map<String, String> updateLocationParams = new HashMap<>();
     private Double latitude, longitude;
+    private String post_id, event_id, user_id;
+
     /*****/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +144,58 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         loadHomeFragment();
         setUpNavigationView();
 
+        /******/
+        OnlineUser();
+        /******/
+
+        checkForDeepLink();
+    }
+
+    private void checkForDeepLink() {
+        //////////// Receiving Deep Link
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                            post_id = deepLink.getQueryParameter("post_id");
+                            Log.d(TAG, "onSuccess: " + post_id);
+                            if (post_id != null) {
+                                Intent intent = new Intent(mContext, SinglePostDetailActivity.class);
+                                intent.putExtra(Constants.ID, String.valueOf(post_id));
+                                startActivity(intent);
+                            } else {
+                                event_id = deepLink.getQueryParameter("event_id");
+                                if (event_id != null) {
+
+                                } else {
+                                    user_id = deepLink.getQueryParameter("user_id");
+                                    if (user_id != null) {
+                                        Intent intent = new Intent(mContext, UserProfileActivity.class);
+                                        intent.putExtra(Constants.ID, String.valueOf(user_id));
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("dynamic link tag", "getDynamicLink:onFailure", e);
+                    }
+                });
+
     }
 
     private void iniComponents() {
-        extras = getIntent().getStringExtra("CURRENT_TAG");;
+        extras = getIntent().getStringExtra("CURRENT_TAG");
+        ;
         //checkIntentData();
 
         main_frame = findViewById(R.id.main_frame);
@@ -266,31 +326,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_nav_meet:
                         navItemIndex = 0;
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         CURRENT_TAG = TAG_MEET;
                         break;
                     case R.id.bottom_nav_match:
                         navItemIndex = 1;
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         CURRENT_TAG = TAG_MATCH;
                         break;
                     case R.id.bottom_nav_chat:
                         navItemIndex = 2;
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         CURRENT_TAG = TAG_CHAT;
                         break;
                     case R.id.bottom_nav_social:
                         navItemIndex = 3;
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         CURRENT_TAG = TAG_SOCIAL;
                         break;
                     case R.id.bottom_nav_notify:
                         navItemIndex = 4;
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         CURRENT_TAG = TAG_NOTIFICATION;
                         break;
                     default:
-                        SocialFragment.navItemIndex=0;
+                        SocialFragment.navItemIndex = 0;
                         navItemIndex = 0;
                 }
 
@@ -329,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public void clickDone() {
-        new AlertDialog.Builder(this,R.style.MyDialogTheme)
+        new AlertDialog.Builder(this, R.style.MyDialogTheme)
                 .setIcon(R.mipmap.ic_launcher)
                 .setTitle(getResources().getString(R.string.app_name))
                 .setMessage(R.string.close_warning)
@@ -350,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-//    /**
+    //    /**
 //     * EVENTS
 //     */
 //    @Subscribe(threadMode = ThreadMode.MAIN)
@@ -378,8 +438,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onMessageEvent(CheckInternetEvent event) {
         Log.d("SsS", "checkInternetAvailability: called");
         if (event.isIS_INTERNET_AVAILABLE()) {
-            ShowDialogues.SHOW_SNACK_BAR(parentLayout,MainActivity.this,getString(R.string.snackbar_internet_available));
-            Log.d("fffff", "onMessageEvent: "+CURRENT_TAG);
+            ShowDialogues.SHOW_SNACK_BAR(parentLayout, MainActivity.this, getString(R.string.snackbar_internet_available));
+            Log.d("fffff", "onMessageEvent: " + CURRENT_TAG);
             switch (CURRENT_TAG) {
                 case TAG_MEET:
                     /*HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME);
@@ -395,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //                    settingsFragment.getSettingsData();*/
             }
         } else {
-            ShowDialogues.SHOW_SNACK_BAR(parentLayout,MainActivity.this,getString(R.string.snackbar_check_internet));
+            ShowDialogues.SHOW_SNACK_BAR(parentLayout, MainActivity.this, getString(R.string.snackbar_check_internet));
         }
     }
 
@@ -542,41 +602,42 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.d("TAG", "onLocationChanged:LATITUDE " + latitude);
                 Log.d("TAG", "onLocationChanged:LONGITUDE " + longitude);
 
-                    updateLocationParams.put(Constant.LATITUDE,sessionManager.getLat());
-                    updateLocationParams.put(Constant.LONGITUDE,sessionManager.getLng());
-                    updateLocation();
+                updateLocationParams.put(Constants.LATITUDE, sessionManager.getLat());
+                updateLocationParams.put(Constants.LONGITUDE, sessionManager.getLng());
+                updateLocation();
             }
-        }
-        catch (Exception e){
-            Log.d("TAG", "onLocationChanged: "+e.getMessage());
+        } catch (Exception e) {
+            Log.d("TAG", "onLocationChanged: " + e.getMessage());
         }
     }
+
     public void updateLocation() {
         API api = RestAdapter.createAPI(mContext);
-        Log.d(TAG, "sendOTP: "+ updateLocationParams.size());
-        Log.d(TAG, "token: "+sessionManager.getAccessToken());
+        Log.d(TAG, "sendOTP: " + updateLocationParams.size());
+        Log.d(TAG, "token: " + sessionManager.getAccessToken());
         callbackStatusCall = api.updateProfile(sessionManager.getAccessToken(), updateLocationParams);
         callbackStatusCall.enqueue(new Callback<CallbackUpdateProfile>() {
             @Override
             public void onResponse(Call<CallbackUpdateProfile> call, Response<CallbackUpdateProfile> response) {
                 Log.d(TAG, "onResponse: " + response);
                 responseLatLongUpdate = response.body();
-                if(responseLatLongUpdate != null){
+                if (responseLatLongUpdate != null) {
                     if (responseLatLongUpdate.getSuccess()) {
-                        Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
+                        Log.d(TAG, "onResponse: " + responseLatLongUpdate.getMessage());
 
                         //customLoader.hideIndicator();
                         //goToNextActivity();
-                    }else {
-                        Log.d(TAG, "onResponse: "+ responseLatLongUpdate.getMessage());
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseLatLongUpdate.getMessage());
                         //customLoader.hideIndicator();
                         Toast.makeText(mContext, responseLatLongUpdate.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     //customLoader.hideIndicator();
                     ShowDialogues.SHOW_SERVER_ERROR_DIALOG(mContext);
                 }
             }
+
             @Override
             public void onFailure(Call<CallbackUpdateProfile> call, Throwable t) {
                 if (!call.isCanceled()) {
@@ -587,5 +648,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
     }
 
+    private void OnlineUser() {
+        DatabaseReference mUsersDatabase = null;
+        if (AppState.currentBpackCustomer != null) {
+            mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(AppState.currentFireUser.getUid());
+
+            DatabaseReference finalMUsersDatabase = mUsersDatabase;
+            mUsersDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        finalMUsersDatabase.child("isOnline").onDisconnect()
+                                .setValue("false");
+                        finalMUsersDatabase.child("isOnline").setValue("true");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+    }
 }
 

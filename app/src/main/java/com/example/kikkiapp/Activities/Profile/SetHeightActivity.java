@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
 import com.webianks.library.scroll_choice.ScrollChoice;
@@ -56,7 +56,7 @@ public class SetHeightActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                intent.putExtra(Constant.HEIGHT,feet+inches);
+                intent.putExtra(Constants.HEIGHT,feet+inches);
                 setResult(RESULT_OK,intent);
                 onBackPressed();
             }

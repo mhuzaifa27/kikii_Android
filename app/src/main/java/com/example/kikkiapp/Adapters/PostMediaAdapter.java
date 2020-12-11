@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.MyProfileActivity;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.R;
@@ -24,6 +26,7 @@ public class PostMediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private boolean isLoadingAdded;
     private IClicks iClicks;
     private String type;
+    private boolean isUpdating=false;
 
     public interface IClicks {
         void onCancelClick(View view, String path, int position);
@@ -33,10 +36,11 @@ public class PostMediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.iClicks = iClicks;
     }
 
-    public PostMediaAdapter(List<String> data, Context context,String type) {
+    public PostMediaAdapter(List<String> data, Context context,String type,boolean isUpdating) {
         this.data = data;
         this.context = context;
         this.type=type;
+        this.isUpdating=isUpdating;
     }
 
     @Override
@@ -79,7 +83,20 @@ public class PostMediaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
             case 1:
                 ImageViewHolder imageViewHolder = (ImageViewHolder)holder;
-                imageViewHolder.img_selected.setImageURI(Uri.parse(s));
+                if(isUpdating){
+                    Glide
+                            .with(context)
+                            .load(s)
+                            .centerCrop()
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_user_dummy)
+                            .into(imageViewHolder.img_selected);
+                }
+                else{
+                    imageViewHolder.img_selected.setImageURI(Uri.parse(s));
+                }
                 imageViewHolder.img_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

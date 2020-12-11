@@ -21,7 +21,7 @@ import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.Event;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -182,13 +182,13 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         eventsAdapter.setOnClickListeners(new EventsAdapter.IClicks() {
             @Override
             public void attendEventClick(View view, Event event, int position) {
-                eventParams.put(Constant.ID,event.getId().toString());
+                eventParams.put(Constants.ID,event.getId().toString());
                 attendEvent();
             }
 
             @Override
             public void cancelEventClick(View view, Event event, int position) {
-                eventParams.put(Constant.ID,event.getId().toString());
+                eventParams.put(Constants.ID,event.getId().toString());
                 cancelAttendEvent();
             }
         });

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -111,9 +111,9 @@ public class RegistrationActivity extends AppCompatActivity implements View.OnCl
                     Toast.makeText(mContext, "Select Birth Date!", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    registerParams.put(Constant.NAME,et_name.getText().toString());
-                    registerParams.put(Constant.EMAIL,et_email.getText().toString());
-                    registerParams.put(Constant.BIRTHDAY,tv_birthday.getText().toString());
+                    registerParams.put(Constants.NAME,et_name.getText().toString());
+                    registerParams.put(Constants.EMAIL,et_email.getText().toString());
+                    registerParams.put(Constants.BIRTHDAY,tv_birthday.getText().toString());
                     register();
                 }
                 //startActivity(new Intent(mContext,AddProfileImageActivity.class));

@@ -11,11 +11,16 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.kikkiapp.Activities.ChattingActivity;
-import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Activities.SingleMessagingActivity;
 import com.example.kikkiapp.Activities.UserProfileActivity;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Firebase.ChangeEventListener;
+import com.example.kikkiapp.Firebase.Model.FirebaseUserModel;
+import com.example.kikkiapp.Firebase.Services.UserService;
+import com.example.kikkiapp.Model.User;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.example.kikkiapp.R;
+import com.google.firebase.database.DatabaseError;
 
 public class ShowSelectImageBottomSheet {
 
@@ -40,7 +45,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_from_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,1,type);
+                SelectImage.getPermissions(activity, 1, type);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -48,7 +53,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_from_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,2,type);
+                SelectImage.getPermissions(activity, 2, type);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -88,7 +93,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,1);
+                SelectImage.getPermissions(activity, 1);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -96,7 +101,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,2);
+                SelectImage.getPermissions(activity, 2);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -104,6 +109,7 @@ public class ShowSelectImageBottomSheet {
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+
     public static void showDialogForSelectMedia(final Activity activity, View view, final String type) {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 activity, R.style.AppBottomSheetDialogTheme
@@ -122,7 +128,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,2,type);
+                SelectImage.getPermissions(activity, 2, type);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -130,7 +136,7 @@ public class ShowSelectImageBottomSheet {
         tv_select_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectImage.getPermissions(activity,2,type);
+                SelectImage.getPermissions(activity, 2, type);
                 bottomSheetDialog.dismiss();
                 //activity.startActivity(new Intent(activity, AddMoreProfileImagesActivity.class));
             }
@@ -140,6 +146,22 @@ public class ShowSelectImageBottomSheet {
     }
 
     public static void showDialogProfileOptions(final Activity activity, View view, final Integer userId) {
+        final UserService userService = new UserService();
+        userService.setOnChangedListener(new ChangeEventListener() {
+            @Override
+            public void onChildChanged(EventType type, int index, int oldIndex) {
+
+            }
+
+            @Override
+            public void onDataChanged() {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 activity, R.style.AppBottomSheetDialogTheme
         );
@@ -157,18 +179,24 @@ public class ShowSelectImageBottomSheet {
         tv_send_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                Intent intent=new Intent(activity, ChattingActivity.class);
-                intent.putExtra(Constant.USER_MATCH_ID,String.valueOf(userId));
-                activity.startActivity(intent);
+                FirebaseUserModel user = userService.getUserIdById(userId.toString());
+                if (user != null) {
+                    bottomSheetDialog.dismiss();
+                    Intent intent = new Intent(activity, SingleMessagingActivity.class);
+                    intent.putExtra(Constants.ID, user.getUserId());
+                    intent.putExtra(Constants.START_NAME, user.getUserName());
+                    intent.putExtra(Constants.IMAGE, user.getImage());
+                    intent.putExtra(Constants.CREATE_RIDE_OBJ, user);
+                    activity.startActivity(intent);
+                }
             }
         });
         tv_view_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
-                Intent intent=new Intent(activity, UserProfileActivity.class);
-                intent.putExtra(Constant.ID,String.valueOf(userId));
+                Intent intent = new Intent(activity, UserProfileActivity.class);
+                intent.putExtra(Constants.ID, String.valueOf(userId));
                 activity.startActivity(intent);
             }
         });

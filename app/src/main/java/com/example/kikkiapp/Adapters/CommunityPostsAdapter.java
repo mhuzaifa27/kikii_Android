@@ -163,7 +163,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case 0:
                 final CommunityViewHolder holder = (CommunityViewHolder) mainHolder;
                 holder.tv_name.setText(post.getUser().getName());
-                holder.tv_description.setText(post.getBody());
+                holder.tv_description.setText(post.getBody().replace("\"", ""));
                 holder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 holder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
                 holder.tv_time_ago.setText(post.getCreatedAt());
@@ -212,7 +212,6 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public void onClick(View v) {
                         if (iClicks != null) {
-                            if (post.getCommentsCount() > 0)
                                 iClicks.onShareClick(v, post);
                         }
                     }
@@ -222,7 +221,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case 1:
                 final VideoPostViewHolder videoPostViewHolder = (VideoPostViewHolder) mainHolder;
                 videoPostViewHolder.tv_name.setText(post.getUser().getName());
-                videoPostViewHolder.tv_description.setText(post.getBody());
+                videoPostViewHolder.tv_description.setText(post.getBody().replace("\"", ""));
                 videoPostViewHolder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 videoPostViewHolder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
 
@@ -270,7 +269,6 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public void onClick(View v) {
                         if (iClicks != null) {
-                            if (post.getCommentsCount() > 0)
                                 iClicks.onShareClick(v, post);
                         }
                     }
@@ -280,7 +278,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case 2:
                 final SingleImagePostViewHolder singleImagePostViewHolder = (SingleImagePostViewHolder) mainHolder;
                 singleImagePostViewHolder.tv_name.setText(post.getUser().getName());
-                singleImagePostViewHolder.tv_description.setText(post.getBody());
+                singleImagePostViewHolder.tv_description.setText(post.getBody().replace("\"", ""));
                 singleImagePostViewHolder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 singleImagePostViewHolder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
                 singleImagePostViewHolder.tv_time_ago.setText(post.getCreatedAt());
@@ -344,7 +342,6 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public void onClick(View v) {
                         if (iClicks != null) {
-                            if (post.getCommentsCount() > 0)
                                 iClicks.onShareClick(v, post);
                         }
                     }
@@ -354,7 +351,7 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case 3:
                 final MultipleImagePostViewHolder multipleImagePostViewHolder = (MultipleImagePostViewHolder) mainHolder;
                 multipleImagePostViewHolder.tv_name.setText(post.getUser().getName());
-                multipleImagePostViewHolder.tv_description.setText(post.getBody());
+                multipleImagePostViewHolder.tv_description.setText(post.getBody().replace("\"", ""));
                 multipleImagePostViewHolder.tv_likes.setText(String.valueOf(post.getLikesCount()));
                 multipleImagePostViewHolder.tv_comments.setText(String.valueOf(post.getCommentsCount()));
                 multipleImagePostViewHolder.tv_time_ago.setText(post.getCreatedAt());
@@ -512,7 +509,6 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public void onClick(View v) {
                         if (iClicks != null) {
-                            if (post.getCommentsCount() > 0)
                                 iClicks.onShareClick(v, post);
                         }
                     }

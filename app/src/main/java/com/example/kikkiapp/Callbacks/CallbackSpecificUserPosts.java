@@ -3,12 +3,11 @@ package com.example.kikkiapp.Callbacks;
 
 import java.util.List;
 
-import com.example.kikkiapp.Model.Conversation;
-import com.example.kikkiapp.Model.OnlineUser;
+import com.example.kikkiapp.Model.Post;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CallbackGetConversations {
+public class CallbackSpecificUserPosts {
 
     @SerializedName("success")
     @Expose
@@ -19,12 +18,9 @@ public class CallbackGetConversations {
     @SerializedName("next_offset")
     @Expose
     private Integer nextOffset;
-    @SerializedName("online_users")
+    @SerializedName("posts")
     @Expose
-    private List<OnlineUser> onlineUsers = null;
-    @SerializedName("conversations")
-    @Expose
-    private List<Conversation> conversations = null;
+    private List<Post> posts = null;
 
     public Boolean getSuccess() {
         return success;
@@ -50,20 +46,12 @@ public class CallbackGetConversations {
         this.nextOffset = nextOffset;
     }
 
-    public List<OnlineUser> getOnlineUsers() {
-        return onlineUsers;
+    public List<Post> getPosts() {
+        return posts;
     }
 
-    public void setOnlineUsers(List<OnlineUser> onlineUsers) {
-        this.onlineUsers = onlineUsers;
-    }
-
-    public List<Conversation> getConversations() {
-        return conversations;
-    }
-
-    public void setConversations(List<Conversation> conversations) {
-        this.conversations = conversations;
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
 }

@@ -37,7 +37,7 @@ public class RestAdapter {
         OkHttpClient okHttpClient = builder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.WEB_URL)
+                .baseUrl(Constants.WEB_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
@@ -60,7 +60,7 @@ public class RestAdapter {
 
         if(OAuth.equalsIgnoreCase("fields")){
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Constant.INSTAGRAM_FIELDS)
+                    .baseUrl(Constants.INSTAGRAM_FIELDS)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();
@@ -68,7 +68,7 @@ public class RestAdapter {
         }
         else{
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Constant.INSTAGRAM_ACCESS_TOKEN)
+                    .baseUrl(Constants.INSTAGRAM_ACCESS_TOKEN)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();

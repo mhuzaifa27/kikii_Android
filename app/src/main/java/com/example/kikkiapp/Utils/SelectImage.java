@@ -3,7 +3,6 @@ package com.example.kikkiapp.Utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +12,7 @@ import android.util.Base64;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Video.VideoPicker;
@@ -92,7 +91,7 @@ public class SelectImage {
                     .enableDebuggingMode(true)
                     .build();
         } else if (i == 2) {
-            if(type.equalsIgnoreCase(Constant.SINGLE)){
+            if(type.equalsIgnoreCase(Constants.SINGLE)){
                 /*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 activityMain.startActivityForResult(photoPickerIntent, TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
@@ -113,7 +112,7 @@ public class SelectImage {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 activityMain.startActivityForResult(Intent.createChooser(intent,"Select Picture"), TAKE_PICTURE_FROM_GALLERY_FOR_PROFILE);*/
                 new ImagePicker.Builder(activityMain)
-                        .mode(ImagePicker.Mode.GALLERY)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)

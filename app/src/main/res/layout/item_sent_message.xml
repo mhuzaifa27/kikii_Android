@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerInParent="true"
     android:weightSum="3"
     android:gravity="right">
@@ -9,7 +10,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="2.5"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="5dp"
     android:gravity="right"
     android:orientation="vertical">
 
@@ -20,7 +21,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_time_ago"
@@ -33,20 +35,20 @@
             android:fontFamily="@font/lato_regular"
             android:text="Just now"
             android:textColor="@color/grey"
-            android:textSize="12sp"></TextView>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:fontFamily="@font/lato_bold"
             android:gravity="center_vertical"
             android:text="Bella S."
             android:textColor="@color/black"
-            android:textSize="14sp"></TextView>
+            android:textSize="14sp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_user"
@@ -57,15 +59,13 @@
             android:src="@drawable/ic_user_dummy"/>
 
     </LinearLayout>
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginRight="-20dp"
         android:elevation="5dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginVertical="10dp"
         android:background="@drawable/bg_sender_message"
         android:orientation="vertical"
         android:paddingVertical="5dp">
@@ -81,15 +81,43 @@
                 android:id="@+id/tv_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="50dp"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/lato_regular"
                 android:text="tempor"
                 android:textColor="@color/black"
-                android:textSize="16sp"></TextView>
+                android:textSize="16sp"/>
+            <RelativeLayout
+                android:id="@+id/rl_ticks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_message"
+                android:layout_alignParentEnd="true"
+                android:visibility="visible"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp">
+                <ImageView
+                    android:id="@+id/img_seen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_seen"
+                    android:visibility="gone">
+
+                </ImageView>
+                <ImageView
+                    android:id="@+id/img_single_tick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_single_tick"
+                    app:tint="@color/black"
+                    android:visibility="visible">
+                </ImageView>
+            </RelativeLayout>
+
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

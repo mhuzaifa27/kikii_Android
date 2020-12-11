@@ -8,29 +8,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.example.kikkiapp.Callbacks.CallbackSentOTP;
-import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
-import com.example.kikkiapp.Netwrok.RestAdapter;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
-import com.example.kikkiapp.Utils.ShowDialogues;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 @SuppressLint("LongLogTag")
 public class EnterPhoneNumberActivity extends AppCompatActivity implements View.OnClickListener {
@@ -100,7 +93,7 @@ public class EnterPhoneNumberActivity extends AppCompatActivity implements View.
                     et_phone_number.setError(getString(R.string.et_error));
                 } else {
                     phone = countryCode + et_phone_number.getText().toString();
-                    sendOTPParams.put(Constant.PHONE, phone);
+                    sendOTPParams.put(Constants.PHONE, phone);
                     sendForPhoneVerification();
                 }
                 break;

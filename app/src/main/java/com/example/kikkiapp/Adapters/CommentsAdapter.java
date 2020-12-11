@@ -37,8 +37,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
     private SessionManager sessionManager;
     private IClicks iClicks;
 
+
     public interface IClicks {
         void onMenuClick(View view, PostComment data, int position);
+    }
+    public void addList(List<PostComment> comments) {
+        if (comments.size() > 0) {
+            for (int i = 0; i < comments.size(); i++) {
+                data.add(comments.get(i));
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public void setOnClickListeners(IClicks iClicks) {
@@ -64,7 +73,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.PostCo
     public void onBindViewHolder(final PostCommentsViewHolder holder, final int position) {
         final PostComment postComment = data.get(position);
 
-        holder.tv_name.setText(postComment.getCommenter().getName());
+        holder.tv_name.setText(postComment.getCommenter().getName().split(" ")[0]+".");
         holder.tv_comment.setText(postComment.getBody());
         holder.tv_date.setText(postComment.getCreatedAt());
         Glide

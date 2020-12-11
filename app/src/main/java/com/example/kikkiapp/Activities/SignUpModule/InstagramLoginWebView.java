@@ -1,7 +1,6 @@
 package com.example.kikkiapp.Activities.SignUpModule;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,11 +21,9 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.SessionManager;
-
-import java.util.Date;
 
 public class InstagramLoginWebView extends AppCompatActivity {
 
@@ -66,7 +63,7 @@ public class InstagramLoginWebView extends AppCompatActivity {
                     Log.d("urllls", "onPageFinished: "+url);
                     access_token=access_token.substring(0, access_token.length() - 2);
                     Intent intent=new Intent();
-                    intent.putExtra(Constant.TOKEN,access_token);
+                    intent.putExtra(Constants.TOKEN,access_token);
                     setResult(RESULT_OK,intent);
                     finish();
                     //listener.onTokenReceived(access_token);

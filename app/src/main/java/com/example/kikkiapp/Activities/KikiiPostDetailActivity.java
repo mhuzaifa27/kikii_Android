@@ -20,17 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Adapters.CommentsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackGetPostComments;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.KikiiPost;
-import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -264,8 +261,8 @@ public class KikiiPostDetailActivity extends AppCompatActivity implements View.O
                         et_comment.setError(getResources().getString(R.string.et_error));
                     } else {
                         comment = et_comment.getText().toString();
-                        addCommentParams.put(Constant.BODY, comment);
-                        addCommentParams.put(Constant.POST_ID, String.valueOf(post.getId()));
+                        addCommentParams.put(Constants.BODY, comment);
+                        addCommentParams.put(Constants.POST_ID, String.valueOf(post.getId()));
 
                         addComment();
                     }
@@ -275,13 +272,13 @@ public class KikiiPostDetailActivity extends AppCompatActivity implements View.O
                         et_comment.setError(getResources().getString(R.string.et_error));
                     } else {
                         if(mediaPaths.size()>0){
-                            media = SelectImage.prepareFilePart(Constant.PROFILE_PIC,mediaPaths.get(0));
+                            media = SelectImage.prepareFilePart(Constants.PROFILE_PIC,mediaPaths.get(0));
                             addCommentWithMedia();
                         }
                         else{
                             comment = et_comment.getText().toString();
-                            addCommentParams.put(Constant.BODY, comment);
-                            addCommentParams.put(Constant.POST_ID, String.valueOf(post.getId()));
+                            addCommentParams.put(Constants.BODY, comment);
+                            addCommentParams.put(Constants.POST_ID, String.valueOf(post.getId()));
                             addComment();
                         }
                     }
@@ -294,7 +291,7 @@ public class KikiiPostDetailActivity extends AppCompatActivity implements View.O
                 CommonMethods.goBack(this);
                 break;
             case R.id.img_select_media:
-                ShowSelectImageBottomSheet.showDialogForSelectMedia(this, img_select_media, Constant.SINGLE);
+                ShowSelectImageBottomSheet.showDialogForSelectMedia(this, img_select_media, Constants.SINGLE);
                 break;
             case R.id.img_cancel:
                 rl_media.setVisibility(View.GONE);

@@ -1,6 +1,6 @@
 package com.example.kikkiapp.Netwrok;
 
-public class Constant {
+public class Constants {
 
     /**
      * -------------------- EDIT THIS WITH YOURS -------------------------------------------------
@@ -114,6 +114,15 @@ public class Constant {
     public static final String UPGRADED="upgraded";
     public static final String SHOW_LOCATION="show_location";
     public static final String MEDIA="media[]";
+    public static final String NEW_MEDIA="new_media[]";
+    public static final String DELETED_MEDIA_IDS="deleted_media_ids";
+    public static final String IMAGE = "image";
+    public static final String TYPE_TEXT = "text";
+    public static final String TYPE_AUDIO= "audio";
+    public static final String TYPE_IMAGE= "image";
+    public static final String TYPE_VIDEO= "video";
+    public static final String START_NAME = "start_name";
+    public static final String CREATE_RIDE_OBJ = "obj";
 
     /**Categories keyword***/
     public static final String GENDER_IDENTITY="gender_identity";

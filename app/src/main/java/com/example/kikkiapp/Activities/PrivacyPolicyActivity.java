@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
 

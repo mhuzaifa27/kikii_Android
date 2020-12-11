@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -31,33 +32,35 @@
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center_vertical"
                 android:fontFamily="@font/lato_bold"
                 android:text="Jian H."
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp">
-
-            </TextView>
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:fontFamily="@font/lato_regular"
                 android:text="12 min. ago"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/grey"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"/>
             <ImageView
                 android:id="@+id/img_comment_options"
                 android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_menu_black"
                 android:paddingHorizontal="10dp"
-                android:paddingVertical="10dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="10dp"
                 android:layout_gravity="center_vertical">
 
             </ImageView>
@@ -69,11 +72,9 @@
             android:layout_weight="1"
             android:fontFamily="@font/lato_regular"
             android:text="Lorum Ipsum Is Simply A Dummy Text Created For Print."
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/black"
-            android:textSize="16sp">
-        </TextView>
+            android:textSize="16sp"/>
         <TextView
             android:id="@+id/tv_reply"
             android:layout_width="wrap_content"
@@ -84,11 +85,7 @@
             android:layout_marginTop="5dp"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp"
-            android:gravity="left"
-            android:paddingRight="20dp"
-            android:layout_marginLeft="10dp">
-
-        </TextView>
-
+            android:padding="10dp"
+            android:gravity="left"/>
     </LinearLayout>
 </RelativeLayout>

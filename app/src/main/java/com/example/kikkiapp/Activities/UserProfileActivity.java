@@ -3,6 +3,7 @@ package com.example.kikkiapp.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,15 +20,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Callbacks.CallbackGetProfile;
+import com.example.kikkiapp.Model.MeetUser;
 import com.example.kikkiapp.Model.ProfileUser;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.example.kikkiapp.Utils.UtilityFunctions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.joooonho.SelectableRoundedImageView;
 
 import retrofit2.Call;
@@ -52,6 +60,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Call<CallbackGetProfile> callbackGetProfileCall;
     private CallbackGetProfile responseGetProfile;
     private String userId;
+    private Uri userProfileLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +76,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getIntentData() {
-        userId=getIntent().getStringExtra(Constant.ID);
+        userId=getIntent().getStringExtra(Constants.ID);
         Log.d(TAG, "getIntentData: userId: "+userId);
     }
 
@@ -106,6 +115,43 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+    private void createShareLink() {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://play.google.com/store/apps/?user_id=" + userId))
+                .setDynamicLinkDomain("kikiiapp.page.link")
+                // Open links with this app on Android
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.example.kikkiapp")
+                                .setMinimumVersion(125)
+                                .build())
+                // Open links with com.example.ios on iOS
+                .buildDynamicLink();
+        userProfileLink = dynamicLink.getUri();
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(userProfileLink)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            customLoader.hideIndicator();
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            Log.d(TAG, "onComplete: " + shortLink);
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString());
+                            startActivity(Intent.createChooser(intent, "Share"));
+                        } else {
+                            customLoader.hideIndicator();
+                            Log.d(TAG, "ERROR: " + task.getException());
+                        }
+                    }
+                });
+    }
+
 
     private void setData() {
         ProfileUser user=responseGetProfile.getUser();
@@ -198,8 +244,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_view_friends:
                 startActivity(new Intent(context, FriendsActivity.class));
                 break;
+            case R.id.img_share:
+                createShareLink();
+                break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

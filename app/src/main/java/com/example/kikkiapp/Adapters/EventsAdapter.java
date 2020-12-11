@@ -17,13 +17,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.EventDetailActivity;
 import com.example.kikkiapp.Model.Attendant;
 import com.example.kikkiapp.Model.Event;
-import com.example.kikkiapp.Model.PostComment;
-import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.ItemDecorator;
 import com.joooonho.SelectableRoundedImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {

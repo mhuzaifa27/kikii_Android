@@ -18,9 +18,8 @@ import com.example.kikkiapp.Callbacks.CallbackFacebookLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
-import com.example.kikkiapp.Callbacks.CallbackVerifyOTP;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -33,18 +32,13 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,8 +144,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void continueWithInsta() {
         Intent intent1 = new Intent(mContext, InstagramLoginWebView.class);
-        Log.d(TAG, Constant.INSTAGRAM_LOGIN_LINK);
-        intent1.putExtra(Constant.URL, Constant.INSTAGRAM_LOGIN_LINK);
+        Log.d(TAG, Constants.INSTAGRAM_LOGIN_LINK);
+        intent1.putExtra(Constants.URL, Constants.INSTAGRAM_LOGIN_LINK);
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(intent1, REQUEST_LOGIN_WITH_INSTA);
     }
@@ -187,10 +181,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             + "BIRTHDAY:" + socialUserBirthday);
 
                     if (socialId != null) {
-                        fbLoginParam.put(Constant.EMAIL, socialEmail);
-                        fbLoginParam.put(Constant.NAME, socialName);
-                        fbLoginParam.put(Constant.UID, socialId);
-                        fbLoginParam.put(Constant.BIRTHDAY, socialUserBirthday);
+                        fbLoginParam.put(Constants.EMAIL, socialEmail);
+                        fbLoginParam.put(Constants.NAME, socialName);
+                        fbLoginParam.put(Constants.UID, socialId);
+                        fbLoginParam.put(Constants.BIRTHDAY, socialUserBirthday);
                         loginWithFacebook();
                     }
                 } catch (JSONException e) {
@@ -270,13 +264,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOGIN_WITH_INSTA && resultCode == RESULT_OK) {
             if (data != null) {
-                instaCode=data.getStringExtra(Constant.TOKEN);
+                instaCode=data.getStringExtra(Constants.TOKEN);
                 Log.d("aaa", "onActivityResult: "+instaCode);
-                instaAccessTokenParams.put(Constant.CLIENT_ID,"940190363169482");
-                instaAccessTokenParams.put(Constant.CLIENT_SECRET,"63de4d81dc0507154e54367bbc08626b");
-                instaAccessTokenParams.put(Constant.CODE,instaCode);
-                instaAccessTokenParams.put(Constant.GRANT_TYPE,"authorization_code");
-                instaAccessTokenParams.put(Constant.REDIRECT_URI,"https://www.instagram.com/");
+                instaAccessTokenParams.put(Constants.CLIENT_ID,"940190363169482");
+                instaAccessTokenParams.put(Constants.CLIENT_SECRET,"63de4d81dc0507154e54367bbc08626b");
+                instaAccessTokenParams.put(Constants.CODE,instaCode);
+                instaAccessTokenParams.put(Constants.GRANT_TYPE,"authorization_code");
+                instaAccessTokenParams.put(Constants.REDIRECT_URI,"https://www.instagram.com/");
                 getInstagramAccessToken(instaCode);
             }
         }
@@ -324,9 +318,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (responseInstagramFields != null) {
                     if (responseInstagramFields.getId()!=null) {
                         Log.d(TAG, "onResponse: " + responseInstagramFields.getId());
-                        instaLoginParam.put(Constant.EMAIL, "");
-                        instaLoginParam.put(Constant.NAME, responseInstagramFields.getUsername());
-                        instaLoginParam.put(Constant.UID, responseInstagramFields.getId());
+                        instaLoginParam.put(Constants.EMAIL, "");
+                        instaLoginParam.put(Constants.NAME, responseInstagramFields.getUsername());
+                        instaLoginParam.put(Constants.UID, responseInstagramFields.getId());
                         loginWithInstagram();
                     } else {
                         Log.d(TAG, "onResponse: " + responseInstagramFields.getId());

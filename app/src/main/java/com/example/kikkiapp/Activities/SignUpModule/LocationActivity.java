@@ -1,6 +1,5 @@
 package com.example.kikkiapp.Activities.SignUpModule;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +21,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.kikkiapp.Activities.MainActivity;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.google.android.gms.common.ConnectionResult;
@@ -246,8 +244,8 @@ public class LocationActivity extends AppCompatActivity implements View.OnClickL
 
                 if (!sessionManager.getLat().isEmpty()
                         && !sessionManager.getLng().isEmpty()) {
-                    updateLocationParams.put(Constant.LATITUDE, sessionManager.getLat());
-                    updateLocationParams.put(Constant.LONGITUDE, sessionManager.getLng());
+                    updateLocationParams.put(Constants.LATITUDE, sessionManager.getLat());
+                    updateLocationParams.put(Constants.LONGITUDE, sessionManager.getLng());
 
                     if (count % 10 == 0)
                         updateLocation();

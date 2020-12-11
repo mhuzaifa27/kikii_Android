@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/header"
-        layout="@layout/app_header_for_fragments"></include>
+        layout="@layout/app_header_for_fragments"/>
     <LinearLayout
         android:id="@+id/ll_tabs"
         android:layout_width="match_parent"

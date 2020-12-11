@@ -21,10 +21,9 @@ import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
 import com.example.kikkiapp.Activities.Profile.SetHeightActivity;
 import com.example.kikkiapp.Adapters.PremiumFiltersAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetFilters;
-import com.example.kikkiapp.Callbacks.CallbackGetProfile;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -203,7 +202,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SET_HEIGHT && resultCode == RESULT_OK) {
             if (data != null) {
-                String value = data.getStringExtra(Constant.HEIGHT);
+                String value = data.getStringExtra(Constants.HEIGHT);
                 tv_height_value.setText(value);
             }
         }
@@ -234,11 +233,11 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 else
                     height = tv_height_value.getText().toString();
 
-                updateFiltersParam.put(Constant.FROM_AGE, tv_start_age.getText().toString());
-                updateFiltersParam.put(Constant.TO_AGE, tv_end_age.getText().toString());
-                updateFiltersParam.put(Constant.DISTANCE, tv_distance_value.getText().toString());
-                updateFiltersParam.put(Constant.HEIGHT, height);
-                updateFiltersParam.put(Constant.DISTANCE_IN, distanceIn);
+                updateFiltersParam.put(Constants.FROM_AGE, tv_start_age.getText().toString());
+                updateFiltersParam.put(Constants.TO_AGE, tv_end_age.getText().toString());
+                updateFiltersParam.put(Constants.DISTANCE, tv_distance_value.getText().toString());
+                updateFiltersParam.put(Constants.HEIGHT, height);
+                updateFiltersParam.put(Constants.DISTANCE_IN, distanceIn);
 
                 updateFilters();
                 break;

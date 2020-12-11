@@ -11,15 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kikkiapp.Adapters.ChipAdapter;
-import com.example.kikkiapp.Adapters.TabsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Model.ChipModel;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -72,7 +69,7 @@ public class YourPetsActivity extends AppCompatActivity implements OnChipClickLi
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                intent.putExtra(Constant.PETS,isChecked);
+                intent.putExtra(Constants.PETS,isChecked);
                 setResult(RESULT_OK,intent);
                 onBackPressed();
             }
@@ -92,7 +89,7 @@ public class YourPetsActivity extends AppCompatActivity implements OnChipClickLi
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constant.PETS);
+        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constants.PETS);
         callbackGetCategoryCall.enqueue(new Callback<CallbackGetCategory>() {
             @Override
             public void onResponse(Call<CallbackGetCategory> call, Response<CallbackGetCategory> response) {
@@ -131,7 +128,10 @@ public class YourPetsActivity extends AppCompatActivity implements OnChipClickLi
             Log.d(TAG, "setData: "+responseGetCategory.getValue().getValueAttr().get(i));
             chipList.add(new ChipModel(responseGetCategory.getValue().getValueAttr().get(i)));
         }
-        chipViewAdapter =new ChipAdapter(context,responseGetCategory.getIsChecked());
+        if (responseGetCategory.getIsChecked() != null)
+            chipViewAdapter = new ChipAdapter(context, responseGetCategory.getIsChecked());
+        else
+            chipViewAdapter = new ChipAdapter(context, "null");
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);
     }

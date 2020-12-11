@@ -14,10 +14,9 @@ import android.widget.Toast;
 
 import com.example.kikkiapp.Adapters.ChipAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
-import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
 import com.example.kikkiapp.Model.ChipModel;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -49,7 +48,7 @@ public class RelationshipStatusActivity extends AppCompatActivity implements OnC
 
     private Call<CallbackGetCategory> callbackGetCategoryCall;
     private CallbackGetCategory responseGetCategory;
-    private String isChecked;
+    private String isChecked="null";
     private ImageView img_back;
 
 
@@ -69,7 +68,7 @@ public class RelationshipStatusActivity extends AppCompatActivity implements OnC
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                intent.putExtra(Constant.RELATIONSHIP_STATUS,isChecked);
+                intent.putExtra(Constants.RELATIONSHIP_STATUS,isChecked);
                 setResult(RESULT_OK,intent);
                 onBackPressed();
             }
@@ -89,7 +88,7 @@ public class RelationshipStatusActivity extends AppCompatActivity implements OnC
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constant.RELATIONSHIP_STATUS);
+        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constants.RELATIONSHIP_STATUS);
         callbackGetCategoryCall.enqueue(new Callback<CallbackGetCategory>() {
             @Override
             public void onResponse(Call<CallbackGetCategory> call, Response<CallbackGetCategory> response) {
@@ -128,7 +127,10 @@ public class RelationshipStatusActivity extends AppCompatActivity implements OnC
             Log.d(TAG, "setData: "+responseGetCategory.getValue().getValueAttr().get(i));
             chipList.add(new ChipModel(responseGetCategory.getValue().getValueAttr().get(i)));
         }
-        chipViewAdapter =new ChipAdapter(context,responseGetCategory.getIsChecked());
+        if (responseGetCategory.getIsChecked() != null)
+            chipViewAdapter = new ChipAdapter(context, responseGetCategory.getIsChecked());
+        else
+            chipViewAdapter = new ChipAdapter(context, "null");
         chip_statuses.setAdapter(chipViewAdapter);
         chip_statuses.setChipList(chipList);
     }

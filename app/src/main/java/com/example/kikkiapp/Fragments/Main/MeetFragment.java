@@ -3,6 +3,7 @@ package com.example.kikkiapp.Fragments.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -30,16 +32,20 @@ import com.example.kikkiapp.Firebase.ChangeEventListener;
 import com.example.kikkiapp.Firebase.Services.UserService;
 import com.example.kikkiapp.Model.MeetUser;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -95,6 +101,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private int currentCardPosition = 0;
     private PopupWindow mypopupWindow = null;
     private UserService userService;
+    private Uri userProfileLink;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -201,7 +208,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void setCardSwipe() {
-        cardStackLayoutManager = new CardStackLayoutManager(context,this);
+        cardStackLayoutManager = new CardStackLayoutManager(context, this);
         cardStackLayoutManager.setStackFrom(StackFrom.Top);
         cardStackLayoutManager.setMaxDegree(20.0f);
         cardStackLayoutManager.setDirections(Direction.HORIZONTAL);
@@ -241,14 +248,60 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 blockUser(user);
             }
 
+            @Override
+            public void onReportUserClick(MeetUser user) {
+                reportUser(user);
+            }
+
+            @Override
+            public void onShareUserProfile(MeetUser user) {
+                createShareLink(user);
+            }
+
         });
+    }
+    private void createShareLink(MeetUser user) {
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://play.google.com/store/apps/?user_id=" + user.getId()))
+                .setDynamicLinkDomain("kikiiapp.page.link")
+                // Open links with this app on Android
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder("com.example.kikkiapp")
+                                .setMinimumVersion(125)
+                                .build())
+                // Open links with com.example.ios on iOS
+                .buildDynamicLink();
+        userProfileLink = dynamicLink.getUri();
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(userProfileLink)
+                .buildShortDynamicLink()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            customLoader.hideIndicator();
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+                            Log.d(TAG, "onComplete: " + shortLink);
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString());
+                            startActivity(Intent.createChooser(intent, "Share"));
+                        } else {
+                            customLoader.hideIndicator();
+                            Log.d(TAG, "ERROR: " + task.getException());
+                        }
+                    }
+                });
     }
 
     private void followUser(MeetUser user) {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        paramsList.put(Constant.ID, user.getId().toString());
+        paramsList.put(Constants.ID, user.getId().toString());
         callbackStatusCall = api.followUser(sessionManager.getAccessToken(), paramsList);
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override
@@ -281,8 +334,40 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        paramsList.put(Constant.ID, user.getId().toString());
+        paramsList.put(Constants.ID, user.getId().toString());
         callbackStatusCall = api.blockUser(sessionManager.getAccessToken(), paramsList);
+        callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                responseStatus = response.body();
+                if (responseStatus != null) {
+                    if (!responseStatus.getSuccess()) {
+                        Log.d(TAG, "onResponse: " + responseStatus.getMessage());
+                    }
+                    customLoader.hideIndicator();
+                    Toast.makeText(context, responseStatus.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(context);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+    }
+
+    private void reportUser(MeetUser user) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(context);
+        Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
+        callbackStatusCall = api.reportUser(user.getId().toString(), sessionManager.getAccessToken());
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override
             public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
@@ -314,7 +399,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        paramsList.put(Constant.ID, user.getId().toString());
+        paramsList.put(Constants.ID, user.getId().toString());
         callbackStatusCall = api.dislikeUser(sessionManager.getAccessToken(), paramsList);
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override
@@ -351,7 +436,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        paramsList.put(Constant.ID, user.getId().toString());
+        paramsList.put(Constants.ID, user.getId().toString());
         callbackStatusCall = api.likeUser(sessionManager.getAccessToken(), paramsList);
         callbackStatusCall.enqueue(new Callback<CallbackStatus>() {
             @Override
@@ -463,6 +548,7 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onCardDisappeared(View view, int position) {
 
     }
+
     private void getUserProfile() {
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
@@ -609,17 +695,17 @@ public class MeetFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     sessionManager.getProfileUser().getEmail(),
                     sessionManager.getProfileUser().getProfilePic(),
                     new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError == null) {
-                        AppState.currentBpackCustomer=userService.getUserById(AppState.currentFireUser.getUid());
-                    } else {
-                        customLoader.hideIndicator();
-                        Log.d("messagee", "onComplete: " + databaseError.getMessage());
-                        Toast.makeText(context, "SigUp failed - database error", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                AppState.currentBpackCustomer = userService.getUserById(AppState.currentFireUser.getUid());
+                            } else {
+                                customLoader.hideIndicator();
+                                Log.d("messagee", "onComplete: " + databaseError.getMessage());
+                                Toast.makeText(context, "SigUp failed - database error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
         } else {
             Toast.makeText(context, "SigUp failed, email empty. Please try again", Toast.LENGTH_SHORT).show();

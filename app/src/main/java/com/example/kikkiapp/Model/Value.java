@@ -13,7 +13,7 @@ public class Value {
     @SerializedName("key")
     @Expose
     private String key;
-    @SerializedName("value_attr")
+    @SerializedName("value")
     @Expose
     private List<String> valueAttr = null;
     @SerializedName("created_at")

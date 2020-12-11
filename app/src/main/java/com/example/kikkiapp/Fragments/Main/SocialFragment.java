@@ -21,7 +21,6 @@ import com.example.kikkiapp.Activities.EventDetailActivity;
 import com.example.kikkiapp.Fragments.Others.CommunityFragment;
 import com.example.kikkiapp.Fragments.Others.EventsFragment;
 import com.example.kikkiapp.Fragments.Others.KikiiFragment;
-import com.example.kikkiapp.Netwrok.Constant;
 import com.example.kikkiapp.R;
 
 public class SocialFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {

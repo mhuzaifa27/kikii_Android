@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Activities.MyProfileActivity;
+import com.example.kikkiapp.Activities.SpecificUserFriendsActivity;
+import com.example.kikkiapp.Activities.SpecificUserPosts;
 import com.example.kikkiapp.Model.MeetUser;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.UtilityFunctions;
 import com.joooonho.SelectableRoundedImageView;
@@ -38,6 +41,8 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
         void onDislikeUserClick(MeetUser user);
         void onFollowUserClick(MeetUser user);
         void onBlockUserClick(MeetUser user);
+        void onReportUserClick(MeetUser user);
+        void onShareUserProfile(MeetUser user);
     }
     public void setOnListEndListener(IListEnd iListEnd){
         this.iListEnd=iListEnd;
@@ -182,6 +187,38 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
                 }
             }
         });
+        holder.img_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onReportUserClick(user);
+                }
+            }
+        });
+        holder.btn_view_posts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, SpecificUserPosts.class);
+                intent.putExtra(Constants.ID,user.getId().toString());
+                context.startActivity(intent);
+            }
+        });
+        holder.btn_view_friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, SpecificUserFriendsActivity.class);
+                intent.putExtra(Constants.ID,user.getId().toString());
+                context.startActivity(intent);
+            }
+        });
+        holder.img_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(iClick!=null){
+                    iClick.onShareUserProfile(user);
+                }
+            }
+        });
     }
 
 
@@ -199,7 +236,7 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
                 ,tv_friends_count;
         private Button btn_view_posts,btn_view_friends,btn_add_friend;
         private TextView tv_relationship_status,tv_height,tv_looking_for,tv_cigerate,tv_drink,tv_canabiese,tv_political_views,tv_religion,tv_diet,tv_sign,tv_pet,tv_children;
-        private ImageView img_like_user,img_dislike_user,img_follow_user,img_block;
+        private ImageView img_like_user,img_dislike_user,img_follow_user,img_block,img_report,img_share;
 
         public TravelBuddyViewHolder(View itemView) {
             super(itemView);
@@ -237,6 +274,8 @@ public class MeetCardSwipeStackAdapter extends RecyclerView.Adapter<MeetCardSwip
             img_dislike_user=itemView.findViewById(R.id.img_dislike_user);
             img_follow_user=itemView.findViewById(R.id.img_follow_user);
             img_block=itemView.findViewById(R.id.img_block);
+            img_report=itemView.findViewById(R.id.img_report);
+            img_share=itemView.findViewById(R.id.img_share);
 
             ll_normal_view=itemView.findViewById(R.id.ll_normal_view);
             rl_detail_view=itemView.findViewById(R.id.rl_detail_view);

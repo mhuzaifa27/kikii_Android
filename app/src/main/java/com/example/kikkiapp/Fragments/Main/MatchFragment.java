@@ -24,6 +24,7 @@ import com.example.kikkiapp.Adapters.YourMatchAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetMatch;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
+import com.example.kikkiapp.Firebase.Model.FirebaseUserModel;
 import com.example.kikkiapp.Model.Attendant;
 import com.example.kikkiapp.Model.Match;
 import com.example.kikkiapp.Model.MatchLike;
@@ -69,7 +70,8 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private Call<CallbackGetMatch> callbackGetMatchCall;
     private CallbackGetMatch responseGetMatch;
     private TextView tv_total_likes,tv_upgrade_text;
-    private ImageView img_blur_users;
+    private ImageView img_blur_users,img_add;
+    private FirebaseUserModel firebaseUserModel;
 
     /*****/
     ProgressBar progressBar;
@@ -196,6 +198,8 @@ public class MatchFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         tv_upgrade_text=view.findViewById(R.id.tv_upgrade_text);
 
         img_blur_users=view.findViewById(R.id.img_blur_users);
+        img_add=view.findViewById(R.id.img_add);
+        img_add.setVisibility(View.GONE);
     }
 
     @Override

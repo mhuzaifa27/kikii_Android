@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -76,7 +76,7 @@ public class AddBioActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 else{
                     Intent intent=new Intent();
-                    intent.putExtra(Constant.BIO,et_bio.getText().toString());
+                    intent.putExtra(Constants.BIO,et_bio.getText().toString());
                     setResult(RESULT_OK,intent);
                     onBackPressed();
                     /*updateParam.put(Constant.BIO,et_bio.getText().toString());

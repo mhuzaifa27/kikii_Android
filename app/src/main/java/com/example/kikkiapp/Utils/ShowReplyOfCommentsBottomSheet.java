@@ -1,7 +1,6 @@
 package com.example.kikkiapp.Utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -23,12 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.kikkiapp.Activities.PostDetailActivity;
 import com.example.kikkiapp.Adapters.RepliesAdapter;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Model.PostComment;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -114,8 +111,8 @@ public class ShowReplyOfCommentsBottomSheet {
                     et_comment.setError(activity.getResources().getString(R.string.et_error));
                 } else {
                     String comment = et_comment.getText().toString();
-                    addCommentParams.put(Constant.BODY, comment);
-                    addCommentParams.put(Constant.COMMENT_ID, String.valueOf(postComment.getId()));
+                    addCommentParams.put(Constants.BODY, comment);
+                    addCommentParams.put(Constants.COMMENT_ID, String.valueOf(postComment.getId()));
                     addReply(activity);
                 }
             }

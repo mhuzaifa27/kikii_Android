@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -148,35 +148,35 @@ public class AddMoreProfileImagesActivity extends AppCompatActivity implements V
                 break;
             case R.id.img_select_1:
                 setImageOn = 1;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_2:
                 setImageOn = 2;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_3:
                 setImageOn = 3;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_4:
                 setImageOn = 4;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_5:
                 setImageOn = 5;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_6:
                 setImageOn = 6;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_7:
                 setImageOn = 7;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_select_8:
                 setImageOn = 8;
-                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constant.MULTIPLE);
+                ShowSelectImageBottomSheet.showDialog(activity, getWindow().getDecorView().getRootView(), Constants.MULTIPLE);
                 break;
             case R.id.img_back:
                 CommonMethods.goBack(this);

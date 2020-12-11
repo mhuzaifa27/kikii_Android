@@ -2,24 +2,20 @@ package com.example.kikkiapp.Activities.SignUpModule;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.kikkiapp.Adapters.PostMediaAdapter;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -32,7 +28,6 @@ import com.example.kikkiapp.Utils.ShowSelectImageBottomSheet;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +85,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_add_image:
-                ShowSelectImageBottomSheet.showDialog(activity,getWindow().getDecorView().getRootView(),Constant.SINGLE);
+                ShowSelectImageBottomSheet.showDialog(activity,getWindow().getDecorView().getRootView(), Constants.SINGLE);
                 break;
             case R.id.img_back:
                 CommonMethods.goBack(this);
@@ -107,7 +102,7 @@ public class AddProfileImageActivity extends AppCompatActivity implements View.O
             mediaPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
             Log.d("hhhh", "onActivityResult: "+ mediaPaths.size());
             currentPhotoPath=mediaPaths.get(0);
-            MultipartBody.Part body = SelectImage.prepareFilePart(Constant.PROFILE_PIC,currentPhotoPath);
+            MultipartBody.Part body = SelectImage.prepareFilePart(Constants.PROFILE_PIC,currentPhotoPath);
             RequestBody token = RequestBody.create(MediaType.parse("Authorization"), sessionManager.getAccessToken());
             HashMap<String, RequestBody> map = new HashMap<>();
             map.put("Authorization", token);

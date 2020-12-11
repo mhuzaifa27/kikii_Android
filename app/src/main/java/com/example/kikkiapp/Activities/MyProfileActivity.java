@@ -191,6 +191,9 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_view_friends:
                 startActivity(new Intent(context, FriendsActivity.class));
                 break;
+            case R.id.img_back:
+                onBackPressed();
+                break;
         }
     }
 

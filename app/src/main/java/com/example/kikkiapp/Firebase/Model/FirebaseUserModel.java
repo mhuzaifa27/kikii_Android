@@ -21,6 +21,15 @@ public class FirebaseUserModel implements Serializable {
     public String type = "";
     public String image = "";
     public String id="";
+    public String isOnline="true";
+
+    public String getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(String isOnline) {
+        this.isOnline = isOnline;
+    }
 
     public String getId() {
         return id;
@@ -89,6 +98,7 @@ public class FirebaseUserModel implements Serializable {
         result.put("type", type);
         result.put("image", image);
         result.put("id", id);
+        result.put("isOnline", isOnline);
         return result;
     }
 }

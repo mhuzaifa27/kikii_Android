@@ -7,7 +7,7 @@ import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Callbacks.CallbackGetCategoryChip;
 import com.example.kikkiapp.Callbacks.CallbackGetCommunityPosts;
 import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
-import com.example.kikkiapp.Callbacks.CallbackGetConversations;
+import com.example.kikkiapp.Callbacks.CallbackGetOnlineUsers;
 import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackGetMyFriends;
 import com.example.kikkiapp.Callbacks.CallbackGetFilters;
@@ -22,6 +22,8 @@ import com.example.kikkiapp.Callbacks.CallbackInstagramFields;
 import com.example.kikkiapp.Callbacks.CallbackInstagramLogin;
 import com.example.kikkiapp.Callbacks.CallbackInstagramOAuth;
 import com.example.kikkiapp.Callbacks.CallbackSendMessage;
+import com.example.kikkiapp.Callbacks.CallbackSinglePost;
+import com.example.kikkiapp.Callbacks.CallbackSpecificUserPosts;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.google.gson.JsonElement;
 import com.example.kikkiapp.Callbacks.CallbackUpdateProfile;
@@ -34,6 +36,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -97,11 +100,18 @@ public interface API {
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
 
+    @POST("update/comment/{id}")
+    @FormUrlEncoded
+    Call<CallbackAddComment> updateComment(
+            @Header("Authorization") String auth,
+            @Path("id") String id,
+            @FieldMap Map<String, String> params);
+
     @Multipart
     @POST("add/comment")
     Call<CallbackAddComment> addCommentWithImages(@Header("Authorization") String auth,
-                                                        @PartMap Map<String, String> text,
-                                                        @Part MultipartBody.Part image);
+                                                  @PartMap Map<String, String> text,
+                                                  @Part MultipartBody.Part image);
 
     @POST("attend/event")
     @FormUrlEncoded
@@ -120,16 +130,19 @@ public interface API {
     Call<CallbackSendMessage> sendMessage(
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
+
     @POST("like/user")
     @FormUrlEncoded
     Call<CallbackStatus> likeUser(
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
+
     @POST("dislike/user")
     @FormUrlEncoded
     Call<CallbackStatus> dislikeUser(
             @Header("Authorization") String auth,
             @FieldMap Map<String, String> params);
+
     @POST("follow/user")
     @FormUrlEncoded
     Call<CallbackStatus> followUser(
@@ -167,14 +180,28 @@ public interface API {
                                              @Part List<MultipartBody.Part> images);
 
     @Multipart
+    @POST("update/post/{id}")
+    Call<CallbackStatus> updatePostWithNewMedia(@Header("Authorization") String auth,
+                                                @Path("id") String id,
+                                                @PartMap Map<String, RequestBody> text,
+                                                @Part List<MultipartBody.Part> images);
+
+    @POST("update/post/{id}")
+    @FormUrlEncoded
+    Call<CallbackStatus> updatePost(@Header("Authorization") String auth,
+                                    @Path("id") String id,
+                                    @FieldMap Map<String, String> text);
+
+    @Multipart
     @POST("update/profile")
     Call<CallbackUpdateProfile> updateProfileWithImages(@Header("Authorization") String auth,
-                                             @PartMap Map<String, String> text,
-                                             @Part List<MultipartBody.Part> images);
+                                                        @PartMap Map<String, String> text,
+                                                        @Part List<MultipartBody.Part> images);
+
     @Multipart
     @POST("update/profile")
     Call<CallbackUpdateProfile> updateOtherImages(@Header("Authorization") String auth,
-                                                        @Part List<MultipartBody.Part> images);
+                                                  @Part List<MultipartBody.Part> images);
 
     @GET("me")
     Call<CallbackInstagramFields> instagramGetFields(@Query("fields") String fields,
@@ -195,20 +222,37 @@ public interface API {
 
     @GET("conversation/messages")
     Call<CallbackGetConversationMessages> getConversationMessages1(@Header("Authorization") String auth,
-                                                          @Query("conversation_id") String conversation_id);
+                                                                   @Query("conversation_id") String conversation_id);
+
     @GET("conversation/messages")
     Call<CallbackGetConversationMessages> getConversationMessages2(@Header("Authorization") String auth,
-                                                                  @Query("user_match_id") String conversation_id);
+                                                                   @Query("user_match_id") String conversation_id);
 
     @GET("post/comments")
     Call<CallbackGetPostComments> getPostComments(@Header("Authorization") String auth,
                                                   @Query("post_id") String id);
 
+    @GET("post/comments")
+    Call<CallbackGetPostComments> getSinglePostComments(@Header("Authorization") String auth,
+                                                        @Query("post_id") String id,
+                                                        @Query("offset") String next_offset);
+
+
+    @GET("post")
+    Call<CallbackSinglePost> getSinglePost(@Header("Authorization") String auth,
+                                           @Query("id") String id);
+
     @GET("community")
     Call<CallbackGetCommunityPosts> getAllPosts(@Header("Authorization") String auth,
                                                 @Query("offset") String next_offset);
-    @GET("conversations")
-    Call<CallbackGetConversations> getConversations(@Header("Authorization") String auth);
+
+    @GET("user/posts")
+    Call<CallbackSpecificUserPosts> getUserPosts(@Header("Authorization") String auth,
+                                                 @Query("offset") String next_offset,
+                                                 @Query("user_id") String user_id);
+
+    @GET("online-users")
+    Call<CallbackGetOnlineUsers> getOnlineUsers(@Header("Authorization") String auth);
 
     @GET("get/events")
     Call<CallbackGetEvents> getEvents(@Header("Authorization") String auth,
@@ -222,6 +266,10 @@ public interface API {
     Call<CallbackGetMyFriends> getMyFriends(@Header("Authorization") String auth,
                                             @Query("offset") String next_offset);
 
+    @GET("user/friends")
+    Call<CallbackGetMyFriends> getUserFriends(@Header("Authorization") String auth,
+                                              @Query("user_id") String next_offset);
+
     @GET("sent/requests")
     Call<CallbackGetSentRequests> getSentRequests(@Header("Authorization") String auth,
                                                   @Query("offset") String next_offset);
@@ -230,13 +278,17 @@ public interface API {
     Call<CallbackGetProfile> getProfile(@Header("Authorization") String auth,
                                         @Query("user_id") String user_id);
 
+    @GET("event")
+    Call<CallbackGetProfile> getSingleEvent(@Header("Authorization") String auth,
+                                        @Query("id") String id);
+
     @GET("get/category/{name}")
     Call<CallbackGetCategory> getCategory(@Header("Authorization") String auth,
                                           @Path("name") String name);
 
     @GET("get/category/{name}")
     Call<CallbackGetCategoryChip> getCategoryChip(@Header("Authorization") String auth,
-                                              @Path("name") String name);
+                                                  @Path("name") String name);
 
     @GET("posts")
     Call<CallbackGetKikiiPosts> getKikiiPosts(@Header("Authorization") String auth,
@@ -251,12 +303,26 @@ public interface API {
 
     @DELETE("delete/conversation/{id}")
     Call<CallbackStatus> deleteConversation(@Path("id") String id,
-                                       @Header("Authorization") String auth);
+                                            @Header("Authorization") String auth);
 
     @DELETE("delete/post/{id}")
     Call<CallbackStatus> deletePost(@Path("id") String id,
                                     @Header("Authorization") String auth);
 
+    @POST("save/report")
+    @FormUrlEncoded
+    Call<CallbackStatus> reportPost(@Field("post_id") String id,
+                                    @Header("Authorization") String auth);
+
+    @POST("save/report")
+    @FormUrlEncoded
+    Call<CallbackStatus> reportComment(@Field("comment_id") String id,
+                                       @Header("Authorization") String auth);
+
+    @POST("save/report")
+    @FormUrlEncoded
+    Call<CallbackStatus> reportUser(@Field("user_id") String id,
+                                    @Header("Authorization") String auth);
    /* @POST("login")
     @FormUrlEncoded
     Call<CallbackLogin> loginUser(@Field("email") String email,

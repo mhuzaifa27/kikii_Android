@@ -20,12 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kikkiapp.Adapters.ChattingAdapter;
-import com.example.kikkiapp.Adapters.CommentsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetConversationMessages;
 import com.example.kikkiapp.Callbacks.CallbackSendMessage;
 import com.example.kikkiapp.Model.Message;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
@@ -83,10 +82,10 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
         if (conversationId != null) {
             loadChat1(conversationId);
-            sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+            sendMessageParam.put(Constants.CONVERSATION_ID, conversationId);
         } else if (userMatchId != null) {
             loadChat2(userMatchId);
-            sendMessageParam.put(Constant.USER_MATCH_ID, userMatchId);
+            sendMessageParam.put(Constants.USER_MATCH_ID, userMatchId);
         }
         else
         tv_no.setVisibility(View.VISIBLE);
@@ -123,8 +122,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getIntentData() {
-        userMatchId = getIntent().getStringExtra(Constant.USER_MATCH_ID);
-        conversationId = getIntent().getStringExtra(Constant.CONVERSATION_ID);
+        userMatchId = getIntent().getStringExtra(Constants.USER_MATCH_ID);
+        conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
     }
 
     private void loadChat1(String id) {
@@ -223,7 +222,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
 
     private void setData() {
         conversationId = responseGetConversationMessages.getMessages().get(0).getConversationId().toString();
-        sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+        sendMessageParam.put(Constants.CONVERSATION_ID, conversationId);
         linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -268,8 +267,8 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                 if (et_message.getText().toString().isEmpty()) {
                     et_message.setError(getResources().getString(R.string.et_error));
                 } else {
-                    sendMessageParam.put(Constant.BODY, et_message.getText().toString());
-                    sendMessageParam.put(Constant.RECEIVER_ID, userMatchId);
+                    sendMessageParam.put(Constants.BODY, et_message.getText().toString());
+                    sendMessageParam.put(Constants.RECEIVER_ID, userMatchId);
                     sendMessage();
                 }
                 break;
@@ -292,7 +291,7 @@ public class ChattingActivity extends AppCompatActivity implements View.OnClickL
                         Message message = responseSendMessage.getData();
                         sendMessageParam.clear();
                         conversationId = message.getConversationId().toString();
-                        sendMessageParam.put(Constant.CONVERSATION_ID, conversationId);
+                        sendMessageParam.put(Constants.CONVERSATION_ID, conversationId);
                         chattingAdapter.add(message);
                         et_message.setText("");
                         tv_no.setVisibility(View.GONE);

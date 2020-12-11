@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kikkiapp.Adapters.IdentityAdapter;
 import com.example.kikkiapp.Callbacks.CallbackGetCategory;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CommonMethods;
@@ -61,7 +61,7 @@ public class PronounsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
-                intent.putExtra(Constant.PRONOUNS,isChecked);
+                intent.putExtra(Constants.PRONOUNS,isChecked);
                 setResult(RESULT_OK,intent);
                 onBackPressed();
             }
@@ -72,7 +72,7 @@ public class PronounsActivity extends AppCompatActivity implements View.OnClickL
         customLoader.showIndicator();
         API api = RestAdapter.createAPI(context);
         Log.d(TAG, "loadCommunityPosts: " + sessionManager.getAccessToken());
-        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constant.PRONOUNS);
+        callbackGetCategoryCall = api.getCategory(sessionManager.getAccessToken(), Constants.PRONOUNS);
         callbackGetCategoryCall.enqueue(new Callback<CallbackGetCategory>() {
             @Override
             public void onResponse(Call<CallbackGetCategory> call, Response<CallbackGetCategory> response) {

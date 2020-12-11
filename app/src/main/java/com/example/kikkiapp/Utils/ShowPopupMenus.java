@@ -1,6 +1,8 @@
 package com.example.kikkiapp.Utils;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,13 +14,16 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kikkiapp.Activities.CreatePostActivity;
 import com.example.kikkiapp.Activities.PostDetailActivity;
 import com.example.kikkiapp.Adapters.CommentsAdapter;
 import com.example.kikkiapp.Adapters.CommunityPostsAdapter;
 import com.example.kikkiapp.Callbacks.CallbackAddComment;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
+import com.example.kikkiapp.Fragments.Others.CommunityFragment;
 import com.example.kikkiapp.Model.Post;
 import com.example.kikkiapp.Model.PostComment;
+import com.example.kikkiapp.Model.SinglePost;
 import com.example.kikkiapp.Netwrok.API;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
@@ -34,6 +39,7 @@ import retrofit2.Response;
 
 public class ShowPopupMenus {
     private static final String TAG = "ReplyOfCommentsBottom";
+
     private static CustomLoader customLoader;
     private static SessionManager sessionManager;
 
@@ -45,8 +51,14 @@ public class ShowPopupMenus {
         customLoader = new CustomLoader(activity, false);
         sessionManager = new SessionManager(activity);
         PopupMenu popup = new PopupMenu(activity, view);
-        popup.getMenuInflater()
-                .inflate(R.menu.my_post_menu, popup.getMenu());
+        if(post.getUser().getId().toString().equalsIgnoreCase(sessionManager.getUserID())){
+            popup.getMenuInflater()
+                    .inflate(R.menu.my_post_menu, popup.getMenu());
+        }
+        else {
+            popup.getMenuInflater()
+                    .inflate(R.menu.other_user_post_menu, popup.getMenu());
+        }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -54,6 +66,14 @@ public class ShowPopupMenus {
                         deletePost(activity, post.getId(), position, rv_comments, communityPostsList, communityPostsAdapter);
                         break;
                     case R.id.menu_update:
+                        Intent intent = new Intent(activity, CreatePostActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("post", post);
+                        intent.putExtras(bundle);
+                        activity.startActivityForResult(intent, CommunityFragment.REQUEST_UPDATE_POST);
+                        break;
+                    case R.id.menu_report:
+                        reportPost(activity, post.getId());
                         break;
                 }
                 return true;
@@ -99,8 +119,107 @@ public class ShowPopupMenus {
 
     }
 
+    private static void reportPost(final Activity activity, Integer id) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(activity);
+        Log.d(TAG, "reportPost: " + sessionManager.getAccessToken());
+        Log.d(TAG, "reportPost: " + id);
+
+        callbackDeletePost = api.reportPost(String.valueOf(id), sessionManager.getAccessToken());
+        callbackDeletePost.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                customLoader.hideIndicator();
+                responseDeletePost = response.body();
+                if (responseDeletePost != null) {
+                    if (responseDeletePost.getSuccess()) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(activity, responseDeletePost.getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseDeletePost.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(activity, responseDeletePost.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(activity);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+
+    }
+    private static void reportComment(final Activity activity, Integer id) {
+        customLoader.showIndicator();
+        API api = RestAdapter.createAPI(activity);
+        Log.d(TAG, "reportComment: " + sessionManager.getAccessToken());
+        Log.d(TAG, "reportComment: " + id);
+
+        callbackDeletePost = api.reportComment(String.valueOf(id), sessionManager.getAccessToken());
+        callbackDeletePost.enqueue(new Callback<CallbackStatus>() {
+            @Override
+            public void onResponse(Call<CallbackStatus> call, Response<CallbackStatus> response) {
+                Log.d(TAG, "onResponse: " + response);
+                customLoader.hideIndicator();
+                responseDeletePost = response.body();
+                if (responseDeletePost != null) {
+                    if (responseDeletePost.getSuccess()) {
+                        customLoader.hideIndicator();
+                        Toast.makeText(activity, responseDeletePost.getMessage(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "onResponse: " + responseDeletePost.getMessage());
+                        customLoader.hideIndicator();
+                        Toast.makeText(activity, responseDeletePost.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    customLoader.hideIndicator();
+                    ShowDialogues.SHOW_SERVER_ERROR_DIALOG(activity);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallbackStatus> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    Log.d(TAG, "onResponse: " + t.getMessage());
+                    customLoader.hideIndicator();
+                }
+            }
+        });
+
+    }
+
     /***FOR SINGLE POST***/
     public static void showPostMenu(final Activity activity, View view, final Post post, final EditText et_comment, final String comment) {
+        customLoader = new CustomLoader(activity, false);
+        sessionManager = new SessionManager(activity);
+        PopupMenu popup = new PopupMenu(activity, view);
+        popup.getMenuInflater()
+                .inflate(R.menu.my_post_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_delete:
+                        deletePost(activity, post.getId());
+                        break;
+                    case R.id.menu_update:
+                        PostDetailActivity.IS_UPDATING_COMMENT=false;
+                        et_comment.setText(comment);
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+    public static void showPostMenu(final Activity activity, View view, final SinglePost post, final EditText et_comment, final String comment) {
         customLoader = new CustomLoader(activity, false);
         sessionManager = new SessionManager(activity);
         PopupMenu popup = new PopupMenu(activity, view);
@@ -181,8 +300,10 @@ public class ShowPopupMenus {
                         deleteComment(activity, postComment.getId(), position, rv_comments, commentsList, commentsAdapter,tv_no);
                         break;
                     case R.id.menu_report:
+                        reportComment(activity, postComment.getId());
                         break;
                     case R.id.menu_update:
+
                         break;
                 }
                 return true;

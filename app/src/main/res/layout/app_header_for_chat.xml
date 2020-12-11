@@ -15,6 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_arrow_back"
+                android:padding="18dp"
+                android:onClick="onClick"
+                android:layout_marginLeft="20dp">
+            </ImageView>
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/app_logo"

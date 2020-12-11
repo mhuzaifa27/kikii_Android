@@ -9,7 +9,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Model.OnlineUser;
+import com.example.kikkiapp.Model.User;
 import com.example.kikkiapp.R;
 
 import java.util.List;
@@ -17,10 +20,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OnlineUsersAdapter extends RecyclerView.Adapter<OnlineUsersAdapter.TravelBuddyViewHolder> {
-    private List<OnlineUser> data;
+    private List<User> data;
     Context context;
 
-    public OnlineUsersAdapter(List<OnlineUser> data, Context context) {
+    public OnlineUsersAdapter(List<User> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -34,7 +37,17 @@ public class OnlineUsersAdapter extends RecyclerView.Adapter<OnlineUsersAdapter.
 
     @Override
     public void onBindViewHolder(final TravelBuddyViewHolder holder, int position) {
-        OnlineUser s = data.get(position);
+        User user = data.get(position);
+        Glide
+                .with(context)
+                .load(user.getProfilePic())
+                .centerCrop()
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .centerCrop()
+                .placeholder(R.drawable.ic_user_dummy)
+                .into(holder.img_user);
+
     }
 
 

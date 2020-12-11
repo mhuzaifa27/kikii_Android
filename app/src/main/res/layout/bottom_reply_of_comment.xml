@@ -164,7 +164,7 @@
                         <LinearLayout
                             android:id="@+id/ll_type"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="70dp"
                             android:layout_alignParentBottom="true"
                             android:background="@color/light_white"
                             android:orientation="horizontal"
@@ -172,7 +172,8 @@
 
                             <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:layout_width="wrap_content"

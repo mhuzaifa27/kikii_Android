@@ -16,19 +16,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kikkiapp.Adapters.EventAttendantsDetailAdapter;
-import com.example.kikkiapp.Callbacks.CallbackGetEvents;
 import com.example.kikkiapp.Callbacks.CallbackStatus;
 import com.example.kikkiapp.Model.Attendant;
 import com.example.kikkiapp.Model.Event;
 import com.example.kikkiapp.Netwrok.API;
-import com.example.kikkiapp.Netwrok.Constant;
+import com.example.kikkiapp.Netwrok.Constants;
 import com.example.kikkiapp.Netwrok.RestAdapter;
 import com.example.kikkiapp.R;
 import com.example.kikkiapp.Utils.CustomLoader;
 import com.example.kikkiapp.Utils.SessionManager;
 import com.example.kikkiapp.Utils.ShowDialogues;
 import com.joooonho.SelectableRoundedImageView;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -165,7 +163,7 @@ public class EventDetailActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.img_join:
-                eventParams.put(Constant.ID,event.getId().toString());
+                eventParams.put(Constants.ID,event.getId().toString());
                 attendEvent();
                 break;
         }
