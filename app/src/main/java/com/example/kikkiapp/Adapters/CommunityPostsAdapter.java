@@ -479,7 +479,6 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     multipleImagePostViewHolder.ll_three_images_view.setVisibility(View.GONE);
                     //multipleImagePostViewHolder.ll_four_more_images_view.setVisibility(View.VISIBLE);
                 }*/
-
                 /***CLICKS****/
                 multipleImagePostViewHolder.img_post_menu.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -621,10 +620,8 @@ public class CommunityPostsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             @Override
             public void loadImage(ImageView imageView, PostMedia postMedia) {
                 Glide.with(context).load(postMedia.getPath()).into(imageView);
-            }
-        })
+            }})
                 .withStartPosition(pos)
                 .show();
     }
-
 }

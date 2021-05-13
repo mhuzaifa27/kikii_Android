@@ -6,34 +6,9 @@ public class Constants {
      * -------------------- EDIT THIS WITH YOURS -------------------------------------------------
      */
 
-    // Edit WEB_URL with your url. Make sure you have backslash('/') in the end url
-//    public static String WEB_URL = "http://demo.dream-space.web.id/markeet_panel/";
-   // public static String WEB_URL = "https://thinkgeniux.live/livewave1/public/api/";
-   // public static String IMAGE_URL = "https://thinkgeniux.live/livewave1/public/";
-    public static String WEB_URL ="https://kikii.jobesk.com/api/";
-    public static String IMAGE_URL ="http://livewaveapp.com/";
-//    public static String WEB_URL = "https://thinkgeniux.live/livewave1/public/api/";
-//    public static String IMAGE_URL = "https://thinkgeniux.live/livewave1/public/";
-
+    public static String WEB_URL ="YOUR_SERVER_URL_HERE";
     public static String INSTAGRAM_ACCESS_TOKEN ="https://api.instagram.com/oauth/";
     public static String INSTAGRAM_FIELDS ="https://graph.instagram.com/";
-
-    public static final String MEMBER_SEARCH_PARAM="member_search_param";
-    public static final String CATEGORY_SEARCH_PARAM="category_search_param";
-    public static final String SUBCATEGORY_SEARCH_PARAM="subcategory_search_param";
-    public static final String LAT_SEARCH_PARAM="lat_search_param";
-    public static final String LONG_SEARCH_PARAM="long_search_param";
-
-    public static final String SPECIFIC_USER_ID="specific_user_id";
-    public static boolean COMING_FROM_ALERT=false;
-
-    /* [ IMPORTANT ] be careful when edit this security code */
-    /* This string must be same with security code at Server, if its different android unable to submit order */
-    public static final String SECURITY_CODE = "8V06LupAaMBLtQqyqTxmcN42nn27FlejvaoSM3zXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-    // Device will re-register the device data to server when open app N-times
-    public static int OPEN_COUNTER = 50;
-
 
     /**
      * ------------------- DON'T EDIT THIS -------------------------------------------------------
